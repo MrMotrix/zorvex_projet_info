@@ -8,10 +8,25 @@
             "type": "java",
             "name": "App",
             "request": "launch",
+            "mainClass": "main.java.application.App",
+            "projectName": "zorvex_projet_info_ea1fd476",
+            "vmArgs": "--module-path \"C:/JavaFX/openjfx-23.0.2_windows-x64_bin-sdk/javafx-sdk-23.0.2/lib\" --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "main.application.App",
+            "projectName": "zorvex_projet_info_ea1fd476",
+            "vmArgs": "--module-path \"C:/JavaFX/openjfx-23.0.2_windows-x64_bin-sdk/javafx-sdk-23.0.2/lib\" --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
             "mainClass": "App",
             "projectName": "zorvex_projet_info_ea1fd476",
             "vmArgs": "--module-path \"C:/JavaFX/openjfx-23.0.2_windows-x64_bin-sdk/javafx-sdk-23.0.2/lib\" --add-modules javafx.controls,javafx.fxml"
-
         },
         {
             "type": "java",
@@ -19,7 +34,6 @@
             "request": "launch",
             "mainClass": "${file}",
             "vmArgs": "--module-path \"C:/JavaFX/openjfx-23.0.2_windows-x64_bin-sdk/javafx-sdk-23.0.2/lib\" --add-modules javafx.controls,javafx.fxml"
-
         }
     ]
 }

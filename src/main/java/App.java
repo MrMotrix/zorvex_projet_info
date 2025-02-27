@@ -1,11 +1,9 @@
-package main.java.application;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import main.java.utilities.Paths;
+import utilities.Paths;
 
 public class App extends Application{
     public static void main (String[] args) throws Exception {
@@ -23,7 +21,7 @@ public class App extends Application{
         // AnchorPane root = loader.load();
     
         AnchorPane load = FXMLLoader.load(getClass().getResource(Paths.OPEN_NEW_FILE));
-        
+
         // Scene scene = new Scene(root);
         Scene scene = new Scene(load);
         primaryStage.setScene(scene);

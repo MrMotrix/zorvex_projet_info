@@ -1,9 +1,13 @@
 package controllers;
 
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.ResourceBundle;
+
+import application.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import utilities.Paths;
 
 public class duringExecutionController {
 
@@ -38,12 +42,17 @@ public class duringExecutionController {
     @FXML
     void stopExecution(ActionEvent event) {
         System.out.println("here we should return to the SuccessFileUpload scene");
-
+        
+        changeScene(Paths.SUCCESS_FILE_UPLOAD);
     }
 
     @FXML
     void initialize() {
 
+    }
+
+    private void changeScene(String path) {
+        App.app.setScene(path);
     }
 
 }

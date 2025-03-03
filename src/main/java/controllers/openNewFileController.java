@@ -7,6 +7,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import java.io.File;
 
+// import App;
+
+// import App;
+
 public class openNewFileController {
 
     public void openFile() {
@@ -31,9 +35,16 @@ public class openNewFileController {
             // TODO : Ceci est si jamais on veux montrer un message si on ne choisit pas de fichier
             // Alert alert = new Alert(AlertType.INFORMATION);
             // alert.setTitle("Attention");
+            System.out.println("nothing was openend nor chosen");
             // alert.setHeaderText(null);
             // alert.setContentText("No file selected");
             // alert.showAndWait();
         }
     }
+
+    // TODO : This could be factored maybe
+    // void changeScene(String path){
+    //     App.app.setScene(path);
+    // };
+
 }

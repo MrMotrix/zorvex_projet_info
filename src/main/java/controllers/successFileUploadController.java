@@ -7,6 +7,21 @@ import javafx.fxml.FXML;
 
 public class successFileUploadController {
 
-   
+    @FXML
+    private ResourceBundle resources;
+
+    @FXML
+    private URL location;
+
+    // TODO ici on change de scene et on commence avec l-execution du code
+    @FXML
+    void beginExecution(ActionEvent event) {
+        
+    }
+
+    @FXML
+    void initialize() {
+
+    }
 
 }

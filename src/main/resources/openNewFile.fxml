@@ -3,8 +3,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controllers.openNewFileController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.openNewFileController">
    <children>
-      <Button accessibleRole="HYPERLINK" layoutX="259.0" layoutY="187.0" mnemonicParsing="false" text="Ouvrir Fichier" onAction="#openFile" />
+      <Button accessibleRole="HYPERLINK" layoutX="257.0" layoutY="218.0" mnemonicParsing="false" onAction="#openFile" text="Ouvrir Fichier" />
    </children>
 </AnchorPane>

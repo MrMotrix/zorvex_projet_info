@@ -75,11 +75,11 @@ fabric.properties
 
 # gradle
 .gradle
-.build
 
 # vscode
 .vscode
+.vscode/**
 
 # fichiers de compilation
-.build/*
-.bin/*
+build
+build/**

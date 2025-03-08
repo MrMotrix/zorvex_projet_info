@@ -2,19 +2,32 @@ package controllers;
 
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import utilities.Paths;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.BorderPane;
+
 import java.io.File;
-
-// import App;
-
-// import App;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+import application.*;
 
 public class openNewFileController {
 
+    private Stage stage;
+    private StringBuilder builder;
+
     public void openFile() {
-        //create a filechooser onj
+        
+        //create a filechooser onj     bj 
         FileChooser fileChooser = new FileChooser();
 
         // only some types are accepted
@@ -29,7 +42,15 @@ public class openNewFileController {
             // TODO : just for testing, shows the path 
             System.out.println("Selected File: " + selectedFile.getAbsolutePath());
 
-            // here we should implement the procedure to charge the file
+            // TODO : here we should implement the procedure to charge the file
+            loadFile(selectedFile);
+            App.app.getStageWindow().setTitle("Intepreting : " + selectedFile.getName());
+
+            mainController.nameFile = selectedFile.getName();
+
+            showSuccessScene();
+            
+
         } else {
         
             // TODO : Ceci est si jamais on veux montrer un message si on ne choisit pas de fichier
@@ -42,9 +63,50 @@ public class openNewFileController {
         }
     }
 
-    // TODO : This could be factored maybe
-    // void changeScene(String path){
-    //     App.app.setScene(path);
-    // };
+
+    private void loadFile(File file){
+        try {
+            // Lire fichier et garder les lignes dans un stringbuilder
+            List<String> lines = Files.readAllLines(file.toPath());
+            builder = new StringBuilder();
+            for (String line : lines) {
+                builder.append(line).append("\n");
+            }
+    
+            // load file
+            System.out.println(builder.toString());
+            mainController.content = builder;
+
+    
+        } catch (Exception e) {
+            System.out.println("something went wrong");
+            e.printStackTrace();
+        }
+    }
+
+
+    void showSuccessScene() {
+        // try {
+        // FXMLLoader loader = App.app.loader;
+        // loader = new FXMLLoader(getClass().getResource(Paths.SUCCESS_FILE_UPLOAD));
+        // BorderPane root = loader.load();
+
+
+        // successFileUploadController controller2 = loader.getController();
+
+        // Scene scene = new Scene(root);
+        // stage.setScene(scene);
+
+        // controller2.init(builder);
+        // stage.show();
+        // } catch (IOException e) {
+        // // TODO Auto-generated catch block
+        // e.printStackTrace();
+        // }
+    
+        App.app.setScene(Paths.SUCCESS_FILE_UPLOAD);
+    }
+
+    public void setStage(Stage stage) { this.stage = stage;}
 
 }

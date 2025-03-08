@@ -7,15 +7,40 @@ import java.util.ResourceBundle;
 import application.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.AnchorPane;
 import utilities.Paths;
 
-public class duringExecutionController {
+public class duringExecutionController extends mainController {
 
     @FXML
-    private ResourceBundle resources;
+    private TextArea codeContainer;
 
     @FXML
-    private URL location;
+    private TextArea consolePanel;
+
+    @FXML
+    private Button continueButton;
+
+    @FXML
+    private Button lastLineButton;
+
+    @FXML
+    private Button nextLineButton;
+
+    @FXML
+    private Button restartButton;
+
+    @FXML
+    private Button stopButton;
+
+    @FXML
+    private AnchorPane leftControlsPanel;
+
+    private successFileUploadController successController;
+    private double savedWidth;
+    private double savedHeight;
 
     @FXML
     void continueExecution(ActionEvent event) {
@@ -43,16 +68,33 @@ public class duringExecutionController {
     void stopExecution(ActionEvent event) {
         System.out.println("here we should return to the SuccessFileUpload scene");
         
+        // successController.show();
+        // mainController.codeContainer = codeContainer;
         changeScene(Paths.SUCCESS_FILE_UPLOAD);
+
     }
+
+    // public void setLeftPanelDimensions(double width, double height) {
+    //     this.savedWidth = width;
+    //     this.savedHeight = height;
+    // }
 
     @FXML
     void initialize() {
 
-    }
+        codeContainer.setEditable(false);
 
-    private void changeScene(String path) {
-        App.app.setScene(path);
+        // leftControlsPanel.setMaxWidth(savedWidth);
+        // leftControlsPanel.setMaxHeight(savedHeight);
+        // leftControlsPanel.setWidth(savedWidth);  // Asegúrate de ajustar el tamaño actual
+        // leftControlsPanel.setHeight(savedHeight); // Asegúrate de ajustar el tamaño actual
+
+        // codeContainer = mainController.codeContainer;
     }
+    
+    // public void initController(double leftPanelWidth, successFileUploadController successFileUploadController) {
+    //     successController = successFileUploadController;
+    // }
+
 
 }

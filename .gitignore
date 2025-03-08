@@ -79,3 +79,7 @@ fabric.properties
 
 # vscode
 .vscode
+
+# fichiers de compilation
+.build/*
+.bin/*

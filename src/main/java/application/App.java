@@ -26,8 +26,8 @@ import javafx.scene.Scene;
     public void start(Stage primaryStage) throws Exception {
 
 
-            loader = new FXMLLoader(getClass().getResource(Paths.OPEN_NEW_FILE));
-            // FXMLLoader loader = new FXMLLoader(getClass().getResource(Paths.SUCCESS_FILE_UPLOAD));
+            // loader = new FXMLLoader(getClass().getResource(Paths.OPEN_NEW_FILE));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(Paths.SUCCESS_FILE_UPLOAD));
             // FXMLLoader loader = new FXMLLoader(getClass().getResource(Paths.DURING_EXECUTION));
             
             // BorderPane load = FXMLLoader.load(getClass().getResource(Paths.OPEN_NEW_FILE));
@@ -37,7 +37,7 @@ import javafx.scene.Scene;
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
 
-            openNewFileController controller1 = loader.getController();
+            // openNewFileController controller1 = loader.getController();
             // successFileUploadController controller1 = loader.getController();
             // controller1.setStage(primaryStage);
             

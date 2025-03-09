@@ -1,7 +1,6 @@
 package graphics;
 
-public interface GraphicalObject {
+public sealed interface GraphicalObject permits GraphicalVar, GraphicalArray, GraphcalLinkedList {
 
-    void render();
-    void update();
+    void draw(double x, double y);
 }

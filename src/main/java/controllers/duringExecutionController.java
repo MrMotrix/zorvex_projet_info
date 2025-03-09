@@ -5,11 +5,16 @@ import java.nio.file.Path;
 import java.util.ResourceBundle;
 
 import application.App;
+import graphics.GraphcalLinkedList;
+import graphics.GraphicalArray;
+import graphics.GraphicalRepresentation;
+import graphics.GraphicalVar;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import utilities.Paths;
 
 public class duringExecutionController extends mainController {
@@ -38,6 +43,9 @@ public class duringExecutionController extends mainController {
     @FXML
     private AnchorPane leftControlsPanel;
 
+    @FXML
+    private Pane canvasPane;
+
     private successFileUploadController successController;
     private double savedWidth;
     private double savedHeight;
@@ -55,6 +63,14 @@ public class duringExecutionController extends mainController {
     @FXML
     void goNextLine(ActionEvent event) {
         System.out.println("here we should implement a way to go to the next line");
+
+        GraphicalRepresentation rep = new GraphicalRepresentation();
+        rep.addElement(new GraphicalVar("myVar", "10", canvasPane));
+        rep.addElement(new GraphicalArray("myArray", new String[]{"value1", "value2", "value3"}, canvasPane));
+        rep.addElement(new GraphcalLinkedList("myLinkedList", new String[]{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11"}, canvasPane)); // test to see what happens if there is not enough space
+
+        rep.renderAll();
+
 
     }
 

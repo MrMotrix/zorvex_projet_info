@@ -64,7 +64,7 @@ public class Scanner {
                 tokenBuilder.append(readChar());
                 currentPos += 1;
             }
-            return new Token(TokenType.NUMBER, tokenBuilder.toString(), Integer.valueOf(tokenBuilder.toString()));
+            return new Token(TokenType.NOMBRE, tokenBuilder.toString(), Integer.valueOf(tokenBuilder.toString()));
         }
 
         if (character == '"') {
@@ -74,7 +74,7 @@ public class Scanner {
                 currentPos += 1;
             }
             currentPos += 1;
-            return new Token(TokenType.STRING, tokenBuilder.toString(), tokenBuilder.toString());
+            return new Token(TokenType.CHAINE, tokenBuilder.toString(), tokenBuilder.toString());
         }
 
         Set<Character> startOfNewToken = TokenType.startOfNewToken();
@@ -84,7 +84,7 @@ public class Scanner {
             tokenBuilder.append(readChar());
             currentPos += 1;
         }
-        return new Token(TokenType.IDENTIFIER, tokenBuilder.toString());
+        return new Token(TokenType.IDENTIFIANT, tokenBuilder.toString());
     }
     public List<Token> getTokens() {
         return tokens;

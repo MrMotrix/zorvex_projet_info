@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Set;
 
 public enum TokenType {
-    PLUS("+"), MINUS("-"), TIMES("*"), DIVIDE("/"), EQUAL("=="), GREATER_THAN(">"),
-    LESS_THAN("<"), GREATER_EQUAL(">="), LESS_EQUAL("<="), NOT("!"), 
-    ASSIGN("<-"), LEFT_PAREN("("), RIGHT_PAREN(")"), 
-    IF("if"), FOR("for"), RETURN("return"), PRINT("print"),
-    NUMBER(),
-    STRING(),
-    IDENTIFIER();
+    PLUS("+"), MOINS("-"), FOIS("*"), DIVISE("/"), EGAL("=="), PLUS_GRAND(">"),
+    PLUS_PETIT("<"), GRAND_EGAL(">="), PETIT_EGAL("<="), NON("!"), 
+    ASSIGNER("<-"), PARENTHESE_GAUCHE("("), PARENTHESE_DROIT(")"), 
+    SI("si"), POUR("pour"), RETOURNER("retourner"), AFFICHER("afficher"),
+    NOMBRE(),
+    CHAINE(),
+    IDENTIFIANT();
 
     private TokenType(String characters) {
         this.characters = characters;

@@ -45,7 +45,7 @@ public class GraphicalRepresentation {
         for (GraphicalObject obj : elements) {
             obj.removeFromPane();
         }
-        reinitialisePositioningValues();
+        reinitializePositioningValues();
         //TODO implement coordinates management
 
         // double x = 10;
@@ -65,7 +65,7 @@ public class GraphicalRepresentation {
     }
     
     // this could be made non static, and wouuld probably be better
-    public static void reinitialisePositioningValues(){
+    public static void reinitializePositioningValues(){
         initialX = 10;
         initialY = 10;
         spaceBetweenPlots = 100;
@@ -76,7 +76,7 @@ public class GraphicalRepresentation {
             obj.removeFromPane();
         }
         elements.clear();
-        reinitialisePositioningValues();
+        reinitializePositioningValues();
     }
 
 }

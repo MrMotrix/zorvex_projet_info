@@ -5,22 +5,20 @@ import java.util.List;
 
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public final class GraphicalVar implements GraphicalObject {
+public final class GraphicalVar extends AbstractGraphicalObject {
 
-    private String name;
+    
     private String value;
-    private Pane pane;
-    private List<Node> renderedNodes;
+    
 
     public GraphicalVar(String name, String value, Pane pane) {
-        this.name = name;
+        super(name, pane);
         this.value = value;
-        this.pane = pane;
-        renderedNodes = new ArrayList<>();
     }
 
     @Override
@@ -56,15 +54,16 @@ public final class GraphicalVar implements GraphicalObject {
         renderedNodes.add(rect);
         renderedNodes.add(textContainer);
 
+        Tooltip tooltip = new Tooltip();
+        Tooltip.install(textContainer, tooltip);
+        tooltip.setText(textContainer.getText());
+
+
     pane.getChildren().addAll(rect, textContainer);
 
         
     }
-    public void removeFromPane() {
-        if (renderedNodes != null) {
-            pane.getChildren().removeAll(renderedNodes);
-        }
-    }
+    
 
 }
 

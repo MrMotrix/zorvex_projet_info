@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import application.App;
@@ -54,6 +55,7 @@ public class successFileUploadController {
         MainController.successScene = App.app.getStageWindow().getScene();
         MainController.successController = this;
         MainController.changeScene(Paths.DURING_EXECUTION);
+        
     }
 
 
@@ -73,7 +75,7 @@ public class successFileUploadController {
             
             MainController.numberOfLines = lines;
             
-            for (int i= 0; i < lines; i++){
+            for (int i= 1; i <= lines; i++){
 
                 
                 Label label = new Label("Line " + i);
@@ -153,6 +155,10 @@ public class successFileUploadController {
     }
     
     private void setBreakPoints() {
+        
+        // initialize set
+        if (MainController.bkpoints == null) MainController.bkpoints = new HashSet<>();
+        
         // TODO slight disalignment t be fixed. Currently the best value to almost fit the other lines is 9
         bkpointVbox.setSpacing(9.5);
         bkpointVbox.setAlignment(Pos.BOTTOM_CENTER); 
@@ -170,7 +176,7 @@ public class successFileUploadController {
             bkButton.setMaxSize(buttonSize, buttonSize);
             bkButton.setPrefWidth(buttonSize);
             bkButton.setPrefHeight(buttonSize);
-            bkButton.setStyle("-fx-background-color: black; -fx-text-fill: red; -fx-background-radius: 50%;");
+            bkButton.setStyle("-fx-background-color: black; -fx-background-radius: 50%;");
 
             // Action when a button is pressed
             bkButton.setOnAction(event -> {
@@ -179,7 +185,7 @@ public class successFileUploadController {
                 if (bkButton.getStyle().contains("black")) {
                     
                     //set style
-                    bkButton.setStyle("-fx-background-color: red; -fx-text-fill: green; -fx-background-radius: 50%;");
+                    bkButton.setStyle("-fx-background-color: red; -fx-background-radius: 50%;");
                     
                     // add button to set of bkpoints
                     MainController.bkpoints.add(Integer.parseInt(bkButton.getText()));
@@ -187,7 +193,8 @@ public class successFileUploadController {
                 // if enabled
                 } else {
                     //revert style
-                    bkButton.setStyle("-fx-background-color: black; -fx-text-fill: blue; -fx-background-radius: 50%;");
+                    bkButton.setStyle("-fx-background-color: black; -fx-background-radius: 50%;");
+                    // bkButton.setStyle("-fx-background-color: black; -fx-text-fill: blue; -fx-background-radius: 50%;");
                     // remove
                     MainController.bkpoints.remove(Integer.parseInt(bkButton.getText()));
 
@@ -212,6 +219,8 @@ public class successFileUploadController {
         codeContainer.getChildren().setAll(MainController.getCodeContainer().getChildren());
         nblineVbox.getChildren().setAll(MainController.getNblineVbox().getChildren());
         bkpointVbox.getChildren().setAll(MainController.getBkpointVbox().getChildren());
+
+        bkpointVbox.getChildren().forEach(n -> System.out.println(n.getStyle()));
 
     }
     

@@ -13,19 +13,15 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-public final class GraphcalLinkedList implements GraphicalObject {
+public final class GraphcalLinkedList extends AbstractGraphicalObject {
 
-    private String name;
-    private Pane pane;
     private String[] values;
-    private List<Node> renderedNodes;
+
 
     
     public GraphcalLinkedList(String name,  String[] values, Pane pane) {
-        this.name = name;
-        this.pane = pane;
+        super(name, pane);
         this.values = values;
-        renderedNodes = new ArrayList<>();
     }
 
     public void draw(double x, double y){
@@ -112,15 +108,10 @@ public final class GraphcalLinkedList implements GraphicalObject {
         }
     }
 
-    public void removeFromPane() {
-        if (renderedNodes != null) {
-            pane.getChildren().removeAll(renderedNodes);
-        }
-    }
 
 }
 
-// public final class GraphcalLinkedList implements GraphicalObject {
+// public final class GraphcalLinkedList extends AbstractGraphicalObject {
 
 //     private String name;
 //     private Pane pane;

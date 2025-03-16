@@ -1,11 +1,12 @@
 package graphics;
 
-public sealed interface GraphicalObject permits GraphicalVar, GraphicalArray, GraphcalLinkedList {
+public interface GraphicalObject  {
 
     void draw(double x, double y);
     // String getName();
     // void update(String newValue);
     void removeFromPane();
+    // int getID();
 
 
     static double WIDTH_VARIABLE_BOX = 100;

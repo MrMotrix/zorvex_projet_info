@@ -17,7 +17,10 @@ public class MainController {
     static List<String> content; // used
     static String nameFile; // used
     static int numberOfLines;
+    static int currentLine = 1;
+    
     static Set<Integer> bkpoints;
+    
     static TextArea consolePanel;
     static ScrollPane bkScroller;
     static ScrollPane codeScroller;

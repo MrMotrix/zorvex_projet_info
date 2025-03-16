@@ -12,19 +12,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-public final class GraphicalArray implements GraphicalObject {
-    //TODO : Replace the 'String[]' type by the the interface or enum that contains all the accepted types, or maybe just a String is required ?
-    private String name;
-    private String[] values;
-    private Pane pane;
-    private List<Node> renderedNodes;
-
+public final class GraphicalArray extends AbstractGraphicalObject {
     
+    //TODO : Replace the 'String[]' type by the the interface or enum that contains all the accepted types, or maybe just a String is required ?
+    private String[] values;
+        
     public GraphicalArray(String name, String[] values, Pane pane) {
-        this.name = name;
+        super(name, pane);
         this.values = values;
-        this.pane = pane;
-        renderedNodes = new ArrayList<>();
     }
 
     public void draw(double x, double y) {  
@@ -81,12 +76,6 @@ public final class GraphicalArray implements GraphicalObject {
         }
 
 
-    }
-
-    public void removeFromPane() {
-        if (renderedNodes != null) {
-            pane.getChildren().removeAll(renderedNodes);
-        }
     }
 
 }

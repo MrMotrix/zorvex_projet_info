@@ -49,7 +49,22 @@ public class duringExecutionController  {
         
         consolePanel.setText("here we should continue execution until next breakpoint or stop from the user . Currently there is a test on the plot area");
         consolePanel.setText(consolePanel.getText() + "\n i am adding a new variable");
+        consolePanel.setText(consolePanel.getText() + "\n Currently on line" + MainController.currentLine);
         rep.addAndRenderElement(new GraphicalVar("myVar2", "50", canvasPane));
+
+        //  if the button was pressed when being in a breakpoint
+        if (MainController.bkpoints.contains(MainController.currentLine)){
+            consolePanel.setText(MainController.currentLine + "");
+            MainController.bkpoints.forEach(System.out::println);
+            goNextLine(event);
+        }
+        
+        // continue execution until a new breakpoint is found or the end of the file is reached
+        while (!MainController.bkpoints.contains(MainController.currentLine) && MainController.currentLine != MainController.numberOfLines) {
+            consolePanel.setText(MainController.currentLine + "");
+            MainController.bkpoints.forEach(System.out::println);
+            goNextLine(event);
+        }
 
     }
 
@@ -61,14 +76,24 @@ public class duringExecutionController  {
 
     @FXML
     void goNextLine(ActionEvent event) {
-        System.out.println("here we should implement a way to go to the next line");
-
         
-        rep.addElement(new GraphicalVar("myVar", "10", canvasPane));
-        rep.addElement(new GraphicalArray("myArray", new String[]{"value1", "value2", "value3"}, canvasPane));
-        rep.addElement(new GraphcalLinkedList("myLinkedList", new String[]{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11"}, canvasPane)); // test to see what happens if there is not enough space
+        
+        System.out.println("here we should implement a way to go to the next line");
+        
+        // TODO implement the logic to interpret the current line
+        // if we have finished execution, we return
+        if (MainController.currentLine > MainController.numberOfLines) return;
+
+
+        rep.addElement(new GraphicalVar("Done in line", MainController.currentLine + "", canvasPane));
+        // rep.addElement(new GraphicalArray("myArray", new String[]{"value1", "value2", "value3"}, canvasPane));
+        // rep.addElement(new GraphcalLinkedList("myLinkedList", new String[]{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11"}, canvasPane)); // test to see what happens if there is not enough space
 
         rep.renderAll();
+        highlightCurrentLine(MainController.currentLine);
+
+        // this should be the last line of the method, we only increase the pointer to the current line once it has been correctly interpreted
+        MainController.currentLine++;
 
     }
 
@@ -78,31 +103,19 @@ public class duringExecutionController  {
         consolePanel.setText("i am restarting the execution, so all should be cleaned");
 
         
-        // reinitialise the defaiult values of the position magager 
-        GraphicalRepresentation.reinitialisePositioningValues();
+        // reinitialize the defaiult values of the position magager 
+        GraphicalRepresentation.reinitializePositioningValues();
         
         // Clean plots from panel
         rep.clear();
 
+        // Reset the curerntline
+        MainController.currentLine = 1;
+        // clean highlights if any
+        highlightCurrentLine(-1); 
+
     }
 
-    // @FXML
-    // void stopExecution(ActionEvent event) {
-    //     System.out.println("here we should return to the SuccessFileUpload scene");
-    //     consolePanel.setText("i am stopping the execution, so change scene and clean panel");
-
-    //     // reinitialise positioning and clean canvas
-    //     GraphicalRepresentation.reinitialisePositioningValues();
-        
-    //     rep.clear();
-
-
-        
-    //     // successController.show();
-    //     // mainController.codeContainer = codeContainer;
-    //     changeScene(Paths.SUCCESS_FILE_UPLOAD);
-
-    // }
 
     @FXML
     void stopExecution(ActionEvent event) {
@@ -111,7 +124,7 @@ public class duringExecutionController  {
         consolePanel.setText("We stop execution, so we return to the previous scene");
 
         // reset values for rendering
-        GraphicalRepresentation.reinitialisePositioningValues();
+        GraphicalRepresentation.reinitializePositioningValues();
         rep.clear();
         // set the positino of the divider
         MainController.setSplitPaneDividerPosition(splitPane.getDividerPositions()[0]);
@@ -158,6 +171,9 @@ public class duringExecutionController  {
 
         this.successController = MainController.successController;
 
+        // after doing all the settings, we start the exeution by calling continueExecution
+        // TODO : still this should probable be moved to another place
+        continueExecution(null);
     }
     
     void setPreviousState(){
@@ -181,7 +197,7 @@ public class duringExecutionController  {
 
         bkpointVbox.setSpacing(9.5);
         bkpointVbox.setAlignment(Pos.BOTTOM_CENTER); 
-        bkpointVbox.setStyle(null);
+        // bkpointVbox.setStyle(null);
 
         // this is being reused so maybe it can be factorise
         double buttonSize = 8; 
@@ -192,9 +208,21 @@ public class duringExecutionController  {
                 bkButton.setMaxSize(buttonSize, buttonSize);
                 bkButton.setPrefWidth(buttonSize);
                 bkButton.setPrefHeight(buttonSize);
-                bkButton.setStyle("-fx-background-color: black; -fx-text-fill: red; -fx-background-radius: 50%;");
+                // bkButton.setStyle("-fx-background-color: black; -fx-background-radius: 50%;");
             }
             });
     }
 
+    // TODO :it would be better to highlight the whole line and not just behind the text
+    private void highlightCurrentLine(int currentLine) {
+        for (int i = 0; i < codeContainer.getChildren().size(); i++) {
+            if (i == currentLine) { 
+                codeContainer.getChildren().get(i).setStyle("-fx-background-color: #fff5a3;"); 
+            } else {
+                // remove the style 
+                codeContainer.getChildren().get(i).setStyle("");
+            }
+        }
+    }
+    
 }

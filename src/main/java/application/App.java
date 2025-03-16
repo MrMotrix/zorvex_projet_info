@@ -1,60 +1,56 @@
 package application;
-import controllers.openNewFileController;
-import controllers.successFileUploadController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import utilities.Paths;
 
-    public class App extends Application{
-        
-        public static App app;
-        private Stage stageWindow;
-        public FXMLLoader loader;
+public class App extends Application{
+    
+    public static App app;
+    private Stage stageWindow;
+    public FXMLLoader loader;
 
-        public static void main (String[] args) throws Exception {
+    public static void main (String[] args) throws Exception {
 
-            launch(args);
-        }
+        launch(args);
+    }
 
         @Override
     public void start(Stage primaryStage) throws Exception {
 
 
-            // loader = new FXMLLoader(getClass().getResource(Paths.OPEN_NEW_FILE));
-            loader = new FXMLLoader(getClass().getResource(Paths.SUCCESS_FILE_UPLOAD));
-            // loader = new FXMLLoader(getClass().getResource(Paths.DURING_EXECUTION));
-            
-            // BorderPane load = FXMLLoader.load(getClass().getResource(Paths.OPEN_NEW_FILE));
-            // BorderPane load = FXMLLoader.load(getClass().getResource(Paths.DURING_EXECUTION));
-            Parent root = loader.load();
-            // Scene scene = new Scene(root);
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
+        // loader = new FXMLLoader(getClass().getResource(Paths.OPEN_NEW_FILE));
+        loader = new FXMLLoader(getClass().getResource(Paths.SUCCESS_FILE_UPLOAD));
+        // loader = new FXMLLoader(getClass().getResource(Paths.DURING_EXECUTION));
+        
+        // BorderPane load = FXMLLoader.load(getClass().getResource(Paths.OPEN_NEW_FILE));
+        // BorderPane load = FXMLLoader.load(getClass().getResource(Paths.DURING_EXECUTION));
+        Parent root = loader.load();
+        // Scene scene = new Scene(root);
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
 
-            // openNewFileController controller1 = loader.getController();
-            // successFileUploadController controller1 = loader.getController();
-            // controller1.setStage(primaryStage);
-            
+        // openNewFileController controller1 = loader.getController();
+        // successFileUploadController controller1 = loader.getController();
+        // controller1.setStage(primaryStage);
+        
 
-            app = this;
-            stageWindow = primaryStage;
-            // setScene(Paths.OPEN_NEW_FILE);
+        app = this;
+        stageWindow = primaryStage;
+        // setScene(Paths.OPEN_NEW_FILE);
 
 
 
-            primaryStage.setMinHeight(400);
-            primaryStage.setMinWidth(600);
-            primaryStage.setMaxHeight(4000);
-            primaryStage.setMaxWidth(6000);
-            primaryStage.show();
-            System.out.println("SALUUUUUT");
-            
+        primaryStage.setMinHeight(400);
+        primaryStage.setMinWidth(600);
+        primaryStage.setMaxHeight(4000);
+        primaryStage.setMaxWidth(6000);
+        primaryStage.show();
+        System.out.println("SALUUUUUT");
+        
 
             
     }

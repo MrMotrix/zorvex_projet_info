@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.duringExecutionController">
    <top>
@@ -41,7 +42,7 @@
       <AnchorPane prefHeight="28.0" prefWidth="600.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER" />
    </bottom>
    <center>
-      <SplitPane dividerPositions="0.3299866131191433" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <SplitPane fx:id="splitPane" dividerPositions="0.3299866131191433" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
           <AnchorPane fx:id="leftControlsPanel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="200.0">
                <children>
@@ -56,17 +57,38 @@
                     </rowConstraints>
                      <children>
                         <TextArea fx:id="consolePanel" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2" />
-                        <GridPane style="-fx-background-color: red;">
+                        <GridPane style="-fx-background-color: white;">
                           <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="15.0" minWidth="15.0" prefWidth="15.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="15.0" minWidth="15.0" prefWidth="15.0" />
-                            <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="139.2" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="30.0" minWidth="30.0" prefWidth="30.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="30.0" minWidth="30.0" prefWidth="30.0" />
+                            <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" />
                           </columnConstraints>
                           <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <TextArea id="instructionsPanel" fx:id="codeContainer" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" />
+                              <ScrollPane fx:id="nblineScroller" disable="false" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="30.0" vbarPolicy="NEVER" GridPane.columnIndex="1" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
+                                 <content>
+                                    <VBox fx:id="nblineVbox" maxHeight="1.7976931348623157E308" prefWidth="30.0" style="-fx-background-color: lightgrey;" />
+                                 </content>
+                              </ScrollPane>
+                              <ScrollPane fx:id="bkScroller" disable="false" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="30.0" vbarPolicy="NEVER" GridPane.columnIndex="0" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
+                                 <content>
+                                    <VBox fx:id="bkpointVbox" maxWidth="1.7976931348623157E308" prefWidth="25.0" />
+                                 </content>
+                              </ScrollPane>
+                              <ScrollPane fx:id="codeScroller" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+                                 <content>
+                                    <VBox fx:id="codeContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: blue;" />
+                                 </content>
+                              </ScrollPane>
+
                            </children>
                         </GridPane>
                         <GridPane GridPane.rowIndex="1">

@@ -1,15 +1,15 @@
-    package application;
-    import controllers.openNewFileController;
+package application;
+import controllers.openNewFileController;
 import controllers.successFileUploadController;
 import javafx.application.Application;
-    import javafx.fxml.FXMLLoader;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-    import javafx.scene.layout.AnchorPane;
-    import javafx.scene.layout.BorderPane;
-    import javafx.scene.layout.Pane;
-    import javafx.stage.Stage;
-    import utilities.Paths;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import utilities.Paths;
 
     public class App extends Application{
         
@@ -27,8 +27,8 @@ import javafx.scene.Scene;
 
 
             // loader = new FXMLLoader(getClass().getResource(Paths.OPEN_NEW_FILE));
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(Paths.SUCCESS_FILE_UPLOAD));
-            // FXMLLoader loader = new FXMLLoader(getClass().getResource(Paths.DURING_EXECUTION));
+            loader = new FXMLLoader(getClass().getResource(Paths.SUCCESS_FILE_UPLOAD));
+            // loader = new FXMLLoader(getClass().getResource(Paths.DURING_EXECUTION));
             
             // BorderPane load = FXMLLoader.load(getClass().getResource(Paths.OPEN_NEW_FILE));
             // BorderPane load = FXMLLoader.load(getClass().getResource(Paths.DURING_EXECUTION));

@@ -6,6 +6,10 @@ import java.util.List;
 public class GraphicalRepresentation {
 
     public List<GraphicalObject> elements;
+
+    public static double initialX = 10;
+    public static double initialY = 10;
+    public static double spaceBetweenPlots = 100;
     
     public GraphicalRepresentation(List<GraphicalObject> elements) {
         this.elements = elements;
@@ -30,6 +34,7 @@ public class GraphicalRepresentation {
     // TODO this string should be or not replaced by the enum mentionned in the GraphicalArray class    
     public void updateVariable(String name, String value) {
         // TODO add update
+        elements.get(0);
     }
 
     public void deleteElement(GraphicalObject element) {  
@@ -37,16 +42,41 @@ public class GraphicalRepresentation {
     }
 
     public void renderAll(){
-
+        for (GraphicalObject obj : elements) {
+            obj.removeFromPane();
+        }
+        reinitialisePositioningValues();
         //TODO implement coordinates management
 
-        double x = 10;
-        double y = 10;
+        // double x = 10;
+        // double y = 10;
 
         for (GraphicalObject element : elements){
-            element.draw(x,y);
-            y += 100;
+            element.draw(initialX,initialY);
+            initialY += spaceBetweenPlots;
         }
     }
+
+    public void addAndRenderElement(GraphicalVar graphicalVar) {
+        // TODO Auto-generated method stub
+        addElement(graphicalVar);
+        graphicalVar.draw(initialX, initialY);
+        initialY += spaceBetweenPlots;
+    }
     
+    // this could be made non static, and wouuld probably be better
+    public static void reinitialisePositioningValues(){
+        initialX = 10;
+        initialY = 10;
+        spaceBetweenPlots = 100;
+    }
+
+    public void clear() {
+        for (GraphicalObject obj : elements) {
+            obj.removeFromPane();
+        }
+        elements.clear();
+        reinitialisePositioningValues();
+    }
+
 }

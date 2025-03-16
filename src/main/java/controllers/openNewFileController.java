@@ -46,7 +46,7 @@ public class openNewFileController {
             loadFile(selectedFile);
             App.app.getStageWindow().setTitle("Intepreting : " + selectedFile.getName());
 
-            mainController.nameFile = selectedFile.getName();
+            MainController.nameFile = selectedFile.getName();
 
             showSuccessScene();
             
@@ -68,14 +68,16 @@ public class openNewFileController {
         try {
             // Lire fichier et garder les lignes dans un stringbuilder
             List<String> lines = Files.readAllLines(file.toPath());
-            builder = new StringBuilder();
-            for (String line : lines) {
-                builder.append(line).append("\n");
-            }
+            // builder = new StringBuilder();
+            // for (String line : lines) {
+            //     builder.append(line).append("\n");
+            //     MainController.numberOfLines ++;
+            // }
     
-            // load file
-            System.out.println(builder.toString());
-            mainController.content = builder;
+            // // load file
+            // System.out.println(builder.toString());
+            MainController.content = lines;
+            MainController.numberOfLines = lines.size();
 
     
         } catch (Exception e) {

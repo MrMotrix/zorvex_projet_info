@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import interpreter.expression.BinaryOperator;
+import interpreter.expression.Expression;
+import interpreter.expression.UBinaryOperator;
+
 public class Scanner {
     private final List<Token> tokens;
     private final String code;
@@ -24,12 +28,6 @@ public class Scanner {
         scanner = new Scanner("5+42*2+\"hello world\"");
         scanner.scan();
         System.out.println(scanner.getTokens());
-
-
-        BinaryOperator plus = new UBinaryOperator(new Token(TokenType.PLUS, "+"));
-        BinaryOperator minus = new UBinaryOperator(new Token(TokenType.MOINS, "-"));
-        BinaryOperator times = new UBinaryOperator(new Token(TokenType.FOIS, "*"));
-        BinaryOperator divided = new UBinaryOperator(new Token(TokenType.DIVISE, "/"));
 
     } 
 

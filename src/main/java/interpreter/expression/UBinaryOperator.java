@@ -1,4 +1,7 @@
-package interpreter;
+package interpreter.expression;
+
+import interpreter.Token;
+import interpreter.ZorvexValue;
 
 public class UBinaryOperator implements BinaryOperator {
     private Token operation;

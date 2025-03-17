@@ -1,4 +1,7 @@
-package interpreter;
+package interpreter.expression;
+
+import interpreter.Context;
+import interpreter.ZorvexValue;
 
 public record Variable(String name) implements Expression {
     public ZorvexValue value(Context context) {

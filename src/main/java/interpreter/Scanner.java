@@ -11,13 +11,26 @@ public class Scanner {
     private int currentPos = 0;
 
     public static void main(String[] args) {
-        var scanner = new Scanner("print 512+test-moi*256");
+        String expr = "8*20/5+2*3";
+        System.out.println(expr);
+        var scanner = new Scanner(expr);
+        scanner.scan();
+        System.out.println(scanner.getTokens());
+        var parser = new Parser(scanner.getTokens());
+        Expression result = parser.parse();
+        System.out.println(result.printValue());
+        System.out.println(result.value(new Context()));
+        
+        scanner = new Scanner("5+42*2+\"hello world\"");
         scanner.scan();
         System.out.println(scanner.getTokens());
 
-        scanner = new Scanner("print \"hello world\"");
-        scanner.scan();
-        System.out.println(scanner.getTokens());
+
+        BinaryOperator plus = new UBinaryOperator(new Token(TokenType.PLUS, "+"));
+        BinaryOperator minus = new UBinaryOperator(new Token(TokenType.MOINS, "-"));
+        BinaryOperator times = new UBinaryOperator(new Token(TokenType.FOIS, "*"));
+        BinaryOperator divided = new UBinaryOperator(new Token(TokenType.DIVISE, "/"));
+
     } 
 
     public Scanner(String code) {

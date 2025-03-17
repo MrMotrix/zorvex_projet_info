@@ -19,4 +19,16 @@ public class Token {
     public String toString() {
         return type + " " + lexeme;
     }
+
+    public TokenType type() {
+        return type;
+    }
+
+    public Object data() {
+        return data;
+    }
+
+    public String lexeme() {
+        return lexeme;
+    }
 }

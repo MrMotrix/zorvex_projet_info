@@ -7,9 +7,10 @@ import java.util.Set;
 
 public enum TokenType {
     PLUS("+"), MOINS("-"), FOIS("*"), DIVISE("/"), EGAL("=="), PLUS_GRAND(">"),
-    PLUS_PETIT("<"), GRAND_EGAL(">="), PETIT_EGAL("<="), NON("!"), 
+    PLUS_PETIT("<"), GRAND_EGAL(">="), PETIT_EGAL("<="), NON("!"), DIFFERENT("!="),
     ASSIGNER("<-"), PARENTHESE_GAUCHE("("), PARENTHESE_DROIT(")"), 
     SI("si"), POUR("pour"), RETOURNER("retourner"), AFFICHER("afficher"),
+    VRAI("vrai"), FAUX("faux"),
     NOMBRE(),
     CHAINE(),
     IDENTIFIANT();

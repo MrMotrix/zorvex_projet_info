@@ -1,5 +1,8 @@
 package controllers;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utilities.Paths;
@@ -11,12 +14,16 @@ import application.*;
 public class openNewFileController {
 
     private Stage stage;
-    private StringBuilder builder;
+    
+    // trucs pour la documentation
+    @FXML private MenuItem aboutButton;
+    @FXML private MenuItem openDocumentationButton;
 
     public void openFile() {
         
         //create a filechooser onj     bj 
         FileChooser fileChooser = new FileChooser();
+        // fileChooser.setInitialDirectory(".");
 
         // only some types are accepted
         // TODO : define the extension of the files
@@ -27,8 +34,11 @@ public class openNewFileController {
         File selectedFile = fileChooser.showOpenDialog(null); // i think this null can be modified
 
         if (selectedFile != null) {
-            // TODO : just for testing, shows the path 
+            // ============================================================== TEST ============================================================
+            
             System.out.println("Selected File: " + selectedFile.getAbsolutePath());
+            
+            // ==========================================================================================================================
 
             // TODO : here we should implement the procedure to charge the file
             loadFile(selectedFile);
@@ -54,7 +64,7 @@ public class openNewFileController {
 
     private void loadFile(File file){
         try {
-            // Lire fichier et garder les lignes dans un stringbuilder
+            // Lire fichier et garder les lignes dans une liste
             List<String> lines = Files.readAllLines(file.toPath());
             // builder = new StringBuilder();
             // for (String line : lines) {
@@ -76,27 +86,22 @@ public class openNewFileController {
 
 
     void showSuccessScene() {
-        // try {
-        // FXMLLoader loader = App.app.loader;
-        // loader = new FXMLLoader(getClass().getResource(Paths.SUCCESS_FILE_UPLOAD));
-        // BorderPane root = loader.load();
-
-
-        // successFileUploadController controller2 = loader.getController();
-
-        // Scene scene = new Scene(root);
-        // stage.setScene(scene);
-
-        // controller2.init(builder);
-        // stage.show();
-        // } catch (IOException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
     
         App.app.setScene(Paths.SUCCESS_FILE_UPLOAD);
     }
 
     public void setStage(Stage stage) { this.stage = stage;}
 
+
+    // TODO : ajouter un lien vers la doucmentation ou (penible) ouvrir une nouvelle fenetre avec la documentation
+    @FXML
+    void openDocumentation(ActionEvent event) {
+        
+    }
+
+    // TODO : ouvrir une petite fenetre avec un peu sur ceux qui ont cree le programma ???
+    @FXML
+    void ouvrirAboutUs(ActionEvent event) {
+
+    }
 }

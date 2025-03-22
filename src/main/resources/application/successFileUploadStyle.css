@@ -1,0 +1,19 @@
+
+.anchor-pane-bottom {
+    -fx-background-color: grey;
+}
+
+
+.code-container-grid {
+    -fx-background-color: white;
+}
+
+
+.nbline-vbox {
+    -fx-background-color: lightgrey;
+}
+
+
+.code-container {
+    -fx-background-color: blue;
+}

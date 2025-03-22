@@ -31,6 +31,10 @@ public class App extends Application{
         Parent root = loader.load();
         // Scene scene = new Scene(root);
         Scene scene = new Scene(root);
+
+        // scene.getStylesheets().add(getClass().getResource(Paths.OPEN_NEW_FILE_STYLE).toExternalForm());
+
+        primaryStage.setMaximized(true);
         primaryStage.setScene(scene);
 
         // openNewFileController controller1 = loader.getController();
@@ -43,13 +47,11 @@ public class App extends Application{
         // setScene(Paths.OPEN_NEW_FILE);
 
 
-
         primaryStage.setMinHeight(400);
         primaryStage.setMinWidth(600);
         primaryStage.setMaxHeight(4000);
         primaryStage.setMaxWidth(6000);
         primaryStage.show();
-        System.out.println("SALUUUUUT");
         
 
             
@@ -59,17 +61,23 @@ public class App extends Application{
         // save the size of the screen before changing scene to make it fluid. Also check if it is fullscreen
         double width = stageWindow.getWidth();
         double height = stageWindow.getHeight();
-        boolean isFullScreen = stageWindow.isFullScreen();
+        // boolean isFullScreen = stageWindow.isFullScreen();
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
         try {
             BorderPane pane = loader.load();
             Scene scene = new Scene(pane);
+
+
+            // ============================= TEST ========================
+            // scene.getStylesheets().add(getClass().getResource(Paths))
+
+            // ==============================++++++=======================
             
             // The scene is loaded but has not been changed yet. Resize before changing
             stageWindow.setWidth(width);
             stageWindow.setHeight(height);
-            stageWindow.setFullScreen(isFullScreen);
+            // stageWindow.setFullScreen(isFullScreen);
             // Change scene
             stageWindow.setScene(scene);
     

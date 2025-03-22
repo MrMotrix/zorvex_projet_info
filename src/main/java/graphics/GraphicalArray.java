@@ -23,7 +23,7 @@ public final class GraphicalArray extends AbstractGraphicalObject {
     }
 
     public void draw(double x, double y) {  
-        // TODO maybe we could set static constants to automate the sizes ?
+
         double cellHeight = HEIGHT_ARRAY_BOX;
         double cellWidth = WIDTH_ARRAY_BOX;
         
@@ -76,6 +76,11 @@ public final class GraphicalArray extends AbstractGraphicalObject {
         }
 
 
+    }
+
+    @Override
+    public void update(int index, String value) {
+        this.values[index] = value;
     }
 
 }

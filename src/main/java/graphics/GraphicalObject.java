@@ -8,6 +8,8 @@ public interface GraphicalObject  {
     void removeFromPane();
     // int getID();
 
+    void update(int index, String value);
+
 
     static double WIDTH_VARIABLE_BOX = 100;
     static double HEIGHT_VARIABLE_BOX = 50;

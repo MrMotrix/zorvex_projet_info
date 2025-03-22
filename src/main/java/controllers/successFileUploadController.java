@@ -8,10 +8,13 @@ import application.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
@@ -34,7 +37,6 @@ public class successFileUploadController {
     @FXML private ScrollPane nblineScroller;
     @FXML private ScrollPane codeScroller;
 
-    
 
     public SplitPane getSplitPane() {
         return splitPane;
@@ -160,8 +162,12 @@ public class successFileUploadController {
         if (MainController.bkpoints == null) MainController.bkpoints = new HashSet<>();
         
         // TODO slight disalignment t be fixed. Currently the best value to almost fit the other lines is 9
-        bkpointVbox.setSpacing(9.5);
+        bkpointVbox.setSpacing(9.4);
+        // bkScroller.setPadding(new Insets(5,0,5,0));
+        // bkpointVbox.setAlignment(Pos.BOTTOM_CENTER); 
         bkpointVbox.setAlignment(Pos.BOTTOM_CENTER); 
+        bkpointVbox.setStyle(bkpointVbox.getStyle() + "-fx-background-color: transparent;");
+        // bkpointVbox.setStyle("-fx-border-color: black;");
 
         //size of the button
         double buttonSize = 8; 
@@ -176,7 +182,7 @@ public class successFileUploadController {
             bkButton.setMaxSize(buttonSize, buttonSize);
             bkButton.setPrefWidth(buttonSize);
             bkButton.setPrefHeight(buttonSize);
-            bkButton.setStyle("-fx-background-color: black; -fx-background-radius: 50%;");
+            bkButton.setStyle("-fx-background-color: black; -fx-background-radius: 100%;");
 
             // Action when a button is pressed
             bkButton.setOnAction(event -> {
@@ -202,6 +208,9 @@ public class successFileUploadController {
             });
             
             bkpointVbox.getChildren().add(bkButton);
+            // Separator separator = new Separator();
+            //     separator.setStyle("-fx-background-color: black; -fx-border-color: black; -fx-border-width: 1px;");
+            //     bkpointVbox.getChildren().add(separator);
         }
     }
 
@@ -220,9 +229,11 @@ public class successFileUploadController {
         nblineVbox.getChildren().setAll(MainController.getNblineVbox().getChildren());
         bkpointVbox.getChildren().setAll(MainController.getBkpointVbox().getChildren());
 
-        bkpointVbox.getChildren().forEach(n -> System.out.println(n.getStyle()));
+        // just to test the style of the buttons
+        // bkpointVbox.getChildren().forEach(n -> System.out.println(n.getStyle()));
 
     }
     
+
 
 }

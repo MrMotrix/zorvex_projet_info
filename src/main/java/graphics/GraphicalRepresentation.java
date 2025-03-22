@@ -32,9 +32,10 @@ public class GraphicalRepresentation {
     }
 
     // TODO this string should be or not replaced by the enum mentionned in the GraphicalArray class    
-    public void updateVariable(String name, String value) {
+    public void updateElement(int id, GraphicalObject element) {
         // TODO add update
-        elements.get(0);
+        elements.set(id, element);
+        elements.get(id).draw(id, id);
     }
 
     public void deleteElement(GraphicalObject element) {  

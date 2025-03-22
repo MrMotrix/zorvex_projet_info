@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+
+<MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.menuBarController">
+  <menus>
+    <Menu text="Fichier">
+      <items><MenuItem fx:id="openNewItem" onAction="#openNew" text="Ouvrir nouveau" />
+            <MenuItem fx:id="closeItem" onAction="#close" text="Fermer" /></items>
+    </Menu>
+    <Menu text="Edit">
+      <items><MenuItem fx:id="deleteItem" text="Delete" /></items>
+    </Menu>
+    <Menu text="Aide">
+      <items><MenuItem fx:id="aboutUsItem" onAction="#aboutUs" text="A propos" />
+            <MenuItem fx:id="voirDocumentationItem" onAction="#voirDocumentation" text="Voir documentation" /></items>
+    </Menu>
+  </menus>
+</MenuBar>

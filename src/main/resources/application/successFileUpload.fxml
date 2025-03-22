@@ -15,27 +15,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.successFileUploadController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@successFileUploadStyle.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.successFileUploadController">
    <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
+      <fx:include source="menuBar.fxml" />
    </top>
    <bottom>
       <AnchorPane prefHeight="28.0" prefWidth="600.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER" />
@@ -79,7 +61,7 @@
                                     <Insets />
                                  </GridPane.margin>
                                  <content>
-                                    <VBox fx:id="bkpointVbox" maxWidth="1.7976931348623157E308" prefWidth="25.0" />
+                                    <VBox fx:id="bkpointVbox" maxHeight="1.7976931348623157E308" prefWidth="25.0" />
                                  </content>
                               </ScrollPane>
                               <ScrollPane fx:id="codeScroller" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">

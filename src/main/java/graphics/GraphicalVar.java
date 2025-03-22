@@ -63,6 +63,11 @@ public final class GraphicalVar extends AbstractGraphicalObject {
 
         
     }
+
+    @Override
+    public void update(int index, String value) {
+        this.value = value;
+    }
     
 
 }

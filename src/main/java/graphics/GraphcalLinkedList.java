@@ -108,6 +108,16 @@ public final class GraphcalLinkedList extends AbstractGraphicalObject {
         }
     }
 
+    @Override
+    public void update(int index, String value) {
+        try{
+
+            values[index] = value;
+        } catch(Exception e) {
+            System.out.println("Index out of range");
+        }
+    }
+
 
 }
 

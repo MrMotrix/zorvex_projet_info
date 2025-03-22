@@ -7,31 +7,13 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.openNewFileController">
+<BorderPane stylesheets="@openNewFileStyle.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.openNewFileController">
    <center>
       <StackPane minHeight="200.0" minWidth="400.0">
-         <Button mnemonicParsing="false" onAction="#openFile" text="Ouvrir Fichier" />
+         <Button fx:id="openFileButton" mnemonicParsing="false" onAction="#openFile" text="Ouvrir Fichier" />
       </StackPane>
    </center>
    <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
+      <fx:include source="menuBar.fxml" />
    </top>
 </BorderPane>

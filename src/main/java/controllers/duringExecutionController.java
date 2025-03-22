@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.Random;
+
 import application.App;
 import graphics.GraphcalLinkedList;
 import graphics.GraphicalArray;
@@ -9,12 +11,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class duringExecutionController  {
@@ -37,11 +42,14 @@ public class duringExecutionController  {
     @FXML private ScrollPane codeScroller;
     @FXML private Pane canvasPane;
     
+    private int currentHighlightedLine = -1;
+    private double widthLine = -1;
+
     
     // TEST, so this can be deleteed later =================================================================
     GraphicalRepresentation rep = new GraphicalRepresentation();
     private successFileUploadController successController;
-    
+    Random random = new Random();
     // ==============================================================================
 
     @FXML
@@ -71,6 +79,10 @@ public class duringExecutionController  {
     @FXML
     void goLastLine(ActionEvent event) {
         System.out.println("here we should implement a way to return to the last line");
+        consolePanel.setText("when I press the button i should be modifying a variable");
+
+
+        // rep.getElements().get(0).update
         
     }
 
@@ -84,10 +96,23 @@ public class duringExecutionController  {
         // if we have finished execution, we return
         if (MainController.currentLine > MainController.numberOfLines) return;
 
-
-        rep.addElement(new GraphicalVar("Done in line", MainController.currentLine + "", canvasPane));
-        // rep.addElement(new GraphicalArray("myArray", new String[]{"value1", "value2", "value3"}, canvasPane));
-        // rep.addElement(new GraphcalLinkedList("myLinkedList", new String[]{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11"}, canvasPane)); // test to see what happens if there is not enough space
+        // random test to add a var, an array or a llist
+        switch (random.nextInt(2)) {
+            case 0:
+                rep.addElement(new GraphicalVar("Done in line", MainController.currentLine + "", canvasPane));
+                
+                break;
+            case 1:
+                rep.addElement(new GraphicalArray("myArray_done_in_line" + MainController.currentLine, new String[]{"value1", "value2", "value3"}, canvasPane));
+                
+                break;
+            case 2:
+            
+                rep.addElement(new GraphcalLinkedList("myLinkedList", new String[]{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11"}, canvasPane)); // test to see what happens if there is not enough space
+                break;
+            default:
+                break;
+        }
 
         rep.renderAll();
         highlightCurrentLine(MainController.currentLine);
@@ -113,6 +138,8 @@ public class duringExecutionController  {
         MainController.currentLine = 1;
         // clean highlights if any
         highlightCurrentLine(-1); 
+        //restart execution
+        continueExecution(event);
 
     }
 
@@ -123,6 +150,14 @@ public class duringExecutionController  {
 
         consolePanel.setText("We stop execution, so we return to the previous scene");
 
+
+        if (currentHighlightedLine >= 0 && currentHighlightedLine < codeContainer.getChildren().size()) {
+            Node node = codeContainer.getChildren().get(currentHighlightedLine);
+            node.setStyle("");
+            currentHighlightedLine = -1;
+        }
+
+
         // reset values for rendering
         GraphicalRepresentation.reinitializePositioningValues();
         rep.clear();
@@ -131,7 +166,9 @@ public class duringExecutionController  {
         // save the current state in MainController
         save();
         successController.setPreviousState();
-        
+        MainController.currentLine = 1;
+
+        MainController.bkpoints.forEach(System.out::println);
         // reuse the last scene
         App.app.getStageWindow().setScene(MainController.successScene);
         // MainController.successController.show(); 
@@ -161,6 +198,7 @@ public class duringExecutionController  {
         // codeContainer.setWrapText(false);
         splitPane.setDividerPosition(0, MainController.splitPaneDividerPosition);
 
+        // set the labels for every button
         continueButton.setText("C");
         lastLineButton.setText("<");
         nextLineButton.setText(">");   
@@ -212,17 +250,24 @@ public class duringExecutionController  {
             }
             });
     }
-
-    // TODO :it would be better to highlight the whole line and not just behind the text
+   
     private void highlightCurrentLine(int currentLine) {
         for (int i = 0; i < codeContainer.getChildren().size(); i++) {
-            if (i == currentLine) { 
-                codeContainer.getChildren().get(i).setStyle("-fx-background-color: #fff5a3;"); 
+            Node node = codeContainer.getChildren().get(i);
+            if (i == currentLine && node instanceof Label label) {
+                label.setMaxWidth(Double.MAX_VALUE);
+                // label.setMaxWidth(codeContainer.getMaxWidth());
+                
+                // label.setStyle("-fx-background-color: #fff5a3; -fx-border-color: black;");
+                label.setStyle("-fx-background-color: #fff5a3;");
+                // VBox.setVgrow(label, Priority.NEVER);
+                currentHighlightedLine = currentLine;
+                consolePanel.appendText(codeContainer.getWidth() + "\n");
             } else {
-                // remove the style 
-                codeContainer.getChildren().get(i).setStyle("");
+                node.setStyle("");
             }
         }
     }
-    
+
+
 }

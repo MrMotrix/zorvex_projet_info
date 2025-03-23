@@ -125,21 +125,12 @@ public class Parser {
             }
                 
         }
-        return null;
-        
+        return null;   
     }
 
 
     private Token current() {
         return tokens.get(i);
-    }
-
-    private Token peekNext() {
-        return i+1 < tokens.size() ? tokens.get(i+1) : null;
-    }
-
-    private Token getPrevious() {
-        return i-1 >= 0 ? tokens.get(i-1) : null;
     }
 
     private void advance() {

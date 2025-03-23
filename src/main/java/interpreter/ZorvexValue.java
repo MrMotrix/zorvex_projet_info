@@ -40,6 +40,6 @@ public class ZorvexValue {
     }
 
     public String toString() {
-        return type + " " + value + " ";
+        return type + " " + value;
     }
 }

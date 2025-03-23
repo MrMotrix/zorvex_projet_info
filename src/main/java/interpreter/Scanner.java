@@ -80,9 +80,12 @@ public class Scanner {
 
         if (character == '"') {
             currentPos += 1;
-            while (readChar() != '"') {
+            while (currentPos < code.length() && readChar() != '"') {
                 tokenBuilder.append(readChar());
                 currentPos += 1;
+            }
+            if (currentPos == code.length()) {
+                // erreur ici
             }
             currentPos += 1;
             return new Token(TokenType.CHAINE, tokenBuilder.toString(), tokenBuilder.toString());

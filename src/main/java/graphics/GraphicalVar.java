@@ -48,9 +48,9 @@ public final class GraphicalVar extends AbstractGraphicalObject {
         textContainer.setPrefWidth(width - 10);
         textContainer.setEditable(false);
 
-        textContainer.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 14;");
+        textContainer.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 12;");
 
-        renderedNodes = new ArrayList<>();
+        // renderedNodes = new ArrayList<>();
         renderedNodes.add(rect);
         renderedNodes.add(textContainer);
 

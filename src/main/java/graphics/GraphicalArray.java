@@ -23,6 +23,7 @@ public final class GraphicalArray extends AbstractGraphicalObject {
     }
 
     public void draw(double x, double y) {  
+    
 
         double cellHeight = HEIGHT_ARRAY_BOX;
         double cellWidth = WIDTH_ARRAY_BOX;
@@ -77,7 +78,7 @@ public final class GraphicalArray extends AbstractGraphicalObject {
 
 
     }
-
+    // TODO : this method needs to be tested and well implemented
     @Override
     public void update(int index, String value) {
         this.values[index] = value;

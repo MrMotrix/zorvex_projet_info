@@ -72,8 +72,6 @@ public class MainController {
         MainController.bkpointVbox = bkpointVbox;
     }
 
-
-
     public static void setSplitPaneDividerPosition(double value){splitPaneDividerPosition = value;}
     
     static void changeScene(String path) {
@@ -104,7 +102,7 @@ public class MainController {
     public static double getSplitPaneDividerPosition() {
         return splitPaneDividerPosition;
     }
-
+    
     
 }
 

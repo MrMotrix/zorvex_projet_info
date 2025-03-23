@@ -58,6 +58,9 @@ public class successFileUploadController {
         MainController.successController = this;
         MainController.changeScene(Paths.DURING_EXECUTION);
         
+        // System.out.println(bkpointVbox.getHeight());
+        // System.out.println(codeContainer.getHeight());
+        // System.out.println(nblineVbox.getHeight());
     }
 
 
@@ -66,6 +69,16 @@ public class successFileUploadController {
 
         // supprimer le background du TextField
         codeContainer.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-line-spacing: 60px;"); 
+
+        codeScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
+        bkScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
+        nblineScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
+        consolePanel.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
+
+        
+
+
+
         // codeContainer.setSpacing(0);
 
         if (MainController.content == null ) {
@@ -101,6 +114,11 @@ public class successFileUploadController {
         setNbLines();
         setBreakPoints();
         
+        // bkpointVbox.setMaxHeight(codeContainer.getMinHeight());
+        // bkpointVbox.setMinHeight(0);
+        // nblineVbox.setMaxHeight(codeContainer.getMinHeight());
+        // nblineVbox.setMinHeight(0);
+
         // syncrhonise scrolling
         codeScroller.vvalueProperty().bindBidirectional(bkScroller.vvalueProperty());
         codeScroller.vvalueProperty().bindBidirectional(nblineScroller.vvalueProperty());
@@ -146,9 +164,11 @@ public class successFileUploadController {
     private void setNbLines() {
         // set the minimum spacing, we can increase it though if required for the stop instructions
         nblineVbox.setSpacing(0); 
-    
+        // nblineVbox.setAlignment(Pos.);; 
+        
         for (int i = 1; i <= MainController.numberOfLines; i++) {
             Label label = new Label(String.valueOf(i));
+            // label.setStyle("-fx-");
             // label.setStyle("-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 1px;");
             // label.setStyle("-fx-background-color: transparent;");
     
@@ -164,7 +184,7 @@ public class successFileUploadController {
         // TODO slight disalignment t be fixed. Currently the best value to almost fit the other lines is 9
         bkpointVbox.setSpacing(9.4);
         // bkScroller.setPadding(new Insets(5,0,5,0));
-        // bkpointVbox.setAlignment(Pos.BOTTOM_CENTER); 
+
         bkpointVbox.setAlignment(Pos.BOTTOM_CENTER); 
         bkpointVbox.setStyle(bkpointVbox.getStyle() + "-fx-background-color: transparent;");
         // bkpointVbox.setStyle("-fx-border-color: black;");
@@ -208,10 +228,9 @@ public class successFileUploadController {
             });
             
             bkpointVbox.getChildren().add(bkButton);
-            // Separator separator = new Separator();
-            //     separator.setStyle("-fx-background-color: black; -fx-border-color: black; -fx-border-width: 1px;");
-            //     bkpointVbox.getChildren().add(separator);
         }
+
+
     }
 
 
@@ -228,9 +247,6 @@ public class successFileUploadController {
         codeContainer.getChildren().setAll(MainController.getCodeContainer().getChildren());
         nblineVbox.getChildren().setAll(MainController.getNblineVbox().getChildren());
         bkpointVbox.getChildren().setAll(MainController.getBkpointVbox().getChildren());
-
-        // just to test the style of the buttons
-        // bkpointVbox.getChildren().forEach(n -> System.out.println(n.getStyle()));
 
     }
     

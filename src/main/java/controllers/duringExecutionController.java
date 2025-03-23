@@ -3,7 +3,7 @@ package controllers;
 import java.util.Random;
 
 import application.App;
-import graphics.GraphcalLinkedList;
+import graphics.GraphicalLinkedList;
 import graphics.GraphicalArray;
 import graphics.GraphicalRepresentation;
 import graphics.GraphicalVar;
@@ -124,22 +124,22 @@ public class duringExecutionController  {
             switch (random.nextInt(3)) {
                 case 0 -> rep.addElement(new GraphicalVar("Line", MainController.currentLine + "", canvasPane));
                 case 1 -> rep.addElement(new GraphicalArray("myArray_done_in_line" + MainController.currentLine, new String[]{"value1", "value2", "value3"}, canvasPane));
-                case 2 -> rep.addElement(new GraphcalLinkedList("myLinkedList", new String[]{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11"}, canvasPane)); // just to see what happens if there is not enough space
+                case 2 -> rep.addElement(new GraphicalLinkedList("myLinkedList", new String[]{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11"}, canvasPane)); // just to see what happens if there is not enough space
             }
         //========================================================== CASE 2 : random remove of elements from a graphical representation ======================================================================
         } else if (TESTING_INDEX == 2){
 
             if(MainController.currentLine < 6) {
                 // rep.addElement(new GraphicalArray("myArray_done_in_line" + MainController.currentLine, new String[]{"value1", "value2", "value3"}, canvasPane));
-                rep.addElement(new GraphcalLinkedList("myLinkedList" + MainController.currentLine, new String[]{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11"}, canvasPane)); 
+                rep.addElement(new GraphicalLinkedList("myLinkedList" + MainController.currentLine, new String[]{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11"}, canvasPane)); 
             }
             else if (MainController.currentLine < 12){
-                GraphcalLinkedList g = (GraphcalLinkedList) rep.getElements().get(4);
+                GraphicalLinkedList g = (GraphicalLinkedList) rep.getElements().get(4);
                 int index = MainController.currentLine + random.nextInt(4);
                 g.addNodeAt(index, MainController.currentLine + "");
-                // rep.addElement((GraphcalLinkedList)(rep.getElements().getLast()).get(index));
+                // rep.addElement((GraphicalLinkedList)(rep.getElements().getLast()).get(index));
             } else if (MainController.currentLine < 20){
-                GraphcalLinkedList g = (GraphcalLinkedList) rep.getElements().get(4);
+                GraphicalLinkedList g = (GraphicalLinkedList) rep.getElements().get(4);
                 int index = random.nextInt(12);
                 consolePanel.appendText("Delete position" + index);
                 g.deleteNodeAt(index);
@@ -323,7 +323,7 @@ public class duringExecutionController  {
 // import java.util.Random;
 
 // import application.App;
-// import graphics.GraphcalLinkedList;
+// import graphics.GraphicalLinkedList;
 // import graphics.GraphicalArray;
 // import graphics.GraphicalRepresentation;
 // import graphics.GraphicalVar;
@@ -410,7 +410,7 @@ public class duringExecutionController  {
 //             switch (random.nextInt(3)) {
 //                 case 0 -> rep.addElement(new GraphicalVar("Done in line", String.valueOf(MainController.currentLine), canvasPane));
 //                 case 1 -> rep.addElement(new GraphicalArray("myArray_" + MainController.currentLine, new String[]{"value1", "value2", "value3"}, canvasPane));
-//                 case 2 -> rep.addElement(new GraphcalLinkedList("myList_" + MainController.currentLine, new String[]{"v1", "v2", "v3"}, canvasPane));
+//                 case 2 -> rep.addElement(new GraphicalLinkedList("myList_" + MainController.currentLine, new String[]{"v1", "v2", "v3"}, canvasPane));
 //             }
             
 //             // Restaurar el estado de la siguiente línea si ya está calculado

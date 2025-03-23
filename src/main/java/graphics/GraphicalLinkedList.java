@@ -15,14 +15,14 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-public final class GraphcalLinkedList extends AbstractGraphicalObject {
+public final class GraphicalLinkedList extends AbstractGraphicalObject {
 
     private String[] values;
     private List<GraphicalNode> nodes = new ArrayList<>();
 
     double currentX;
     
-    public GraphcalLinkedList(String name,  String[] values, Pane pane) {
+    public GraphicalLinkedList(String name,  String[] values, Pane pane) {
         super(name, pane);
         this.values = values;
         currentX = 0;
@@ -250,7 +250,6 @@ public final class GraphcalLinkedList extends AbstractGraphicalObject {
     //         renderedNodes.addAll(node.getRenderedNodes());
     //     }
     
-    //     // Reconstruir las flechas entre los nodos desplazados
     //     for (int i = position; i < nodes.size() - 1; i++) {
     //         GraphicalNode prevNode = nodes.get(i);
     //         GraphicalNode nextNode = nodes.get(i + 1);
@@ -261,9 +260,16 @@ public final class GraphcalLinkedList extends AbstractGraphicalObject {
     
     //     nodes.remove(position);
     // }
+
+    /**
+     * Deletes node at a given index, updates values and redraw nodes
+     * The feleted node has its transparency increased. It is completely removed from the pane when this is updated, i.e. when the methos reorganize from GraphicalRepresentation is called
+     * @param position Index of the element that will be removed
+     */
     public void deleteNodeAt(int position) {
         if (position < 0 || position >= nodes.size()) return;
-
+        
+        // Update internal value array to reflect insertion
         values = Stream.concat(
             Arrays.stream(values, 0, position),
             Arrays.stream(values, position + 1, values.length)
@@ -287,15 +293,15 @@ public final class GraphcalLinkedList extends AbstractGraphicalObject {
             }
         }
     
-        // Si no es el último nodo, eliminar la flecha de salida del nodo eliminado
+        // Remove arrow from the node to delete
         if (position < nodes.size() - 1) {
             nodeToRemove.clearOutgoingArrow(pane);
         }
     
-        // Eliminar el nodo de la lista
+        // Remove node from list of nodes
         nodes.remove(position);
     
-        // Reindexar los nodos restantes
+        // Reindex nodes from the modified position
         for (int i = position; i < nodes.size(); i++) {
             nodes.get(i).setIndex(i);
         }
@@ -397,7 +403,7 @@ public final class GraphcalLinkedList extends AbstractGraphicalObject {
 
 }
 
-// public final class GraphcalLinkedList extends AbstractGraphicalObject {
+// public final class GraphicalLinkedList extends AbstractGraphicalObject {
 
 //     private String name;
 //     private Pane pane;
@@ -411,7 +417,7 @@ public final class GraphcalLinkedList extends AbstractGraphicalObject {
 //     private Polygon[] arrowHeads;
 //     private Text title;
 
-//     public GraphcalLinkedList(String name, String[] values, Pane pane) {
+//     public GraphicalLinkedList(String name, String[] values, Pane pane) {
 //         this.name = name;
 //         this.pane = pane;
 //         this.values = values;

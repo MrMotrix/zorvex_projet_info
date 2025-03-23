@@ -252,13 +252,13 @@ public class GraphicalNode extends AbstractGraphicalObject{
 // import javafx.scene.shape.Rectangle;
 // import javafx.scene.text.Text;
 
-// public final class GraphcalLinkedList extends AbstractGraphicalObject {
+// public final class GraphicalLinkedList extends AbstractGraphicalObject {
 
 //     private String[] values;
 
 
     
-//     public GraphcalLinkedList(String name,  String[] values, Pane pane) {
+//     public GraphicalLinkedList(String name,  String[] values, Pane pane) {
 //         super(name, pane);
 //         this.values = values;
 //     }

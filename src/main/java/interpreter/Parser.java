@@ -1,32 +1,30 @@
 package interpreter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import interpreter.expression.BinaryOperation;
-import interpreter.expression.Expression;
-import interpreter.expression.Grouping;
-import interpreter.expression.Literal;
-import interpreter.expression.UBinaryOperator;
-import interpreter.expression.UUnaryOperator;
-import interpreter.expression.UnaryOperation;
-import interpreter.expression.Variable;
-import interpreter.instruction.Afficher;
+import interpreter.expression.*;
+import interpreter.instruction.*;
 
-// expression     → equality ;
-// equality       → comparison ( ( "!=" | "==" ) comparison )* ;
-// comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
-// term           → factor ( ( "-" | "+" ) factor )* ;
-// factor         → unary ( ( "/" | "*" ) unary )* ;
-// unary          → ( "!" | "-" ) unary
-//                | primary ;
-// primary        → NUMBER | STRING | "true" | "false" | "nil"
-//                | "(" expression ")" ;
+// program          → instruction* EOF;
+// instruction      → afficher | assigner ;
+// afficher         → "afficher " expression ENDL;
+// assignation      → IDENTIFIER "<-" expression ENDL;
+// condition        → "si " expression "faire " block ;
+// block            → "{" instruction* "}" ENDL ;
+// expression       → equality ;
+// equality         → comparison ( ( "!=" | "==" ) comparison )* ;
+// comparison       → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+// term             → factor ( ( "-" | "+" ) factor )* ;
+// factor           → unary ( ( "/" | "*" ) unary )* ;
+// unary            → ( "!" | "-" ) unary | primary ;
+// primary          → NUMBER | STRING | IDENTIFIER | "true" | "false" | "nil" | "(" expression ")" ;
 
 public class Parser {
     private final List<Token> tokens;
     private int i = 0;
-    
+
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
     }
@@ -34,6 +32,78 @@ public class Parser {
     public static Expression parseExpression(List<Token> tokens) {
         Parser parser = new Parser(tokens);
         return parser.expression();
+    }
+
+    public static List<Instruction> parse(List<Token> tokens) {
+        Parser parser = new Parser(tokens);
+        return parser.program();
+    }
+
+    public List<Instruction> program() {
+        List<Instruction> instructions = new ArrayList<>();
+
+        while (i < tokens.size()) 
+            instructions.add(instruction());
+        
+        return instructions;
+    }
+
+    public Instruction instruction() {
+        Instruction result = parse();
+        if (current().type() != TokenType.ENDL) {
+            // erreur
+        }
+        advance();
+        return result;
+    }
+
+    public Instruction parse() {
+        if (current().type() == TokenType.AFFICHER) {
+            advance();
+            return new Afficher(expression());
+        }
+
+        if (current().type() == TokenType.IDENTIFIANT) {
+            String name = current().lexeme();
+            advance();
+            if (current().type() != TokenType.ASSIGNER) {
+                // erreur ici
+            }
+            advance();
+            return new Assigner(name, expression());
+        }
+
+        if (current().type() == TokenType.SI) {
+            advance();
+            Expression condition = expression();
+            Block block = block();
+            return new Si(condition, block);
+        }
+
+        if (current().type() == TokenType.TANT_QUE) {
+            advance();
+            Expression condition = expression();
+            Block block = block();
+            return new TantQue(condition, block);
+        }
+
+        return null;
+    }
+
+    private Block block() {
+        if (current().type() != TokenType.BRACKET_OUVRANT) {
+            // erreur
+        }
+        advance();
+        List<Instruction> instructions = new ArrayList<>();
+        while (i < tokens.size() && current().type() != TokenType.BRACKET_FERMANT)  {
+            Instruction inst = instruction();
+            if (inst != null)
+                instructions.add(inst);
+        }
+        
+        advance();
+        return new Block(instructions);
     }
 
     private Expression expression() {

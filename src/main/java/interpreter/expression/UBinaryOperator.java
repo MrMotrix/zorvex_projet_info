@@ -17,6 +17,15 @@ public class UBinaryOperator implements BinaryOperator {
             case MOINS -> new ZorvexValue(obj1.asInteger() - obj2.asInteger());
             case FOIS -> new ZorvexValue(obj1.asInteger() * obj2.asInteger());
             case DIVISE -> new ZorvexValue(obj1.asInteger() / obj2.asInteger());
+            case PLUS_PETIT -> new ZorvexValue(obj1.asInteger() < obj2.asInteger() ? 1 : 0);
+            case PLUS_GRAND -> new ZorvexValue(obj1.asInteger() > obj2.asInteger() ? 1 : 0);
+            case PETIT_EGAL -> new ZorvexValue(obj1.asInteger() <= obj2.asInteger() ? 1 : 0);
+            case GRAND_EGAL -> new ZorvexValue(obj1.asInteger() >= obj2.asInteger() ? 1 : 0);
+            case EGAL -> new ZorvexValue(obj1.asInteger() == obj2.asInteger() ? 1 : 0);
+            case DIFFERENT -> new ZorvexValue(obj1.asInteger() != obj2.asInteger() ? 1 : 0);
+            case OU -> new ZorvexValue(obj1.asInteger() + obj2.asInteger() >= 0 ? 1 : 0);
+            case ET -> new ZorvexValue(obj2.asInteger() * obj1.asInteger() == 0 ? 0 : 1);
+            
             default -> new ZorvexValue(0);
         };
     }

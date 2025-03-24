@@ -11,6 +11,6 @@ public record UnaryOperation(Expression expr, UnaryOperator op) implements Expre
     }
 
     public String printValue() {
-        return op.toString() + expr.printValue();
+        return "(" + op.toString() + expr.printValue() + ")";
     }
 }

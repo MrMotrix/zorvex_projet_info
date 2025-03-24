@@ -11,7 +11,6 @@ public record BinaryOperation(Expression left, Expression right, BinaryOperator 
     }
 
     public String printValue() {
-        Function<Expression, String> addParenthesis = (Expression x) -> x instanceof Literal ? x.printValue() : "(" + x.printValue() + ")";
-        return addParenthesis.apply(left) + " " + op.toString() + " " + addParenthesis.apply(right);
+        return "(" + left.printValue() + " " + op.toString() + " " + right.printValue() + ")";
     }
 }

@@ -13,27 +13,16 @@ public class Scanner {
     private final String code;
 
     private int currentPos = 0;
-
-    public static void main(String[] args) {
-        String expr = "8*20/5+2*3";
-        System.out.println(expr);
-        var scanner = new Scanner(expr);
-        scanner.scan();
-        System.out.println(scanner.getTokens());
-        var parser = new Parser(scanner.getTokens());
-        Expression result = parser.parse();
-        System.out.println(result.printValue());
-        System.out.println(result.value(new Context()));
-        
-        scanner = new Scanner("5+42*2+\"hello world\"");
-        scanner.scan();
-        System.out.println(scanner.getTokens());
-
-    } 
-
+    
     public Scanner(String code) {
         this.code = code;
         this.tokens = new ArrayList<Token>();
+    }
+
+    public static List<Token> tokenize(String input) {
+        Scanner scanner = new Scanner(input);
+        scanner.scan();
+        return scanner.getTokens();
     }
 
     private void scan() {

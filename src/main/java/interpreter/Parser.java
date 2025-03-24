@@ -11,6 +11,7 @@ import interpreter.expression.UBinaryOperator;
 import interpreter.expression.UUnaryOperator;
 import interpreter.expression.UnaryOperation;
 import interpreter.expression.Variable;
+import interpreter.instruction.Afficher;
 
 // expression     → equality ;
 // equality       → comparison ( ( "!=" | "==" ) comparison )* ;
@@ -30,8 +31,9 @@ public class Parser {
         this.tokens = tokens;
     }
 
-    public Expression parse() {
-        return expression();
+    public static Expression parseExpression(List<Token> tokens) {
+        Parser parser = new Parser(tokens);
+        return parser.expression();
     }
 
     private Expression expression() {
@@ -123,8 +125,9 @@ public class Parser {
                 advance();
                 return new Grouping(expr);
             }
-                
+            // erreur, parenthèse non fermée   
         }
+        // erreur, unexpected token
         return null;   
     }
 

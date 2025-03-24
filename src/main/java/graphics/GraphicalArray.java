@@ -1,8 +1,10 @@
 package graphics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.TooManyListenersException;
+import java.util.stream.Stream;
 
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
@@ -16,15 +18,23 @@ public final class GraphicalArray extends AbstractGraphicalObject {
     
     //TODO : Replace the 'String[]' type by the the interface or enum that contains all the accepted types, or maybe just a String is required ?
     private String[] values;
-        
+    private double currentX;
+    private double currentY;
+    private int size ;
     public GraphicalArray(String name, String[] values, Pane pane) {
         super(name, pane);
         this.values = values;
+        this.size = values.length;
     }
+
+    public String[] getValues(){return values;}
+
+    public int size() {return size;}
 
     public void draw(double x, double y) {  
     
-
+        this.currentX = x;
+        this.currentY = y;
         double cellHeight = HEIGHT_ARRAY_BOX;
         double cellWidth = WIDTH_ARRAY_BOX;
         
@@ -34,7 +44,7 @@ public final class GraphicalArray extends AbstractGraphicalObject {
         
         
         pane.getChildren().add(title);
-        renderedNodes.add(title);
+        renderedNodes.add(title); // index 0
 
         for (int i = 0; i < values.length; i++){
 
@@ -71,18 +81,96 @@ public final class GraphicalArray extends AbstractGraphicalObject {
             index.setY(y + cellHeight + 15);
 
             pane.getChildren().addAll(cell, cellContent, index); // add to the pane
-            renderedNodes.add(index);
-            renderedNodes.add(cell);
-            renderedNodes.add(cellContent);
+            renderedNodes.add(index); // index 1 
+            renderedNodes.add(cell); // index 2
+            renderedNodes.add(cellContent); // index 3
         }
 
 
     }
-    // TODO : this method needs to be tested and well implemented
+
+    public void addNodeAt(int position, String value) {
+        
+        insertNodeWODraw(position, value);
+        
+        // Clear old graphical elements
+        for (Node node : renderedNodes) {
+            pane.getChildren().remove(node);
+        }
+        renderedNodes.clear();
+        draw(currentX, currentY); 
+        
+    }
+
+    /**
+     * Insert a node at a given position without drawing it. I.e. this is the logic to insert a cell. It also updates the size of the array
+     * @param position Index of the value to be added
+     * @param value String value 
+     */
+    public void insertNodeWODraw(int position, String value){
+        if (position < 0 || position > values.length) return;
+    
+        // Insert new value into internal array with shift
+        values = Stream.concat(
+            Stream.concat(Arrays.stream(values, 0, position), Stream.of(value)),
+            Arrays.stream(values, position, values.length)
+        ).toArray(String[]::new);
+    
+        this.size++;
+
+    }
+    
     @Override
     public void update(int index, String value) {
-        this.values[index] = value;
+    
+        updateValue(index, value);
+        updateRender(index, value);
     }
+    
+    public void updateValue(int index, String value){
+        this.values[index] = value;
+        
+    }
+
+    public void updateRender(int index, String value){
+        TextField field = (TextField) renderedNodes.get((index + 1) * 3);
+        field.setText(value);
+
+    }
+
+    /**
+     * Deletes the cell at the given position
+     * @param position index of the cell to remove
+     */
+    public void deleteNodeAt(int position) {
+        deleteNodeWODraw(position);
+    
+        // Clear current graphical elements
+        for (Node node : renderedNodes) {
+            pane.getChildren().remove(node);
+        }
+        renderedNodes.clear();
+    
+        // Redraw array from updated values
+        draw(currentX, currentY);
+    }
+
+    /**
+     * Deletes the value from the given position without affecting the drawn array. It also updates the size of the array
+     * @param position position of the element that will be deleted
+     */
+    public void deleteNodeWODraw(int position){
+        if (position < 0 || position >= values.length) return;
+    
+        // remove the value at the given position, shifting all elements left
+        values = Stream.concat(
+            Arrays.stream(values, 0, position),
+            Arrays.stream(values, position + 1, values.length)
+        ).toArray(String[]::new);
+
+        this.size--;
+    }
+    
 
 }
 

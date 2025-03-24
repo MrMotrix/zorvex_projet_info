@@ -19,14 +19,19 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject {
 
     private String[] values;
     private List<GraphicalNode> nodes = new ArrayList<>();
+    private int size ;
 
-    double currentX;
+    private double currentX;
     
     public GraphicalLinkedList(String name,  String[] values, Pane pane) {
         super(name, pane);
         this.values = values;
         currentX = 0;
+        this.size = values.length;
     }
+
+    public int size() {return size;}
+
 
     /**
      * Draws the entire linked list starting at the given coordinates.
@@ -69,6 +74,14 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject {
     }
 
     /**
+     * Return an array containing the values of the LinkedList
+     * @return
+     */
+    public String[] getValues() {return values;}
+
+
+
+    /**
      * Updates the value of the node at the specified index.
      * This only updates the data model, not the visual field contents.
      *
@@ -77,13 +90,23 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject {
      */
     @Override
     public void update(int index, String value) {
+        
         if (index >= 0 && index < values.length) {
             values[index] = value;
-            nodes.get(index).setValue(value);
+            nodes.get(index).update(index, value);
         } else {
             System.out.println("Index out of range");
         }
     }
+    
+    // public void updateValue(int index, String value){
+        
+    // }
+    
+    // public void updateRender(int index, String value){
+    //     nodes.get(index).update(index, value);;
+
+    // }
 
 
     // public void addNodeAt(int position, String value) {
@@ -131,7 +154,35 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject {
     //     currentX += WIDTH_LLIST_CONTENT_BOX + POINTER_WIDTH + SPACING;
     // }
 
+    /**
+     * Insert a node at a given position without drawing it. I.e. this is the logic to insert a node
+     * @param position Index of the value to be added
+     * @param value String value 
+     */
+    public void insertNodeWODraw(int position, String value){
+        if (position < 0 || position > values.length) return;
     
+        // Insert new value into internal array with shift
+        values = Stream.concat(
+            Stream.concat(Arrays.stream(values, 0, position), Stream.of(value)),
+            Arrays.stream(values, position, values.length)
+        ).toArray(String[]::new);
+    
+    }
+
+    /**
+     * Delete a cell at the given position withoutt drawing it. It is just the logic behind the removal
+     * @param position Index of the object to be removed
+     */
+    public void deleteNodeWODraw(int position){
+        if (position < 0 || position >= values.length) return;
+    
+        // remove the value at the given position, shifting all elements left
+        values = Stream.concat(
+            Arrays.stream(values, 0, position),
+            Arrays.stream(values, position + 1, values.length)
+        ).toArray(String[]::new);
+    }
 
     /**
      * Inserts a new node at the specified position in the linked list representation.
@@ -143,13 +194,8 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject {
      * @param value    The string value to assign to the new node
      */
     public void addNodeAt(int position, String value) {
-        if (position < 0 || position > nodes.size()) return;
 
-        // Update internal value array to reflect insertion
-        values = Stream.concat(
-            Stream.concat(Arrays.stream(values, 0, position), Stream.of(value)),
-            Arrays.stream(values, position, values.length)
-        ).toArray(String[]::new);
+        insertNodeWODraw(position, value);
 
         double WIDTH_LLIST_CONTENT_BOX = GraphicalObject.WIDTH_LLIST_CONTENT_BOX;
         double POINTER_WIDTH = 30;
@@ -192,7 +238,7 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject {
             renderedNodes.add(nodes.get(position).getOutgoingArrow());
             renderedNodes.add(nodes.get(position).getOutgoingArrowHead());
         }
-
+        // TODO : this can probablly be refactored. Its almos the same code than in deleteNodeAt
         // Reconnect arrows for all shifted nodes
         for (int i = position + 1; i < nodes.size(); i++) {
             GraphicalNode prevNode = nodes.get(i - 1);
@@ -267,13 +313,8 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject {
      * @param position Index of the element that will be removed
      */
     public void deleteNodeAt(int position) {
-        if (position < 0 || position >= nodes.size()) return;
         
-        // Update internal value array to reflect insertion
-        values = Stream.concat(
-            Arrays.stream(values, 0, position),
-            Arrays.stream(values, position + 1, values.length)
-        ).toArray(String[]::new);
+        deleteNodeWODraw(position);
     
         GraphicalNode nodeToRemove = nodes.get(position);
     
@@ -284,10 +325,10 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject {
     
         // Except for the last node, reconect all nodes to the next
         if (position > 0) {
-            GraphicalNode prev = nodes.get(position - 1);
-            prev.clearOutgoingArrow(pane);
             if (position < nodes.size() - 1) {
+                GraphicalNode prev = nodes.get(position - 1);
                 GraphicalNode next = nodes.get(position + 1);
+                prev.clearOutgoingArrow(pane);
                 // this instruction draws the arrows, and it draws one that goes over the 'deleted' node
                 prev.createOutgoingArrowTo(next, pane);
             }

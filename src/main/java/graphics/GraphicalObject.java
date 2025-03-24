@@ -1,6 +1,6 @@
 package graphics;
 
-public interface GraphicalObject  {
+public interface GraphicalObject {
 
     void draw(double x, double y);
     // String getName();

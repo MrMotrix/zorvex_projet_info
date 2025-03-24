@@ -3,7 +3,6 @@ package controllers;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,9 +15,7 @@ import javafx.stage.Stage;
 import utilities.Paths;
 
 import java.awt.Desktop;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+
 
 
 public class menuBarController {

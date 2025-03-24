@@ -2,10 +2,6 @@ package graphics;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
-
-import interpreter.ZorvexValue;
-import interpreter.expression.Variable;
 
 public class GraphicalRepresentation {
 
@@ -58,19 +54,7 @@ public class GraphicalRepresentation {
             reorganize();
         }
     }
-    
-    // private void drawElement(GraphicalObject element) {
-    //     element.draw(currentX,currentY);
-    //     currentY += spaceBetweenPlots;
-    // }
 
-    // public void addAndRenderElement(GraphicalVar graphicalVar) {
-
-    //     addElement(graphicalVar);
-    //     graphicalVar.draw(currentX, currentY);
-    //     currentY += spaceBetweenPlots;
-    // }
-    
     // (re)initialise values for psitioning
     public void reinitializePositioningValues(){
         this.currentX = 10;

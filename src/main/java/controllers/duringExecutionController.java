@@ -19,7 +19,6 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class duringExecutionController  {
@@ -45,12 +44,13 @@ public class duringExecutionController  {
     private int currentHighlightedLine = 0;
     private boolean firstLineRead = false;
     private boolean reverse = false;
+    private double consoleScrollPosition;
     private successFileUploadController successController;
     private GraphicalRepresentation rep = new GraphicalRepresentation();
     
     // TEST, so this can be deleteed later =================================================================
     Random random = new Random();
-    int TESTING_INDEX = 6;
+    int TESTING_INDEX = 5;
     // ==============================================================================
 
     @FXML
@@ -76,8 +76,16 @@ public class duringExecutionController  {
         while (!MainController.bkpoints.contains(MainController.currentLine) && MainController.currentLine != MainController.numberOfLines + 1) {
             goNextLine(event);
         }
-    
-        highlightCurrentLine(currentHighlightedLine);
+        // this handles the case when we have reached the end of the file. Basically, it disables the buttons and removes any possible remaining highlight. This is also treated in the goNextLine method
+        if (MainController.currentLine == MainController.numberOfLines + 1){
+            sendMessageToConsole("End of the file reached");
+            currentHighlightedLine++;
+            highlightCurrentLine(currentHighlightedLine);
+            
+            // Disable buttons because we are in the end of the file
+            continueButton.setDisable(true);
+            nextLineButton.setDisable(true);
+        }
 
     }
 
@@ -244,7 +252,7 @@ public class duringExecutionController  {
         MainController.currentLine++;
 
 
-        // TODO : check if the beavior is coherent with the calls to continueExecution
+        // TODO : check if the behaviour is coherent with the calls to continueExecution   
         if (MainController.currentLine == MainController.numberOfLines + 1){
             sendMessageToConsole("End of the file reached");
             
@@ -283,7 +291,6 @@ public class duringExecutionController  {
 
     @FXML
     void stopExecution(ActionEvent event) {
-        // System.out.println("On revient a successFileUpload...");
 
         sendMessageToConsole("We stop execution, so we return to the previous scene");
 
@@ -322,6 +329,7 @@ public class duringExecutionController  {
         MainController.setSplitPaneDividerPosition(splitPane.getDividerPositions()[0]);
         // console
         MainController.setConsole(consolePanel);
+        MainController.setConsoleScrollPosition(consolePanel.getScrollTop());
         // Scrollers
         MainController.setBkscroller(bkScroller);
         MainController.setNblineScroller(nblineScroller);
@@ -343,7 +351,7 @@ public class duringExecutionController  {
         bkScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
         nblineScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
         consolePanel.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
-        
+        canvasPane.setStyle("-fx-background-color: transparent;");
         
         // set the labels for every button
         continueButton.setText("C");
@@ -386,8 +394,7 @@ public class duringExecutionController  {
 
 
         bkpointVbox.setSpacing(9.5);
-        bkpointVbox.setAlignment(Pos.BOTTOM_CENTER); 
-        // bkpointVbox.setStyle(null);
+        bkpointVbox.setAlignment(Pos.TOP_CENTER); 
 
         // this is being reused so maybe it can be factorise
         double buttonSize = 8; 
@@ -408,7 +415,6 @@ public class duringExecutionController  {
             Node node = codeContainer.getChildren().get(i);
             if (i == currentLine && node instanceof Label label) {
                 // TODO : maybe this can be added when the labels are added so we dont have to update every time ?
-                label.setMaxWidth(Double.MAX_VALUE);
                 // label.setMaxWidth(codeContainer.getMaxWidth());
                 
                 // label.setStyle("-fx-background-color: #fff5a3; -fx-border-color: black;");
@@ -433,227 +439,3 @@ public class duringExecutionController  {
 
 
 }
-
-
-// package controllers;
-
-// import java.util.Random;
-
-// import application.App;
-// import graphics.GraphicalLinkedList;
-// import graphics.GraphicalArray;
-// import graphics.GraphicalRepresentation;
-// import graphics.GraphicalVar;
-// import javafx.event.ActionEvent;
-// import javafx.fxml.FXML;
-// import javafx.fxml.FXMLLoader;
-// import javafx.geometry.Pos;
-// import javafx.scene.Node;
-// import javafx.scene.control.Button;
-// import javafx.scene.control.Label;
-// import javafx.scene.control.ScrollPane;
-// import javafx.scene.control.SplitPane;
-// import javafx.scene.control.TextArea;
-// import javafx.scene.layout.AnchorPane;
-// import javafx.scene.layout.Pane;
-// import javafx.scene.layout.Priority;
-// import javafx.scene.layout.VBox;
-
-// public class duringExecutionController {
-    
-
-//         @FXML private VBox codeContainer;
-//         @FXML private TextArea consolePanel;
-//         @FXML private Button continueButton;
-//         @FXML private Button lastLineButton;
-//         @FXML private Button nextLineButton;
-//         @FXML private Button restartButton;
-//         @FXML private Button stopButton;
-//         @FXML private VBox bkpointVbox;
-//         @FXML private VBox nblineVbox;    
-//         @FXML private AnchorPane leftControlsPanel;
-//         @FXML private Button startButton;
-//         @FXML private FXMLLoader loader;
-//         @FXML private SplitPane splitPane;
-//         @FXML private ScrollPane bkScroller;
-//         @FXML private ScrollPane nblineScroller;
-//         @FXML private ScrollPane codeScroller;
-//         @FXML private Pane canvasPane;
-        
-//         private int currentHighlightedLine = -1;
-//         private boolean reverse = false;
-    
-//         // Test, can be deleted later =================================================================
-//         private GraphicalRepresentation rep = new GraphicalRepresentation();
-//         private successFileUploadController successController;
-//         private Random random = new Random();
-//         // ==============================================================================
-    
-//         @FXML
-//         void continueExecution(ActionEvent event) {
-//             consolePanel.setText("Continuing execution until next breakpoint or stop from the user.\n");
-    
-//             // If the button was pressed when being at a breakpoint, continue to next
-//             if (MainController.bkpoints.contains(MainController.currentLine)) {
-//                 goNextLine(event);
-//             }
-            
-//             // Continue execution until a new breakpoint or end of the file
-//             while (!MainController.bkpoints.contains(MainController.currentLine) && MainController.currentLine != MainController.numberOfLines) {
-//                 goNextLine(event);
-//             }
-//         }
-    
-//         @FXML
-//         void goLastLine(ActionEvent event) {
-//             if (MainController.currentLine <= 1) return;
-            
-//             // Go to the previous line, restoring the previous state
-//             MainController.currentLine--;
-//             rep.restoreNextState();
-//             highlightCurrentLine(MainController.currentLine);
-//             consolePanel.appendText("Currently on line " + MainController.currentLine + "\n");
-//         }
-    
-        
-//         @FXML
-//         void goNextLine(ActionEvent event) {
-//             if (MainController.currentLine > MainController.numberOfLines) return;
-            
-//             // Avanzar a la siguiente línea
-//             consolePanel.appendText("\nCurrent line: " + MainController.currentLine);
-            
-//             // Ejemplo: agregar un nuevo gráfico o variable
-//             switch (random.nextInt(3)) {
-//                 case 0 -> rep.addElement(new GraphicalVar("Done in line", String.valueOf(MainController.currentLine), canvasPane));
-//                 case 1 -> rep.addElement(new GraphicalArray("myArray_" + MainController.currentLine, new String[]{"value1", "value2", "value3"}, canvasPane));
-//                 case 2 -> rep.addElement(new GraphicalLinkedList("myList_" + MainController.currentLine, new String[]{"v1", "v2", "v3"}, canvasPane));
-//             }
-            
-//             // Restaurar el estado de la siguiente línea si ya está calculado
-//             rep.restoreNextState();  // Llama a redo() para restaurar el siguiente estado
-            
-//             highlightCurrentLine(MainController.currentLine);
-//             MainController.currentLine++;
-//         }
-        
-    
-//         @FXML
-//         void restartExecution(ActionEvent event) {
-//             consolePanel.setText("Restarting the execution... resetting everything.\n");
-            
-//             // Reinitialize graphical state
-//             GraphicalRepresentation.reinitializePositioningValues();
-//             rep.clear();
-            
-//             // Reset current line
-//             MainController.currentLine = 1;
-//             highlightCurrentLine(-1);  // Remove highlighting
-            
-//             continueExecution(event);  // Restart execution
-//         }
-    
-//         @FXML
-//         void stopExecution(ActionEvent event) {
-//             consolePanel.setText("Execution stopped. Returning to the previous scene.\n");
-    
-//             // Reset the highlighted line, if any
-//             if (currentHighlightedLine >= 0 && currentHighlightedLine < codeContainer.getChildren().size()) {
-//                 Node node = codeContainer.getChildren().get(currentHighlightedLine);
-//                 node.setStyle("");
-//                 currentHighlightedLine = -1;
-//             }
-    
-//             // Clean up rendering and UI elements
-//             GraphicalRepresentation.reinitializePositioningValues();
-//             rep.clear();
-//             MainController.setSplitPaneDividerPosition(splitPane.getDividerPositions()[0]);
-//             save();  // Save current state
-//             successController.setPreviousState();  // Go back to success scene
-    
-//             MainController.currentLine = 1;  // Reset current line
-//             App.app.getStageWindow().setScene(MainController.successScene);  // Switch scene
-//         }
-    
-//         public void save() {
-//             // Save current scene and controller state
-//             MainController.setSplitPaneDividerPosition(splitPane.getDividerPositions()[0]);
-//             MainController.setConsole(consolePanel);
-//             MainController.setBkscroller(bkScroller);
-//             MainController.setNblineScroller(nblineScroller);
-//             MainController.setCodeScroller(codeScroller);
-//             MainController.setCodeContainer(codeContainer);
-//             MainController.setBkpointVbox(bkpointVbox);
-//             MainController.setNblineVbox(nblineVbox);
-//         }
-    
-//         @FXML
-//         void initialize() {
-//             // Set style for UI elements
-//             codeContainer.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
-//             codeScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
-//             bkScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
-//             nblineScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
-//             consolePanel.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
-            
-//             splitPane.setDividerPosition(0, MainController.splitPaneDividerPosition);  // Restore divider position
-            
-//             // Set button labels
-//             continueButton.setText("C");
-//             lastLineButton.setText("<");
-//             nextLineButton.setText(">");
-//             restartButton.setText("R");
-//             stopButton.setText("A");
-    
-//             setPreviousState();
-//             successController = MainController.successController;
-    
-//             // Start execution when everything is set
-//             continueExecution(null);
-//         }
-    
-//         private void setPreviousState() {
-//             // Restore previous state (scroll position, vbox contents, etc.)
-//             splitPane.setDividerPosition(0, MainController.getSplitPaneDividerPosition());
-//             consolePanel.setText(MainController.getConsole().getText());
-//             codeScroller.setVvalue(MainController.getCodeScroller().getVvalue());
-//             nblineScroller.setVvalue(MainController.getNblineScroller().getVvalue());
-//             bkScroller.setVvalue(MainController.getBkScroller().getVvalue());
-    
-//             // Restore UI elements
-//             codeContainer.getChildren().setAll(MainController.getCodeContainer().getChildren());
-//             nblineVbox.getChildren().setAll(MainController.getNblineVbox().getChildren());
-//             bkpointVbox.getChildren().setAll(MainController.getBkpointVbox().getChildren());
-    
-//             // Synchronize scrolls
-//             codeScroller.vvalueProperty().bindBidirectional(bkScroller.vvalueProperty());
-//             codeScroller.vvalueProperty().bindBidirectional(nblineScroller.vvalueProperty());
-    
-//             // Style VBoxes and buttons
-//             bkpointVbox.setSpacing(9.5);
-//             bkpointVbox.setAlignment(Pos.BOTTOM_CENTER);
-    
-//             double buttonSize = 8;
-//             bkpointVbox.getChildren().forEach(node -> {
-//                 if (node instanceof Button bkButton) {
-//                     bkButton.setMinSize(buttonSize, buttonSize);
-//                     bkButton.setMaxSize(buttonSize, buttonSize);
-//                     bkButton.setPrefWidth(buttonSize);
-//                     bkButton.setPrefHeight(buttonSize);
-//                 }
-//             });
-//         }
-    
-//         private void highlightCurrentLine(int currentLine) {
-//             for (int i = 0; i < codeContainer.getChildren().size(); i++) {
-//                 Node node = codeContainer.getChildren().get(i);
-//                 if (i == currentLine && node instanceof Label label) {
-//                     label.setStyle("-fx-background-color: #fff5a3;");
-//                     currentHighlightedLine = currentLine;
-//                 } else {
-//                     node.setStyle("");
-//                 }
-//             }
-//         }
-        
-// }

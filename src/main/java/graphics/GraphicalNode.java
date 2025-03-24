@@ -1,6 +1,5 @@
 package graphics;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.Node;
@@ -11,7 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
 public class GraphicalNode extends AbstractGraphicalObject{
     private String value;
@@ -199,7 +197,7 @@ public class GraphicalNode extends AbstractGraphicalObject{
             );
         }
     }
-    // TODO : this method has not been tested, but would probably require a rerendering of the textfield containing the value
+
     @Override
     public void update(int index, String value) {
         updateValue(index, value);

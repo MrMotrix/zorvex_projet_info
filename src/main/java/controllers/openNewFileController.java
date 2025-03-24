@@ -21,26 +21,21 @@ public class openNewFileController {
 
     public void openFile() {
         
-        //create a filechooser onj     bj 
+        //create a filechooser onj     
         FileChooser fileChooser = new FileChooser();
         // fileChooser.setInitialDirectory(".");
 
-        // only some types are accepted
         // TODO : define the extension of the files
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers txt", "*.txt"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Toutes les fichiers", "*.*"));
 
         // pane to select file
+        File currentDirectory = new File(System.getProperty("user.dir"));
+        fileChooser.setInitialDirectory(currentDirectory);
         File selectedFile = fileChooser.showOpenDialog(null); // i think this null can be modified
 
         if (selectedFile != null) {
-            // ============================================================== TEST ============================================================
-            
-            System.out.println("Selected File: " + selectedFile.getAbsolutePath());
-            
-            // ==========================================================================================================================
 
-            // TODO : here we should implement the procedure to charge the file
             loadFile(selectedFile);
             App.app.getStageWindow().setTitle("Intepreting : " + selectedFile.getName());
 
@@ -66,14 +61,9 @@ public class openNewFileController {
         try {
             // Lire fichier et garder les lignes dans une liste
             List<String> lines = Files.readAllLines(file.toPath());
-            // builder = new StringBuilder();
-            // for (String line : lines) {
-            //     builder.append(line).append("\n");
-            //     MainController.numberOfLines ++;
-            // }
+
     
-            // // load file
-            // System.out.println(builder.toString());
+            //load file
             MainController.content = lines;
             MainController.numberOfLines = lines.size();
 
@@ -91,17 +81,4 @@ public class openNewFileController {
     }
 
     public void setStage(Stage stage) { this.stage = stage;}
-
-
-    // TODO : ajouter un lien vers la doucmentation ou (penible) ouvrir une nouvelle fenetre avec la documentation
-    @FXML
-    void openDocumentation(ActionEvent event) {
-        
-    }
-
-    // TODO : ouvrir une petite fenetre avec un peu sur ceux qui ont cree le programma ???
-    @FXML
-    void ouvrirAboutUs(ActionEvent event) {
-
-    }
 }

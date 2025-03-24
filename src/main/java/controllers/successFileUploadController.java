@@ -8,13 +8,10 @@ import application.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Separator;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
@@ -25,12 +22,10 @@ public class successFileUploadController {
 
     @FXML private VBox bkpointVbox;
     @FXML private VBox nblineVbox;
-    // @FXML private TextArea codeContainer;
     @FXML private VBox codeContainer;
     @FXML private TextArea consolePanel;
     @FXML private AnchorPane leftControlsPanel;
     @FXML private Button startButton;
-    // @FXML // private VBox nblinesPanel;
     @FXML private FXMLLoader loader;
     @FXML private SplitPane splitPane;
     @FXML private ScrollPane bkScroller;
@@ -58,9 +53,6 @@ public class successFileUploadController {
         MainController.successController = this;
         MainController.changeScene(Paths.DURING_EXECUTION);
         
-        // System.out.println(bkpointVbox.getHeight());
-        // System.out.println(codeContainer.getHeight());
-        // System.out.println(nblineVbox.getHeight());
     }
 
 
@@ -69,16 +61,13 @@ public class successFileUploadController {
 
         // supprimer le background du TextField
         codeContainer.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-line-spacing: 60px;"); 
-
         codeScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
         bkScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
         nblineScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
         consolePanel.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
 
+        consolePanel.setWrapText(true);
         
-
-
-
         // codeContainer.setSpacing(0);
 
         if (MainController.content == null ) {
@@ -86,7 +75,7 @@ public class successFileUploadController {
             // codeContainer.setText("this is only for testing, usually CodeContainer is not null, its content would be the content of the file");
 
             List<String> myTestList = new ArrayList<>();
-            int lines = 120;
+            int lines = 50;
             
             MainController.numberOfLines = lines;
             
@@ -94,6 +83,7 @@ public class successFileUploadController {
 
                 
                 Label label = new Label("Line " + i);
+                label.setMaxWidth(Double.MAX_VALUE);
                 // label.setStyle("-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 1px;");
                 myTestList.add(label.getText());
                 codeContainer.getChildren().addAll(label);
@@ -101,11 +91,13 @@ public class successFileUploadController {
             
             MainController.content = myTestList;
 
-
         }
+
         else {
             for (String line : MainController.content){
                 Label label = new Label(line);
+                label.setMaxWidth(Double.MAX_VALUE);
+
                 codeContainer.getChildren().addAll(label);
             }
         }
@@ -153,6 +145,7 @@ public class successFileUploadController {
         MainController.setCodeContainer(codeContainer);
         MainController.setBkpointVbox(bkpointVbox);
         MainController.setNblineVbox(nblineVbox);
+        MainController.consoleScrollPosition = consolePanel.getScrollTop();
         
     }
 
@@ -168,7 +161,6 @@ public class successFileUploadController {
         
         for (int i = 1; i <= MainController.numberOfLines; i++) {
             Label label = new Label(String.valueOf(i));
-            // label.setStyle("-fx-");
             // label.setStyle("-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 1px;");
             // label.setStyle("-fx-background-color: transparent;");
     
@@ -183,9 +175,9 @@ public class successFileUploadController {
         
         // TODO slight disalignment t be fixed. Currently the best value to almost fit the other lines is 9
         bkpointVbox.setSpacing(9.4);
+        bkpointVbox.setAlignment(Pos.TOP_CENTER); 
         // bkScroller.setPadding(new Insets(5,0,5,0));
 
-        bkpointVbox.setAlignment(Pos.BOTTOM_CENTER); 
         bkpointVbox.setStyle(bkpointVbox.getStyle() + "-fx-background-color: transparent;");
         // bkpointVbox.setStyle("-fx-border-color: black;");
 
@@ -238,6 +230,8 @@ public class successFileUploadController {
         splitPane.setDividerPosition(0,MainController.getSplitPaneDividerPosition());
         // console
         consolePanel.setText(MainController.getConsole().getText());
+        consolePanel.setScrollTop(MainController.consoleScrollPosition);
+
         // Scrollers
         codeScroller.setVvalue(MainController.getCodeScroller().getVvalue());
         nblineScroller.setVvalue(MainController.getNblineScroller().getVvalue());

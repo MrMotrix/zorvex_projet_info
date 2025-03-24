@@ -22,7 +22,7 @@ public class App extends Application{
     public void start(Stage primaryStage) throws Exception {
 
 
-        // loader = new FXMLLoader(getClass().getResource(Paths.OPEN_NEW_FILE));
+        //  loader = new FXMLLoader(getClass().getResource(Paths.OPEN_NEW_FILE));
         loader = new FXMLLoader(getClass().getResource(Paths.SUCCESS_FILE_UPLOAD));
         // loader = new FXMLLoader(getClass().getResource(Paths.DURING_EXECUTION));
         
@@ -37,15 +37,8 @@ public class App extends Application{
         primaryStage.setMaximized(true);
         primaryStage.setScene(scene);
 
-        // openNewFileController controller1 = loader.getController();
-        // successFileUploadController controller1 = loader.getController();
-        // controller1.setStage(primaryStage);
-        
-
         app = this;
         stageWindow = primaryStage;
-        // setScene(Paths.OPEN_NEW_FILE);
-
 
         primaryStage.setMinHeight(400);
         primaryStage.setMinWidth(600);
@@ -67,26 +60,18 @@ public class App extends Application{
         try {
             BorderPane pane = loader.load();
             Scene scene = new Scene(pane);
-
-
-            // ============================= TEST ========================
-            // scene.getStylesheets().add(getClass().getResource(Paths))
-
-            // ==============================++++++=======================
             
             // The scene is loaded but has not been changed yet. Resize before changing
             stageWindow.setWidth(width);
             stageWindow.setHeight(height);
-            // stageWindow.setFullScreen(isFullScreen);
+            
             // Change scene
             stageWindow.setScene(scene);
     
-            // stageWindow.show();
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        
     }
     
 

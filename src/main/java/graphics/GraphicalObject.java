@@ -20,4 +20,6 @@ public interface GraphicalObject  {
     static double WIDTH_LLIST_CONTENT_BOX = 40;
     static double HEIGHT_LLIST_CONTENT_BOX = 40;
 
+    static double POINTER_WIDTH = 30;
+    static double SPACING = 20;
 }

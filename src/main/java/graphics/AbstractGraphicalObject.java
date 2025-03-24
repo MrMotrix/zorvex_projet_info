@@ -11,7 +11,6 @@ public abstract  class AbstractGraphicalObject implements GraphicalObject {
     protected String name;
     protected Pane pane;
     protected List<Node> renderedNodes;
-    // protected Pair<Double, Double> coordinates;
     private final int id;
 
     public AbstractGraphicalObject(String name, Pane pane) {
@@ -21,23 +20,15 @@ public abstract  class AbstractGraphicalObject implements GraphicalObject {
         this.id = GraphicalObjectIDGenerator.getNextId();
         
     }
-
-    // public void setCoordinates(double x, double y) { 
-    //     this.coordinates = new Pair<Double,Double>(x, y);
-    // }
-
-    // public Pair<Double, Double> getCoordinates(){
-    //     return coordinates;
-    // }
     
     public int getID() {
         return id;
     }
 
-    // TODO : maybe check that every node is not null ? 
     public void removeFromPane() {
         if (renderedNodes != null) {
             pane.getChildren().removeAll(renderedNodes);
+            renderedNodes.clear();
         }
     }
 

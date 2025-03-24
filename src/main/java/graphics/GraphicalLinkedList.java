@@ -90,23 +90,21 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject {
      */
     @Override
     public void update(int index, String value) {
-        
-        if (index >= 0 && index < values.length) {
-            values[index] = value;
-            nodes.get(index).update(index, value);
-        } else {
-            System.out.println("Index out of range");
-        }
+        updateValue(index, value);
+        updateRender(index, value);
     }
     
-    // public void updateValue(int index, String value){
+    public void updateValue(int index, String value){
+        if (index >= 0 && index < values.length) {
+            values[index] = value;
+        } 
         
-    // }
+    }
     
-    // public void updateRender(int index, String value){
-    //     nodes.get(index).update(index, value);;
+    public void updateRender(int index, String value){
+        nodes.get(index).update(index, value);
 
-    // }
+    }
 
 
     // public void addNodeAt(int position, String value) {

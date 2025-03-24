@@ -50,21 +50,21 @@ class GraphicalLinkedListTest {
     @Test
     void testUpdateValueAtMiddle() {
         GraphicalLinkedList list = new GraphicalLinkedList("List", new String[]{"A", "B", "C"}, null);
-        list.update(1, "Updated");
+        list.updateValue(1, "Updated");
         assertArrayEquals(new String[]{"A", "Updated", "C"}, list.getValues());
     }
 
     @Test
     void testUpdateValueAtStart() {
         GraphicalLinkedList list = new GraphicalLinkedList("List", new String[]{"A", "B", "C"}, null);
-        list.update(0, "Updated");
+        list.updateValue(0, "Updated");
         assertArrayEquals(new String[]{"Updated", "B", "C"}, list.getValues());
     }
 
     @Test
     void testupdateAtEnd() {
         GraphicalLinkedList list = new GraphicalLinkedList("List", new String[]{"A", "B", "C"}, null);
-        list.update(2, "Updated");
+        list.updateValue(2, "Updated");
         assertArrayEquals(new String[]{"A", "B", "Updated"}, list.getValues());
     }
 
@@ -93,7 +93,7 @@ class GraphicalLinkedListTest {
         assertArrayEquals(new String[]{"A", "Middle", "C", "D", "End"}, list.getValues());
 
         // Delete the last node
-        list.deleteNodeWODraw(5);
+        list.deleteNodeWODraw(4);
         assertArrayEquals(new String[]{"A", "Middle", "C", "D"}, list.getValues());
     }
 
@@ -114,7 +114,7 @@ class GraphicalLinkedListTest {
     @Test
     void testUpdateOutOfBounds() {
         GraphicalLinkedList list = new GraphicalLinkedList("List", new String[]{"A", "B", "C"}, null);
-        list.update(5, "OutOfBounds");
+        list.updateValue(5, "OutOfBounds");
         assertArrayEquals(new String[]{"A", "B", "C"}, list.getValues());  // Ensure no changes were made
     }
 

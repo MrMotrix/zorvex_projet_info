@@ -42,7 +42,8 @@ public class duringExecutionController  {
     @FXML private ScrollPane codeScroller;
     @FXML private Pane canvasPane;
     
-    private int currentHighlightedLine = -1;
+    private int currentHighlightedLine = 0;
+    private boolean firstLineRead = false;
     private boolean reverse = false;
     private successFileUploadController successController;
     private GraphicalRepresentation rep = new GraphicalRepresentation();
@@ -55,22 +56,28 @@ public class duringExecutionController  {
     @FXML
     void continueExecution(ActionEvent event) {
         
-        consolePanel.setText("here we should continue execution until next breakpoint or stop from the user . Currently there is a test on the plot area");
-        consolePanel.appendText("\n i am adding a new variable");
-        consolePanel.appendText("\n Currently on line" + MainController.currentLine);
+        sendMessageToConsole("here we should continue execution until next breakpoint or stop from the user . Currently there is a test on the plot area");
+        sendMessageToConsole("i am adding a new variable");
+        // sendMessageToConsole("Last line completely executed" + MainController.currentLine);
         // rep.addAndRenderElement(new GraphicalVar("myVar2", "50", canvasPane));
 
-        //  if the button was pressed when being in a breakpoint
-        if (MainController.bkpoints.contains(MainController.currentLine)){
-            MainController.bkpoints.forEach(System.out::println);
+        //  if the button was pressed when being in a breakpoint and we are not in the first line (if there is a bp in the first line we should be able to stop)
+        if (MainController.currentLine == 1 && MainController.bkpoints.contains(1) && !firstLineRead) {
+            highlightCurrentLine(currentHighlightedLine);
+            sendMessageToConsole("Breakpoint reached at line 1");
+            firstLineRead = true;
+            return;
+        }
+    
+        if (MainController.bkpoints.contains(MainController.currentLine)) {
             goNextLine(event);
         }
-        
-        // continue execution until a new breakpoint is found or the end of the file is reached
-        while (!MainController.bkpoints.contains(MainController.currentLine) && MainController.currentLine != MainController.numberOfLines) {
-            MainController.bkpoints.forEach(System.out::println);
+    
+        while (!MainController.bkpoints.contains(MainController.currentLine) && MainController.currentLine != MainController.numberOfLines + 1) {
             goNextLine(event);
         }
+    
+        highlightCurrentLine(currentHighlightedLine);
 
     }
 
@@ -82,7 +89,7 @@ public class duringExecutionController  {
         if (TESTING_INDEX == 1){
             
             int index = random.nextInt(rep.getElements().size());
-            consolePanel.appendText("Erased element in position " + index);
+            sendMessageToConsole("Erased element in position " + index);
             rep.deleteElement(rep.getElements().get(index));
 
         }
@@ -96,7 +103,7 @@ public class duringExecutionController  {
             MainController.currentLine --;
         }
         highlightCurrentLine(MainController.currentLine);
-        consolePanel.appendText("\n Currently on line" + MainController.currentLine);
+        sendMessageToConsole("Last line executed : " + MainController.currentLine);
 
         // rep.getElements().get(0).update
     }
@@ -113,11 +120,10 @@ public class duringExecutionController  {
             MainController.currentLine++;
         }
 
-        consolePanel.appendText("\nCurrent line : " + MainController.currentLine);
+        sendMessageToConsole("Last executed line : " + MainController.currentLine);
 
         // ============================================ TESTING ============================================================================================
-        // ============================================ CASE 1 : random remove of elements from a graphical representation============================================================================================
-        
+        // ============================================ CASE 1 : random remove of elements from a graphical representation======================================================================        
         if (TESTING_INDEX == 1){
 
             // random test to add a var, an array or a llist
@@ -141,7 +147,7 @@ public class duringExecutionController  {
             } else if (MainController.currentLine < 20){
                 GraphicalLinkedList g = (GraphicalLinkedList) rep.getElements().get(4);
                 int index = random.nextInt(12);
-                consolePanel.appendText("Delete position" + index);
+                sendMessageToConsole("Delete position" + index);
                 g.deleteNodeAt(index);
                                 
             } else {
@@ -161,7 +167,7 @@ public class duringExecutionController  {
             } else if (MainController.currentLine < 20){
                 GraphicalArray g = (GraphicalArray) rep.getElements().get(4);
                 int index = random.nextInt(12);
-                consolePanel.appendText("Delete position" + index);
+                sendMessageToConsole("Delete position" + index);
                 g.deleteNodeAt(index);
 
             } else {
@@ -176,7 +182,7 @@ public class duringExecutionController  {
                 
             } else {
                 int index = random.nextInt(5);
-                consolePanel.appendText("Variable modified" + index);
+                sendMessageToConsole("Variable modified" + index);
                 rep.getElements().get(index).update(0, MainController.currentLine + "");;
 
             }
@@ -189,7 +195,7 @@ public class duringExecutionController  {
                 
             } else if (MainController.currentLine < 12){
                 int index = random.nextInt(7);
-                consolePanel.appendText("Index modified in the last array" + index);
+                sendMessageToConsole("Index modified in the last array" + index);
                 rep.getElements().getLast().update(index, MainController.currentLine + "");;
 
             } else if (MainController.currentLine < 20){
@@ -199,7 +205,7 @@ public class duringExecutionController  {
             
             } else if (MainController.currentLine < 25){
                 int index = random.nextInt(7);
-                consolePanel.appendText("Index modified in the last array" + index);
+                sendMessageToConsole("Index modified in the last array" + index);
                 rep.getElements().getLast().update(MainController.currentLine - 20, MainController.currentLine + "");;
 
             }
@@ -214,7 +220,7 @@ public class duringExecutionController  {
                 
             } else if (MainController.currentLine < 12){
                 int index = random.nextInt(7);
-                consolePanel.appendText("Index modified in the last llist" + index);
+                sendMessageToConsole("Index modified in the last llist" + index);
                 rep.getElements().getLast().update(index, MainController.currentLine + "");;
 
             } else if (MainController.currentLine < 20){
@@ -224,7 +230,7 @@ public class duringExecutionController  {
             
             } else if (MainController.currentLine < 25){
                 int index = random.nextInt(7);
-                consolePanel.appendText("Index modified in the last array" + index);
+                sendMessageToConsole("Index modified in the last array" + index);
                 rep.getElements().getLast().update(MainController.currentLine - 20, MainController.currentLine + "");;
 
             }
@@ -236,15 +242,24 @@ public class duringExecutionController  {
 
         // this should be the last line of the method, we only increase the pointer to the current line once it has been correctly interpreted
         MainController.currentLine++;
+
+
+        // TODO : check if the beavior is coherent with the calls to continueExecution
+        if (MainController.currentLine == MainController.numberOfLines + 1){
+            sendMessageToConsole("End of the file reached");
+            
+            // Disable buttons because we are in the end of the file
+            continueButton.setDisable(true);
+            nextLineButton.setDisable(true);
+        }
     
     }
 
     @FXML
     void restartExecution(ActionEvent event) {
         
-        consolePanel.appendText("i am restarting the execution, so all should be cleaned");
+        sendMessageToConsole("i am restarting the execution, so all should be cleaned");
 
-        
         // reinitialize the defaiult values of the position magager 
         rep.reinitializePositioningValues();
         
@@ -254,7 +269,12 @@ public class duringExecutionController  {
         // Reset the curerntline
         MainController.currentLine = 1;
         // clean highlights if any
-        highlightCurrentLine(-1); 
+        highlightCurrentLine(0); 
+        // restart checker of first line breakpoint
+        firstLineRead = false;
+        // restart state of buttons
+        continueButton.setDisable(false);
+        nextLineButton.setDisable(false);
         //restart execution
         continueExecution(event);
 
@@ -263,15 +283,15 @@ public class duringExecutionController  {
 
     @FXML
     void stopExecution(ActionEvent event) {
-        System.out.println("On revient a successFileUpload...");
+        // System.out.println("On revient a successFileUpload...");
 
-        consolePanel.setText("We stop execution, so we return to the previous scene");
+        sendMessageToConsole("We stop execution, so we return to the previous scene");
 
 
         if (currentHighlightedLine >= 0 && currentHighlightedLine < codeContainer.getChildren().size()) {
             Node node = codeContainer.getChildren().get(currentHighlightedLine);
             node.setStyle("");
-            currentHighlightedLine = -1;
+            currentHighlightedLine = 0;
         }
 
 
@@ -280,12 +300,18 @@ public class duringExecutionController  {
         rep.clear();
         // set the positino of the divider
         MainController.setSplitPaneDividerPosition(splitPane.getDividerPositions()[0]);
+        // reset the state of the buttons
+        continueButton.setDisable(false);
+        nextLineButton.setDisable(false);
+
         // save the current state in MainController
         save();
         successController.setPreviousState();
         MainController.currentLine = 1;
+        firstLineRead = false;
 
-        MainController.bkpoints.forEach(System.out::println);
+
+        // MainController.bkpoints.forEach(System.out::println);
         // reuse the last scene
         App.app.getStageWindow().setScene(MainController.successScene);
         // MainController.successController.show(); 
@@ -394,6 +420,15 @@ public class duringExecutionController  {
                 node.setStyle("");
             }
         }
+    }
+
+    /**
+     * This method is used to send messages to the console. It already adds a prefix to the message and a 
+     * line break at the begginning
+     * @param message
+     */
+    private void sendMessageToConsole(String message){
+        consolePanel.appendText("\n>>>" + message);
     }
 
 

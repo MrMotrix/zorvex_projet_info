@@ -9,6 +9,6 @@ public record Grouping(Expression expr) implements Expression {
     }
 
     public String printValue() {
-        return "(" + expr.printValue() + ")";
+        return expr.printValue();
     }
 }

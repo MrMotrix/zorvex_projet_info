@@ -14,12 +14,13 @@ public final class GraphicalVar extends AbstractGraphicalObject {
 
     
     private String value;
-    
 
     public GraphicalVar(String name, String value, Pane pane) {
         super(name, pane);
         this.value = value;
     }
+
+    public String getValue() {return value;}
 
     @Override
     public void draw(double x, double y) {
@@ -51,8 +52,9 @@ public final class GraphicalVar extends AbstractGraphicalObject {
         textContainer.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 12;");
 
         // renderedNodes = new ArrayList<>();
-        renderedNodes.add(rect);
-        renderedNodes.add(textContainer);
+        // important to keep this order, otherwise it may break the logic (yes i know it may not be the best)
+        renderedNodes.add(rect); // index 0
+        renderedNodes.add(textContainer); // index 1
 
         Tooltip tooltip = new Tooltip();
         Tooltip.install(textContainer, tooltip);
@@ -66,9 +68,22 @@ public final class GraphicalVar extends AbstractGraphicalObject {
 
     @Override
     public void update(int index, String value) {
-        this.value = value;
+    
+        updateValue(value);
+        updateRender();
     }
     
+    public void updateValue(String value){
+        this.value = value;
+        
+    }
+    /**
+     * Changes the value of the object in the rendered value. As it is an object it is not required to rerender it
+     */
+    public void updateRender(){
+        TextField field = (TextField) renderedNodes.get(1);
+        field.setText(name + " = " + value);
+    }
 
 }
 

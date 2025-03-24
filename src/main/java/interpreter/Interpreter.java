@@ -20,6 +20,32 @@ public class Interpreter {
     private int currentInstruction = 0;
     private List<Instruction> instructions = new ArrayList<Instruction>();
 
+    public static void main(String[] args) {
+        Interpreter interpreter = new Interpreter();
+        List<Token> tokens = Scanner.tokenize(
+            """
+            n <- 13
+            p <- 2
+            compose <- 0
+            tant que p < n {
+                si n/p*p=n {
+                    compose <- 1
+                }
+                p <- p + 1
+            }
+            si compose=1 {
+                afficher "non premier"
+            }
+            si compose=0 {
+                afficher "premier"
+            }
+            """);
+
+        interpreter.instructions = Parser.parse(tokens);
+
+        while (interpreter.currentInstruction < interpreter.instructions.size())
+            interpreter.interpret();
+    }
     public Interpreter() {
         stack.add(new Context());
     }

@@ -49,7 +49,7 @@ public class duringExecutionController  {
     
     // TEST, so this can be deleteed later =================================================================
     Random random = new Random();
-    int TESTING_INDEX = 2;
+    int TESTING_INDEX = 6;
     // ==============================================================================
 
     @FXML
@@ -116,7 +116,7 @@ public class duringExecutionController  {
         consolePanel.appendText("\nCurrent line : " + MainController.currentLine);
 
         // ============================================ TESTING ============================================================================================
-        // ============================================ CASE 1 : add and remove elements from a linked list ============================================================================================
+        // ============================================ CASE 1 : random remove of elements from a graphical representation============================================================================================
         
         if (TESTING_INDEX == 1){
 
@@ -126,7 +126,7 @@ public class duringExecutionController  {
                 case 1 -> rep.addElement(new GraphicalArray("myArray_done_in_line" + MainController.currentLine, new String[]{"value1", "value2", "value3"}, canvasPane));
                 case 2 -> rep.addElement(new GraphicalLinkedList("myLinkedList", new String[]{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11"}, canvasPane)); // just to see what happens if there is not enough space
             }
-        //========================================================== CASE 2 : random remove of elements from a graphical representation ======================================================================
+        //========================================================== CASE 2 :  add and remove elements from a linked list ======================================================================
         } else if (TESTING_INDEX == 2){
 
             if(MainController.currentLine < 6) {
@@ -147,7 +147,89 @@ public class duringExecutionController  {
             } else {
                 rep.deleteElement(rep.getElements().getFirst());
             }
+        //========================================================== CASE 3 : add and remove elements from an array  ======================================================================
+
+        } else if (TESTING_INDEX == 3){
+            if(MainController.currentLine < 6) {
+
+                rep.addElement(new GraphicalArray("myGraphicalArray" + MainController.currentLine, "Hello worlds this is an array test".split(" "), canvasPane)); 
+                
+            } else if (MainController.currentLine < 12){
+                GraphicalArray g = (GraphicalArray) rep.getElements().get(4);
+                g.addNodeAt(2, "test" + random.nextInt(10));
+
+            } else if (MainController.currentLine < 20){
+                GraphicalArray g = (GraphicalArray) rep.getElements().get(4);
+                int index = random.nextInt(12);
+                consolePanel.appendText("Delete position" + index);
+                g.deleteNodeAt(index);
+
+            } else {
+                rep.deleteElement(rep.getElements().getFirst());
+            }
+        //========================================================== CASE 4 : modify the value of a variable  ======================================================================
+
+        } else if (TESTING_INDEX == 4){
+            if(MainController.currentLine < 6) {
+
+                rep.addElement(new GraphicalVar("myVar" + MainController.currentLine, "value" + MainController.currentLine, canvasPane)); 
+                
+            } else {
+                int index = random.nextInt(5);
+                consolePanel.appendText("Variable modified" + index);
+                rep.getElements().get(index).update(0, MainController.currentLine + "");;
+
+            }
+            //========================================================== CASE 5 : modify the value of an array at a given index  ======================================================================
+
+        } else if (TESTING_INDEX == 5){
+            if(MainController.currentLine < 6) {
+
+                rep.addElement(new GraphicalArray("myGraphicalArray" + MainController.currentLine, "Hello worlds this is an array test".split(" "), canvasPane)); 
+                
+            } else if (MainController.currentLine < 12){
+                int index = random.nextInt(7);
+                consolePanel.appendText("Index modified in the last array" + index);
+                rep.getElements().getLast().update(index, MainController.currentLine + "");;
+
+            } else if (MainController.currentLine < 20){
+
+                GraphicalArray g = (GraphicalArray) rep.getElements().getLast();
+                g.addNodeAt(random.nextInt(g.size()), "test" + MainController.currentLine);
+            
+            } else if (MainController.currentLine < 25){
+                int index = random.nextInt(7);
+                consolePanel.appendText("Index modified in the last array" + index);
+                rep.getElements().getLast().update(MainController.currentLine - 20, MainController.currentLine + "");;
+
+            }
+        
+
+        //========================================================== CASE 6 : modify the value of a linked list at a given index  ======================================================================
+
+        } else if (TESTING_INDEX == 6){
+            if(MainController.currentLine < 6) {
+
+                rep.addElement(new GraphicalLinkedList("myLinkedList" + MainController.currentLine, "Hello worlds this is an llist test".split(" "), canvasPane)); 
+                
+            } else if (MainController.currentLine < 12){
+                int index = random.nextInt(7);
+                consolePanel.appendText("Index modified in the last llist" + index);
+                rep.getElements().getLast().update(index, MainController.currentLine + "");;
+
+            } else if (MainController.currentLine < 20){
+
+                GraphicalLinkedList g = (GraphicalLinkedList) rep.getElements().getLast();
+                g.addNodeAt(random.nextInt(g.size()), "test" + MainController.currentLine);
+            
+            } else if (MainController.currentLine < 25){
+                int index = random.nextInt(7);
+                consolePanel.appendText("Index modified in the last array" + index);
+                rep.getElements().getLast().update(MainController.currentLine - 20, MainController.currentLine + "");;
+
+            }
         }
+            
         //===========================================================END TEST=========================================================================
 
         highlightCurrentLine(MainController.currentLine);

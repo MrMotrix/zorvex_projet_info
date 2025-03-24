@@ -73,9 +73,9 @@ public class GraphicalNode extends AbstractGraphicalObject{
         pointerBox.setStroke(Color.BLACK);
     
         // add everything that has been created to the renderedNodes list
-        renderedNodes.add(valueBox);
-        renderedNodes.add(valueField);
-        renderedNodes.add(pointerBox);
+        renderedNodes.add(valueBox); // index 0
+        renderedNodes.add(valueField); // index 1
+        renderedNodes.add(pointerBox); // index 2
     
         // Add eveything to the
         pane.getChildren().addAll(valueBox, valueField, pointerBox);
@@ -124,8 +124,8 @@ public class GraphicalNode extends AbstractGraphicalObject{
         this.outgoingArrow = line;
         this.outgoingArrowHead = arrowHead;
     
-        renderedNodes.add(line);
-        renderedNodes.add(arrowHead);
+        renderedNodes.add(line); // index3 
+        renderedNodes.add(arrowHead); // index 4
     }
 
     public List<Node> getRenderedNodes() {
@@ -228,8 +228,19 @@ public class GraphicalNode extends AbstractGraphicalObject{
     // TODO : this method has not been tested, but would probably require a rerendering of the textfield containing the value
     @Override
     public void update(int index, String value) {
-        this.value = value;
+        updateValue(index, value);
+        updateRender(index, value);
     }
+    
+    public void updateValue(int index, String value){
+        this.value = value;
+        
+    }
+    
+    public void updateRender(int index, String value){
+        TextField field = (TextField) renderedNodes.get(1);
+        field.setText(value);
+    }    
     
 
     

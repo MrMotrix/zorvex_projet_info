@@ -6,4 +6,5 @@ public class Paths {
     public static final String SUCCESS_FILE_UPLOAD = "successFileUpload.fxml";
     public static final String DURING_EXECUTION = "duringExecution.fxml";
     public static final String OPEN_NEW_FILE_STYLE = "openNewFileStyle.css";
+    public static final String SUCCESS_FILE_STYLE = "successDuringStyle.css";
 }

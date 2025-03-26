@@ -40,7 +40,6 @@ public final class GraphicalVar extends AbstractGraphicalObject {
         rect.setFill(Color.LIGHTBLUE);
         rect.setStroke(Color.BLACK);
         
-        // TODO give a different style so that we differenciate 'name' from 'value' ?
         TextField textContainer = new TextField(name + " = " + value);
 
         textContainer.setLayoutX(x + 5);

@@ -6,7 +6,6 @@ import java.util.Set;
 import application.App;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 
@@ -30,6 +29,8 @@ public class MainController {
     static VBox nblineVbox;
     public static Scene successScene;
     public static successFileUploadController successController;
+
+    public static double consoleScrollPosition;
     
 
 
@@ -62,7 +63,9 @@ public class MainController {
         return nblineVbox;
     }
 
-
+    public static void setConsoleScrollPosition(double value) {
+        consoleScrollPosition = value;
+    }
 
     public static void setNblineVbox(VBox nblineVbox) {
         MainController.nblineVbox = nblineVbox;

@@ -1,0 +1,39 @@
+/* Estilos para los elementos de la interfaz */
+.codeContainer {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-line-spacing: 60px;
+}
+
+.codeScroller, .bkScroller, .nblineScroller {
+    -fx-focus-color: lightgrey;
+    -fx-faint-focus-color: transparent;
+}
+
+.consolePanel {
+    -fx-focus-color: lightgrey;
+    -fx-faint-focus-color: transparent;
+    -fx-wrap-text: true;
+}
+
+/* Estilos para el vbox de breakpoints */
+.bkpointVbox {
+    -fx-background-color: transparent;
+    -fx-spacing: 9.4;
+    -fx-alignment: top-center;
+}
+
+/* Estilos de botones de breakpoints */
+.bkButton {
+    -fx-background-color: black;
+    -fx-background-radius: 100%;
+    -fx-min-width: 8px;
+    -fx-min-height: 8px;
+    -fx-pref-width: 8px;
+    -fx-pref-height: 8px;
+}
+
+.bkButton.active {
+    -fx-background-color: red;
+    -fx-background-radius: 50%;
+}

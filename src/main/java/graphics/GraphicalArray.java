@@ -92,14 +92,17 @@ public final class GraphicalArray extends AbstractGraphicalObject {
     public void addNodeAt(int position, String value) {
         
         insertNodeWODraw(position, value);
+        clearRenderedNodes(); 
+        draw(currentX, currentY);
         
+    }
+
+    private void clearRenderedNodes() {
         // Clear old graphical elements
         for (Node node : renderedNodes) {
             pane.getChildren().remove(node);
         }
         renderedNodes.clear();
-        draw(currentX, currentY); 
-        
     }
 
     /**
@@ -143,16 +146,10 @@ public final class GraphicalArray extends AbstractGraphicalObject {
      * @param position index of the cell to remove
      */
     public void deleteNodeAt(int position) {
-        deleteNodeWODraw(position);
-    
-        // Clear current graphical elements
-        for (Node node : renderedNodes) {
-            pane.getChildren().remove(node);
-        }
-        renderedNodes.clear();
-    
-        // Redraw array from updated values
+        deleteNodeWODraw(position);    
+        clearRenderedNodes();
         draw(currentX, currentY);
+
     }
 
     /**
@@ -173,92 +170,3 @@ public final class GraphicalArray extends AbstractGraphicalObject {
     
 
 }
-
-// public final class GraphicalArray implements GraphicalObject {
-
-//     private String name;
-//     private String[] values;
-//     private Pane pane;
-
-//     private Rectangle[] rectangles;
-//     private TextField[] textFields;
-//     private Text[] indexLabels;
-//     private Text title;
-
-//     public GraphicalArray(String name, String[] values, Pane pane) {
-//         this.name = name;
-//         this.values = values;
-//         this.pane = pane;
-//     }
-
-//     @Override
-//     public void draw(double x, double y) {
-//         double cellHeight = HEIGHT_ARRAY_BOX;
-//         double cellWidth = WIDTH_ARRAY_BOX;
-
-//         title = new Text(name);
-//         title.setX(x);
-//         title.setY(y - 10);
-//         pane.getChildren().add(title);
-
-//         rectangles = new Rectangle[values.length];
-//         textFields = new TextField[values.length];
-//         indexLabels = new Text[values.length];
-
-//         for (int i = 0; i < values.length; i++) {
-//             double cx = x + i * cellWidth;
-
-//             Rectangle cell = new Rectangle(cellWidth, cellHeight);
-//             cell.setX(cx);
-//             cell.setY(y);
-//             cell.setFill(Color.LIGHTBLUE);
-//             cell.setStroke(Color.BLACK);
-
-//             TextField content = new TextField(values[i]);
-//             Tooltip tooltip = new Tooltip();
-//             Tooltip.install(content, tooltip);
-//             tooltip.setText(content.getText());
-//             content.setLayoutX(cx + 5);
-//             content.setLayoutY(y + 10);
-//             content.setPrefWidth(cellWidth - 10);
-//             content.setEditable(false);
-//             content.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 13;");
-
-//             Text index = new Text(String.valueOf(i));
-//             index.setX(cx + cellWidth / 2 - 5);
-//             index.setY(y + cellHeight + 15);
-
-//             rectangles[i] = cell;
-//             textFields[i] = content;
-//             indexLabels[i] = index;
-
-//             pane.getChildren().addAll(cell, content, index);
-//         }
-//     }
-
-//     @Override
-//     public String getName() {
-//         return name;
-//     }
-
-//     @Override
-//     public void update(String value) {
-//         throw new UnsupportedOperationException("Use updateAt(index, value) for arrays.");
-//     }
-
-//     public void updateAt(int index, String newValue) {
-//         if (index < 0 || index >= values.length) return;
-//         values[index] = newValue;
-//         if (textFields != null && textFields[index] != null) {
-//             textFields[index].setText(newValue);
-//         }
-//     }
-
-//     @Override
-//     public void removeFromPane() {
-//         pane.getChildren().remove(title);
-//         for (int i = 0; i < values.length; i++) {
-//             pane.getChildren().removeAll(rectangles[i], textFields[i], indexLabels[i]);
-//         }
-//     }
-// }

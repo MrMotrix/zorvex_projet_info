@@ -1,6 +1,5 @@
 package graphics;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.Node;
@@ -11,7 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
 public class GraphicalNode extends AbstractGraphicalObject{
     private String value;
@@ -40,13 +38,7 @@ public class GraphicalNode extends AbstractGraphicalObject{
     
         this.x = x;
         this.y = y;
-    
-        // Text title = new Text(name);
-        // title.setX(x);
-        // title.setY(y - 10);
-        // pane.getChildren().add(title);
-        // renderedNodes.add(title);
-    
+        
         // draw ValueBox in blue
         Rectangle valueBox = new Rectangle(cellWidth, cellHeight);
         valueBox.setX(x);
@@ -81,29 +73,6 @@ public class GraphicalNode extends AbstractGraphicalObject{
         pane.getChildren().addAll(valueBox, valueField, pointerBox);
     }
 
-    // public void createOutgoingArrowTo(GraphicalNode toNode, Pane pane) {
-    //     double startX = this.x + GraphicalObject.WIDTH_LLIST_CONTENT_BOX + pointerWidth;
-    //     double startY = this.y + GraphicalObject.cellHeight / 2;
-    //     double endX = toNode.x;
-    //     double endY = toNode.y + GraphicalObject.cellHeight / 2;
-    
-    //     Line line = new Line(startX, startY, endX, endY);
-    //     Polygon arrowHead = new Polygon(
-    //         endX, endY,
-    //         endX - 5, endY - 5,
-    //         endX - 5, endY + 5
-    //     );
-    //     arrowHead.setFill(Color.BLACK);
-    
-    //     pane.getChildren().addAll(line, arrowHead);
-    
-    //     this.outgoingArrow = line;
-    //     this.outgoingArrowHead = arrowHead;
-    
-    //     renderedNodes.add(line);
-    //     renderedNodes.add(arrowHead);
-    // }
-    
     // create a new arrow
     public void createOutgoingArrowTo(GraphicalNode toNode, Pane pane) {
         double startX = this.x + WIDTH_LLIST_CONTENT_BOX + pointerWidth;
@@ -171,6 +140,9 @@ public class GraphicalNode extends AbstractGraphicalObject{
     public void setX(double x) {
         this.x = x;
     }
+    public void setY(double y) {
+        this.y = y;
+    }
 
     public void setIndex(int index) {
         this.index = index;
@@ -225,7 +197,7 @@ public class GraphicalNode extends AbstractGraphicalObject{
             );
         }
     }
-    // TODO : this method has not been tested, but would probably require a rerendering of the textfield containing the value
+
     @Override
     public void update(int index, String value) {
         updateValue(index, value);
@@ -241,9 +213,6 @@ public class GraphicalNode extends AbstractGraphicalObject{
         TextField field = (TextField) renderedNodes.get(1);
         field.setText(value);
     }    
-    
-
-    
     
     
 }

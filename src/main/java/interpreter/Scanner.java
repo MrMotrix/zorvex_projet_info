@@ -4,16 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import interpreter.expression.BinaryOperator;
-import interpreter.expression.Expression;
-import interpreter.expression.UBinaryOperator;
-
 public class Scanner {
     private final List<Token> tokens;
     private final String code;
 
     private int currentPos = 0;
-    
+    private int currentLine = 1;
+
     public Scanner(String code) {
         this.code = code;
         this.tokens = new ArrayList<Token>();
@@ -36,6 +33,7 @@ public class Scanner {
         // Je pense que la façon actuelle est lente
 
         // virer les whitespaces au début
+        int line = currentLine;
         while (readChar() == ' ') {
             currentPos += 1;
         }
@@ -46,15 +44,17 @@ public class Scanner {
 
             if (codeCharacters.equals(tokenCharacters)) {
                 currentPos += codeCharacters.length();
-                return new Token(tokenType, codeCharacters);
+                return new Token(tokenType, codeCharacters, null, line);
             }
         }
-
+        
         char character = readChar();
+        if (character == '\n')
+            currentLine += 1;
         for (TokenType tokenType : TokenType.singleCharTokenTypes()) {
             if ((character+"").equals(tokenType.characters())) {
                 currentPos += 1;
-                return new Token(tokenType, character+"");
+                return new Token(tokenType, character+"", null, line);
             }
         }
 
@@ -64,7 +64,7 @@ public class Scanner {
                 tokenBuilder.append(readChar());
                 currentPos += 1;
             }
-            return new Token(TokenType.NOMBRE, tokenBuilder.toString(), Integer.valueOf(tokenBuilder.toString()));
+            return new Token(TokenType.NOMBRE, tokenBuilder.toString(), Integer.valueOf(tokenBuilder.toString()), line);
         }
 
         if (character == '"') {
@@ -77,7 +77,7 @@ public class Scanner {
                 // erreur ici
             }
             currentPos += 1;
-            return new Token(TokenType.CHAINE, tokenBuilder.toString(), tokenBuilder.toString());
+            return new Token(TokenType.CHAINE, tokenBuilder.toString(), tokenBuilder.toString(), line);
         }
 
         Set<Character> startOfNewToken = TokenType.startOfNewToken();
@@ -87,7 +87,7 @@ public class Scanner {
             tokenBuilder.append(readChar());
             currentPos += 1;
         }
-        return new Token(TokenType.IDENTIFIANT, tokenBuilder.toString());
+        return new Token(TokenType.IDENTIFIANT, tokenBuilder.toString(), null, line);
     }
     public List<Token> getTokens() {
         return tokens;

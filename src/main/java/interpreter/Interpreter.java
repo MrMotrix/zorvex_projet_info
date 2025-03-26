@@ -12,13 +12,14 @@ import interpreter.instruction.Afficher;
 import interpreter.instruction.Assigner;
 import interpreter.instruction.Instruction;
 import interpreter.instruction.TantQue;
+import interpreter.instruction.InstructionInfo;
 
 public class Interpreter {
     private ArrayDeque<Context> stack = new ArrayDeque<>();
     private ArrayDeque<Integer> returnLine = new ArrayDeque<>();
 
     private int currentInstruction = 0;
-    private List<Instruction> instructions = new ArrayList<Instruction>();
+    private List<InstructionInfo> instructions = new ArrayList<>();
 
     public static void main(String[] args) {
         Interpreter interpreter = new Interpreter();
@@ -27,44 +28,43 @@ public class Interpreter {
             n <- 13
             p <- 2
             compose <- 0
-            tant que p < n {
-                si n/p*p=n {
-                    compose <- 1
-                }
-                p <- p + 1
-            }
-            si compose=1 {
-                afficher "non premier"
-            }
-            si compose=0 {
-                afficher "premier"
-            }
+            n <- n+p
             """);
 
         interpreter.instructions = Parser.parse(tokens);
 
-        while (interpreter.currentInstruction < interpreter.instructions.size())
-            interpreter.interpret();
+        while (interpreter.currentInstruction < interpreter.instructions.size()) {
+            interpreter.step();
+        }
     }
     public Interpreter() {
         stack.add(new Context());
     }
 
+    public Interpreter(String code) {
+        this();
+        this.instructions = Parser.parse(Scanner.tokenize(code));
+    }
+
     public int getLineCount() {
-        return -1;
+        return instructions.getLast().line();
     }
 
     public int getCurrentLine() {
-        return -1;
-    }  
+        return instructions.get(currentInstruction).line();
+    }
 
     public ZorvexValue getVariable(String name) {
         return stack.getLast().getVariable(name);
     }
 
-    public String interpret() {
+    public String step() {
+        return interpret();
+    }
+
+    private String interpret() {
         currentInstruction += 1;
-        return interpret(instructions.get(currentInstruction-1));
+        return interpret(instructions.get(currentInstruction-1).instruction());
     }
 
     public String interpret(Instruction instruction) {

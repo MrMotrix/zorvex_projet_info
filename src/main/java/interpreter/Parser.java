@@ -8,7 +8,7 @@ import interpreter.expression.*;
 import interpreter.instruction.*;
 
 // program          → instruction* EOF;
-// instruction      → afficher | assigner ;
+// instruction      → afficher | assigner | condition;
 // afficher         → "afficher " expression ENDL;
 // assignation      → IDENTIFIER "<-" expression ENDL;
 // condition        → "si " expression "faire " block ;
@@ -34,16 +34,18 @@ public class Parser {
         return parser.expression();
     }
 
-    public static List<Instruction> parse(List<Token> tokens) {
+    public static List<InstructionInfo> parse(List<Token> tokens) {
         Parser parser = new Parser(tokens);
         return parser.program();
     }
 
-    public List<Instruction> program() {
-        List<Instruction> instructions = new ArrayList<>();
+    public List<InstructionInfo> program() {
+        List<InstructionInfo> instructions = new ArrayList<>();
 
-        while (i < tokens.size()) 
-            instructions.add(instruction());
+        while (i < tokens.size()) {
+            int line = current().line();
+            instructions.add(new InstructionInfo(instruction(), line));
+        }
         
         return instructions;
     }

@@ -212,6 +212,9 @@ public class GraphicalNode extends AbstractGraphicalObject{
     public void updateRender(int index, String value){
         TextField field = (TextField) renderedNodes.get(1);
         field.setText(value);
+
+        Tooltip.install(field, new Tooltip(value));
+
     }    
     
     

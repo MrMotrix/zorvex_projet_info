@@ -32,6 +32,18 @@ public class successFileUploadController {
     @FXML private ScrollPane nblineScroller;
     @FXML private ScrollPane codeScroller;
 
+    // ================================================================================================
+    
+    public static String code =  """
+        n <- 10*10 / 5
+        p <- 2
+        compose <- 0
+        n <- n+p
+        """;
+    
+    // ================================================================================================
+
+
 
     public SplitPane getSplitPane() {
         return splitPane;
@@ -45,7 +57,7 @@ public class successFileUploadController {
 
     @FXML
     void beginExecution(ActionEvent event) {
-        App.app.getStageWindow().setTitle("Executing : " + MainController.nameFile);
+        App.app.getStageWindow().setTitle("En éxécution : " + MainController.nameFile);
     
         save();
 
@@ -68,13 +80,29 @@ public class successFileUploadController {
 
         consolePanel.setWrapText(true);
         
-        // codeContainer.setSpacing(0);
 
         if (MainController.content == null ) {
-            // mainController.content = new StringBuilder("this is only for testing, usually CodeContainer is not null, its content would be the content of the file. this is just a test ●●●●●●●");
-            // codeContainer.setText("this is only for testing, usually CodeContainer is not null, its content would be the content of the file");
 
             List<String> myTestList = new ArrayList<>();
+
+            String testingText = code;
+            
+           
+            for (String line : testingText.split("\n")){
+                myTestList.add(line);
+            }
+            MainController.numberOfLines = myTestList.size();
+
+            for (String line : myTestList){
+                
+                Label label = new Label(line);
+                label.setMaxWidth(Double.MAX_VALUE);
+                // label.setStyle("-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 1px;");
+                codeContainer.getChildren().addAll(label);
+            }
+
+            /*
+            
             int lines = 50;
             
             MainController.numberOfLines = lines;
@@ -88,7 +116,7 @@ public class successFileUploadController {
                 myTestList.add(label.getText());
                 codeContainer.getChildren().addAll(label);
             }
-            
+            */
             MainController.content = myTestList;
 
         }
@@ -128,6 +156,7 @@ public class successFileUploadController {
         this.codeContainer = MainController.getCodeContainer();
         this.bkpointVbox = MainController.getBkpointVbox();
         this.nblineVbox = MainController.getNblineVbox();
+        this.consolePanel.setScrollTop(MainController.consoleScrollPosition);
     }
 
 
@@ -157,7 +186,6 @@ public class successFileUploadController {
     private void setNbLines() {
         // set the minimum spacing, we can increase it though if required for the stop instructions
         nblineVbox.setSpacing(0); 
-        // nblineVbox.setAlignment(Pos.);; 
         
         for (int i = 1; i <= MainController.numberOfLines; i++) {
             Label label = new Label(String.valueOf(i));

@@ -58,8 +58,7 @@ public final class GraphicalVar extends AbstractGraphicalObject {
         Tooltip tooltip = new Tooltip();
         Tooltip.install(textContainer, tooltip);
         tooltip.setText(textContainer.getText());
-
-
+        
     pane.getChildren().addAll(rect, textContainer);
 
         
@@ -82,6 +81,8 @@ public final class GraphicalVar extends AbstractGraphicalObject {
     public void updateRender(){
         TextField field = (TextField) renderedNodes.get(1);
         field.setText(name + " = " + value);
+        Tooltip.install(field, new Tooltip(name + " = " + value));
+
     }
 
 }

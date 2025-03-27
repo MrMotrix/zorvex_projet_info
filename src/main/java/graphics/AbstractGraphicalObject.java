@@ -32,5 +32,9 @@ public abstract  class AbstractGraphicalObject implements GraphicalObject {
     }
 
     public List<Node> getRenderedNodes() {return renderedNodes;}
+
+    public String getName() {
+        return name;
+    }
     
 }

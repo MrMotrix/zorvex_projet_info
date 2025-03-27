@@ -139,6 +139,9 @@ public final class GraphicalArray extends AbstractGraphicalObject {
         TextField field = (TextField) renderedNodes.get((index + 1) * 3);
         field.setText(value);
 
+        Tooltip.install(field, new Tooltip(value));
+
+
     }
 
     /**

@@ -7,6 +7,7 @@ import graphics.GraphicalLinkedList;
 import graphics.GraphicalArray;
 import graphics.GraphicalRepresentation;
 import graphics.GraphicalVar;
+import interpreter.Interpreter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,6 +48,7 @@ public class duringExecutionController  {
     private double consoleScrollPosition;
     private successFileUploadController successController;
     private GraphicalRepresentation rep = new GraphicalRepresentation();
+    private Interpreter interpreter;
     
     // TEST, so this can be deleteed later =================================================================
     Random random = new Random();
@@ -56,15 +58,15 @@ public class duringExecutionController  {
     @FXML
     void continueExecution(ActionEvent event) {
         
-        sendMessageToConsole("here we should continue execution until next breakpoint or stop from the user . Currently there is a test on the plot area");
-        sendMessageToConsole("i am adding a new variable");
+        // sendMessageToConsole("here we should continue execution until next breakpoint or stop from the user . Currently there is a test on the plot area");
+        // sendMessageToConsole("i am adding a new variable");
         // sendMessageToConsole("Last line completely executed" + MainController.currentLine);
         // rep.addAndRenderElement(new GraphicalVar("myVar2", "50", canvasPane));
 
         //  if the button was pressed when being in a breakpoint and we are not in the first line (if there is a bp in the first line we should be able to stop)
         if (MainController.currentLine == 1 && MainController.bkpoints.contains(1) && !firstLineRead) {
             highlightCurrentLine(currentHighlightedLine);
-            sendMessageToConsole("Breakpoint reached at line 1");
+            // sendMessageToConsole("Breakpoint reached at line 1");
             firstLineRead = true;
             return;
         }
@@ -78,7 +80,7 @@ public class duringExecutionController  {
         }
         // this handles the case when we have reached the end of the file. Basically, it disables the buttons and removes any possible remaining highlight. This is also treated in the goNextLine method
         if (MainController.currentLine == MainController.numberOfLines + 1){
-            sendMessageToConsole("End of the file reached");
+            sendMessageToConsole("Fin du fichier atteint");
             currentHighlightedLine++;
             highlightCurrentLine(currentHighlightedLine);
             
@@ -98,7 +100,7 @@ public class duringExecutionController  {
             
             int index = random.nextInt(rep.getElements().size());
             sendMessageToConsole("Erased element in position " + index);
-            rep.deleteElement(rep.getElements().get(index));
+            rep.deleteElement(rep.getElements().get(index).getName());
 
         }
 
@@ -128,7 +130,44 @@ public class duringExecutionController  {
             MainController.currentLine++;
         }
 
-        sendMessageToConsole("Last executed line : " + MainController.currentLine);
+        // sendMessageToConsole("Last executed line : " + MainController.currentLine);
+
+
+        // ===================================HERE GOES THE IMPLEMENTATION TO READ INSTRUCTIONS=========================================
+        
+        // interpret the next line ang get the variables that are modified or added. 
+        String var = interpreter.step();
+        
+        if (var != "" && var != null){
+
+            try {
+                
+                String value = interpreter.getVariable(var).toString();
+                value = value.substring(value.indexOf(" ") + 1);
+                
+                
+                // add the variable to the graphical representation or check if it already exists and update it
+                
+                if (rep.getElements().keySet().contains(var)){
+                    rep.updateElement(var, value, 0);
+                } else {
+                    rep.addElement(var, new GraphicalVar(var, value, canvasPane));
+                }
+                
+            } catch (Exception e) {
+                sendMessageToConsole(e.getStackTrace().toString());
+                stopExecution(event);
+            }
+
+        }
+
+
+        // rep.addElement(null);
+        
+        // ============================================================================
+
+        /*
+        if (false){
 
         // ============================================ TESTING ============================================================================================
         // ============================================ CASE 1 : random remove of elements from a graphical representation======================================================================        
@@ -245,7 +284,8 @@ public class duringExecutionController  {
         }
             
         //===========================================================END TEST=========================================================================
-
+    }
+        */
         highlightCurrentLine(MainController.currentLine);
 
         // this should be the last line of the method, we only increase the pointer to the current line once it has been correctly interpreted
@@ -254,7 +294,7 @@ public class duringExecutionController  {
 
         // TODO : check if the behaviour is coherent with the calls to continueExecution   
         if (MainController.currentLine == MainController.numberOfLines + 1){
-            sendMessageToConsole("End of the file reached");
+            sendMessageToConsole("Fin du fichier atteint");
             
             // Disable buttons because we are in the end of the file
             continueButton.setDisable(true);
@@ -266,7 +306,7 @@ public class duringExecutionController  {
     @FXML
     void restartExecution(ActionEvent event) {
         
-        sendMessageToConsole("i am restarting the execution, so all should be cleaned");
+        sendMessageToConsole("On redemarre l'éxécution");
 
         // reinitialize the defaiult values of the position magager 
         rep.reinitializePositioningValues();
@@ -280,6 +320,11 @@ public class duringExecutionController  {
         highlightCurrentLine(0); 
         // restart checker of first line breakpoint
         firstLineRead = false;
+
+        //reset interpreter
+        interpreter= new Interpreter(successController.code);
+
+
         // restart state of buttons
         continueButton.setDisable(false);
         nextLineButton.setDisable(false);
@@ -317,6 +362,8 @@ public class duringExecutionController  {
         MainController.currentLine = 1;
         firstLineRead = false;
 
+        // reset interpreter
+        interpreter= new Interpreter(successController.code);
 
         // MainController.bkpoints.forEach(System.out::println);
         // reuse the last scene
@@ -324,6 +371,7 @@ public class duringExecutionController  {
         // MainController.successController.show(); 
     }
 
+    // TODO : this can be private i think
     public void save(){
         // save the current scene and controller
         MainController.setSplitPaneDividerPosition(splitPane.getDividerPositions()[0]);
@@ -344,6 +392,19 @@ public class duringExecutionController  {
     @FXML
     void initialize() {
 
+        setInitialVisuals();        
+        setPreviousState();
+
+        this.successController = MainController.successController;
+        System.out.println(MainController.content.toString());
+        interpreter = new Interpreter(successController.code);
+
+        // after doing all the settings, we start the exeution by calling continueExecution
+        // TODO : still this should probable be moved to another place
+        continueExecution(null);
+    }
+
+    private void setInitialVisuals() {
         // codeContainer.setEditable(false);
         codeContainer.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;"); // supprimer le background du TextField
         // TODO : probably this is factorizable with css
@@ -364,20 +425,14 @@ public class duringExecutionController  {
         // codeContainer.setWrapText(false);
 
         splitPane.setDividerPosition(0, MainController.splitPaneDividerPosition);
-        
-        setPreviousState();
 
-        this.successController = MainController.successController;
-
-        // after doing all the settings, we start the exeution by calling continueExecution
-        // TODO : still this should probable be moved to another place
-        continueExecution(null);
     }
     
     void setPreviousState(){
         splitPane.setDividerPosition(0,MainController.getSplitPaneDividerPosition());
         // console
         consolePanel.setText(MainController.getConsole().getText());
+        consolePanel.setScrollTop(MainController.consoleScrollPosition);
         // Scrollers
         codeScroller.setVvalue(MainController.getCodeScroller().getVvalue());
         nblineScroller.setVvalue(MainController.getNblineScroller().getVvalue());

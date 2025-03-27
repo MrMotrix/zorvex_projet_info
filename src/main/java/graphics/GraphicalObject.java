@@ -1,7 +1,7 @@
 package graphics;
 
 public interface GraphicalObject {
-
+    String getName();
     void draw(double x, double y);
     // String getName();
     // void update(String newValue);

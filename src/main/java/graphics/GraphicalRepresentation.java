@@ -1,69 +1,147 @@
+// package graphics;
+
+// import java.util.ArrayList;
+// import java.util.List;
+
+// public class GraphicalRepresentation {
+
+//     private List<GraphicalObject> elements;
+
+//     // public static double currentX = 10;
+//     // public static double currentY = 30;
+//     // public static double spaceBetweenPlots = 100;
+
+//     private  double currentX;
+//     private  double currentY;
+//     private  double spaceBetweenPlots;
+    
+//     public GraphicalRepresentation(List<GraphicalObject> elements) {
+//         this.elements = elements;
+//         reinitializePositioningValues();
+//     }
+
+//     public GraphicalRepresentation(){
+//         this.elements = new ArrayList<>();
+//         reinitializePositioningValues();
+
+//     }
+
+//     public List<GraphicalObject> getElements() {
+//         return elements;
+//     }
+
+//     public void setElements(List<GraphicalObject> elements) {
+//         this.elements = elements;
+//     }
+
+//     public void addElement(GraphicalObject element) {
+//         element.draw(currentX, currentY);
+//         elements.add(element);
+//         currentY += spaceBetweenPlots;
+//     }
+
+//     // TODO this string should be or not replaced by the enum mentionned in the GraphicalArray class    
+//     public void updateElement(int id, GraphicalObject element) {
+//         // TODO add update
+//         elements.set(id, element);
+//         elements.get(id).draw(id, id);
+//     }
+
+//     public void deleteElement(GraphicalObject element) {
+//         if (elements.remove(element)) {
+//             element.removeFromPane();
+//             // if somethig is deleted, it shifts everyting
+//             reorganize();
+//         }
+//     }
+
+//     // (re)initialise values for psitioning
+//     public void reinitializePositioningValues(){
+//         this.currentX = 10;
+//         this.currentY = 30;
+//         this.spaceBetweenPlots = 100;
+//     }
+
+//     public void clear() {
+//         for (GraphicalObject obj : elements) {
+//             obj.removeFromPane();
+//         }
+//         elements.clear();
+//         this.reinitializePositioningValues();
+//     }
+
+//     private void reorganize() {
+//         // clear the pane
+//         for (GraphicalObject obj : elements) {
+//             obj.removeFromPane();
+//         }
+//         // reinitialize positioning
+//         this.reinitializePositioningValues();
+    
+//         // draw all the elements
+//         for (GraphicalObject obj : elements) {
+//             obj.draw(currentX, currentY);
+//             currentY += spaceBetweenPlots;
+//         }
+//     }
+
+// }
+
+
 package graphics;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GraphicalRepresentation {
 
-    private List<GraphicalObject> elements;
-
-    // public static double currentX = 10;
-    // public static double currentY = 30;
-    // public static double spaceBetweenPlots = 100;
-
-    private  double currentX;
-    private  double currentY;
-    private  double spaceBetweenPlots;
+    private Map<String, GraphicalObject> elements;
     
-    public GraphicalRepresentation(List<GraphicalObject> elements) {
-        this.elements = elements;
+    private double currentX;
+    private double currentY;
+    private double spaceBetweenPlots;
+    
+    public GraphicalRepresentation() {
+        this.elements = new HashMap<>();
         reinitializePositioningValues();
     }
 
-    public GraphicalRepresentation(){
-        this.elements = new ArrayList<>();
-        reinitializePositioningValues();
-
-    }
-
-    public List<GraphicalObject> getElements() {
+    public Map<String, GraphicalObject> getElements() {
         return elements;
     }
 
-    public void setElements(List<GraphicalObject> elements) {
+    public void setElements(Map<String, GraphicalObject> elements) {
         this.elements = elements;
     }
 
-    public void addElement(GraphicalObject element) {
+    public void addElement(String name, GraphicalObject element) {
         element.draw(currentX, currentY);
-        elements.add(element);
+        elements.put(name, element);
         currentY += spaceBetweenPlots;
     }
 
-    // TODO this string should be or not replaced by the enum mentionned in the GraphicalArray class    
-    public void updateElement(int id, GraphicalObject element) {
-        // TODO add update
-        elements.set(id, element);
-        elements.get(id).draw(id, id);
+    public void updateElement(String name, String value, int index) {
+        if (elements.containsKey(name)) {
+            elements.get(name).update(index, value);
+        }
     }
 
-    public void deleteElement(GraphicalObject element) {
-        if (elements.remove(element)) {
-            element.removeFromPane();
-            // if somethig is deleted, it shifts everyting
+    public void deleteElement(String name) {
+        if (elements.containsKey(name)) {
+            elements.get(name).removeFromPane();
+            elements.remove(name);
             reorganize();
         }
     }
 
-    // (re)initialise values for psitioning
-    public void reinitializePositioningValues(){
+    public void reinitializePositioningValues() {
         this.currentX = 10;
         this.currentY = 30;
         this.spaceBetweenPlots = 100;
     }
 
     public void clear() {
-        for (GraphicalObject obj : elements) {
+        for (GraphicalObject obj : elements.values()) {
             obj.removeFromPane();
         }
         elements.clear();
@@ -71,21 +149,18 @@ public class GraphicalRepresentation {
     }
 
     private void reorganize() {
-        // clear the pane
-        for (GraphicalObject obj : elements) {
+        for (GraphicalObject obj : elements.values()) {
             obj.removeFromPane();
         }
-        // reinitialize positioning
         this.reinitializePositioningValues();
     
-        // draw all the elements
-        for (GraphicalObject obj : elements) {
+        for (GraphicalObject obj : elements.values()) {
             obj.draw(currentX, currentY);
             currentY += spaceBetweenPlots;
         }
     }
-
 }
+
 
 // ========================================================================================
 

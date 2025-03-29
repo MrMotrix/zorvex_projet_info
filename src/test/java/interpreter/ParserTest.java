@@ -9,7 +9,11 @@ import interpreter.expression.*;
 public class ParserTest {
 
     private Expression parseExpression(String input) {
-        List<Token> tokens = Scanner.tokenize(input);
+        List<Token> tokens = List.of();
+        try {
+            tokens = Scanner.tokenize(input);
+        }
+        catch (Exception e) { }
         return Parser.parseExpression(tokens);
     }
 

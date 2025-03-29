@@ -34,7 +34,7 @@ public class Interpreter {
         interpreter.instructions = Parser.parse(tokens);
 
         while (interpreter.currentInstruction < interpreter.instructions.size()) {
-            interpreter.step();
+            System.out.println(interpreter.step());
         }
     }
     public Interpreter() {

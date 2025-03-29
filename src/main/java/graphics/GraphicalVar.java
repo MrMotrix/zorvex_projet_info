@@ -1,9 +1,5 @@
 package graphics;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;

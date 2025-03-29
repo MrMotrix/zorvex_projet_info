@@ -4,13 +4,16 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import application.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import utilities.Paths;
 
@@ -19,6 +22,7 @@ import java.awt.Desktop;
 
 
 public class menuBarController {
+    
 
     @FXML private MenuItem aboutUsItem;
     @FXML private MenuItem closeItem;
@@ -27,8 +31,41 @@ public class menuBarController {
     @FXML private MenuItem openNewItem;
     @FXML private MenuItem voirDocumentationItem;
 
-    @FXML void aboutUs(ActionEvent event) {
-        // TODO : implement something about the creators
+    @FXML
+    void aboutUs(ActionEvent event) {
+        // Creer fenetre emergente
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("A propos");
+        alert.setHeaderText("A propos de ZorvexInterpreteur");
+    
+        // set content
+        StringBuilder content = new StringBuilder();
+        content.append("Developpeurs:\n");
+        content.append("• AHAMADA Houzaime \n");
+        content.append("• OJEDA Martin \n");
+        content.append("• NDOUR Mohamed \n\n");
+        content.append("Version du projet: 1.0.0\n");
+        content.append("Date de création: Mars 2025\n\n");
+        // TODO : add more information about the project ??
+        content.append("Description: Cette application a été conçue pour héberger l'interprète du langage de programmation Zorvex.\n");
+    
+        alert.setContentText(content.toString());
+        Image logoImage = new Image(getClass().getResourceAsStream(Paths.LOGO_ICON_EXTERNAL));
+        
+        ImageView logoImageView = new ImageView(logoImage);
+        logoImageView.setFitWidth(50); 
+        logoImageView.setFitHeight(50); 
+        logoImageView.setPreserveRatio(true);
+        alert.setGraphic(logoImageView);        
+
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(logoImage);
+
+        ButtonType okButton = alert.getButtonTypes().get(0);
+        Button button = (Button) alert.getDialogPane().lookupButton(okButton);
+        button.setText("Fermer"); 
+        // show
+        alert.showAndWait();
     }
 
     @FXML
@@ -40,18 +77,12 @@ public class menuBarController {
     }
 
     @FXML
-    void openNew(ActionEvent event) {
-        // TODO : fix this because it throws an exception, as usual, Paths.OPEN_NEW_FILE returns null here ...
-        try {
-            System.out.println(getClass().getResource(Paths.OPEN_NEW_FILE));
-            System.out.println(getClass());
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(Paths.OPEN_NEW_FILE));
-            Parent root = loader.load();
+    void openNew(ActionEvent event) throws Exception {
 
-            Stage newStage = new Stage();
-            newStage.setTitle("New File");
-            newStage.setScene(new Scene(root));
-            newStage.show();
+        try {
+            App app = new App();
+            app.start(new Stage());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,9 +98,9 @@ public class menuBarController {
         if (Desktop.isDesktopSupported()) {
             Desktop.getDesktop().browse(uri);
         }
-    } catch (IOException | URISyntaxException e) {
-        e.printStackTrace();
-    }
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
 }

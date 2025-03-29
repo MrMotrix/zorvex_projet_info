@@ -60,9 +60,9 @@ public class ParserTest {
     
     @Test
     void testBooleanExpressions() {
-        Expression expr = parseExpression("vrai == faux");
+        Expression expr = parseExpression("vrai = faux");
         assertNotNull(expr);
-        assertEquals("(1 == 0)", expr.printValue());
+        assertEquals("(1 = 0)", expr.printValue());
     }
 
     @Test

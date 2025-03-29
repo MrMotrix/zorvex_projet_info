@@ -35,7 +35,7 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject {
      * @param y The starting Y coordinate.
      */
     public void draw(double x, double y) {
-        // Reset nodes list to avoid duplicates TODO : this may be improved to avoid double calculations ? 
+        // Reset nodes list to avoid duplicates
         nodes.clear();
 
         // double WIDTH_LLIST_CONTENT_BOX = WIDTH_LLIST_CONTENT_BOX;
@@ -75,19 +75,19 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject {
 
 
 
-    /**
-     * Updates the value of the node at the specified index.
-     * This only updates the data model, not the visual field contents.
-     *
-     * @param index The index of the node to update.
-     * @param value The new value to assign to the node.
-     */
+    // /**
+    //  * Updates the value of the node at the specified index.
+    //  * This only updates the data model, not the visual field contents.
+    //  *
+    //  * @param index The index of the node to update.
+    //  * @param value The new value to assign to the node.
+    //  */
+    // @Override
+    // public void update(int index, String value) {
+    //     updateValue(index, value);
+    //     updateRender(index, value);
+    // }
     @Override
-    public void update(int index, String value) {
-        updateValue(index, value);
-        updateRender(index, value);
-    }
-    
     public void updateValue(int index, String value){
         if (index >= 0 && index < values.length) {
             values[index] = value;
@@ -95,6 +95,7 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject {
         
     }
     
+    @Override
     public void updateRender(int index, String value){
         nodes.get(index).update(index, value);
 

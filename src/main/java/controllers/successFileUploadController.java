@@ -309,6 +309,7 @@ public class successFileUploadController {
     @FXML private ScrollPane bkScroller;
     @FXML private ScrollPane nblineScroller;
     @FXML private ScrollPane codeScroller;
+    @FXML private AnchorPane bottomPane;
 
     private MainController mainController;
     private App app;
@@ -366,6 +367,7 @@ public class successFileUploadController {
         bkScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
         nblineScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
         consolePanel.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
+        bottomPane.setStyle("-fx-background-color : #5E7B9D");;
 
         consolePanel.setWrapText(true);
         

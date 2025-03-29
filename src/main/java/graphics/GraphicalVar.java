@@ -8,14 +8,16 @@ import javafx.scene.shape.Rectangle;
 
 public final class GraphicalVar extends AbstractGraphicalObject {
 
-    
     private String value;
 
     public GraphicalVar(String name, String value, Pane pane) {
         super(name, pane);
         this.value = value;
     }
-
+    /**
+     * Returns the content of the variable
+     * @return value of the variable as a String
+     */
     public String getValue() {return value;}
 
     @Override
@@ -33,7 +35,9 @@ public final class GraphicalVar extends AbstractGraphicalObject {
         rect.setArcWidth(10);
         rect.setArcHeight(10);
         
-        rect.setFill(Color.LIGHTBLUE);
+        // rect.setFill(Color.LIGHTBLUE);
+        rect.setFill(COLOR_VARIABLE_BOX); // background
+
         rect.setStroke(Color.BLACK);
         
         TextField textContainer = new TextField(name + " = " + value);
@@ -44,9 +48,8 @@ public final class GraphicalVar extends AbstractGraphicalObject {
         textContainer.setPrefWidth(width - 10);
         textContainer.setEditable(false);
 
-        textContainer.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 12;");
+        textContainer.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 12; -fx-text-fill:" + COLOR_VARIABLE_TEXT + ";"); // text color
 
-        // renderedNodes = new ArrayList<>();
         // important to keep this order, otherwise it may break the logic (yes i know it may not be the best)
         renderedNodes.add(rect); // index 0
         renderedNodes.add(textContainer); // index 1
@@ -55,7 +58,7 @@ public final class GraphicalVar extends AbstractGraphicalObject {
         Tooltip.install(textContainer, tooltip);
         tooltip.setText(textContainer.getText());
         
-    pane.getChildren().addAll(rect, textContainer);
+        pane.getChildren().addAll(rect, textContainer);
 
         
     }
@@ -63,80 +66,29 @@ public final class GraphicalVar extends AbstractGraphicalObject {
     @Override
     public void update(int index, String value) {
     
-        updateValue(value);
-        updateRender();
+        updateValue(index, value);
+        updateRender(index, value);
     }
     
-    public void updateValue(String value){
+    public void updateValue(int index, String value){
         this.value = value;
         
     }
     /**
      * Changes the value of the object in the rendered value. As it is an object it is not required to rerender it
      */
-    public void updateRender(){
+    public void updateRender(int index, String value) {
         TextField field = (TextField) renderedNodes.get(1);
         field.setText(name + " = " + value);
         Tooltip.install(field, new Tooltip(name + " = " + value));
 
     }
+    /**
+     * Returns the value of the variable as it is rendered in the GUI.
+     * @return
+     */
+    public String getRenderedValue() {
+        return ((TextField) renderedNodes.get(1)).getText();
+    }
 
 }
-
-
-// public final class GraphicalVar implements GraphicalObject {
-
-//     private String name;
-//     private String value;
-//     private Pane pane;
-
-//     private Rectangle rect;
-//     private TextField textContainer;
-
-//     public GraphicalVar(String name, String value, Pane pane) {
-//         this.name = name;
-//         this.value = value;
-//         this.pane = pane;
-//     }
-
-//     @Override
-//     public void draw(double x, double y) {
-//         double width = WIDTH_VARIABLE_BOX;
-//         double height = HEIGHT_VARIABLE_BOX;
-
-//         rect = new Rectangle(width, height);
-//         rect.setX(x);
-//         rect.setY(y);
-//         rect.setArcWidth(10);
-//         rect.setArcHeight(10);
-//         rect.setFill(Color.LIGHTBLUE);
-//         rect.setStroke(Color.BLACK);
-
-//         textContainer = new TextField(name + " = " + value);
-//         textContainer.setLayoutX(x + 5);
-//         textContainer.setLayoutY(y + 10);
-//         textContainer.setPrefWidth(width - 10);
-//         textContainer.setEditable(false);
-//         textContainer.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 14;");
-
-//         pane.getChildren().addAll(rect, textContainer);
-//     }
-
-//     @Override
-//     public String getName() {
-//         return name;
-//     }
-
-//     @Override
-//     public void update(String newValue) {
-//         this.value = newValue;
-//         if (textContainer != null) {
-//             textContainer.setText(name + " = " + value);
-//         }
-//     }
-
-//     @Override
-//     public void removeFromPane() {
-//         pane.getChildren().removeAll(rect, textContainer);
-//     }
-// }

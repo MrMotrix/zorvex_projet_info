@@ -25,7 +25,10 @@ public final class GraphicalArray extends AbstractGraphicalObject {
     }
 
     public String[] getValues(){return values;}
-
+    /**
+     * Returns the size of the array
+     * @return size of the array as an int
+     */
     public int size() {return size;}
 
     public void draw(double x, double y) {  
@@ -57,7 +60,8 @@ public final class GraphicalArray extends AbstractGraphicalObject {
             // cell.setArcWidth(10);
             // cell.setArcHeight(10);
             // stle of the cell
-            cell.setFill(Color.LIGHTBLUE); // background
+            // cell.setFill(Color.LIGHTBLUE); // background
+            cell.setFill(COLOR_ARRAY_BOX); // background
             cell.setStroke(Color.BLACK); // line color
 
             TextField cellContent = new TextField(values[i].toString());
@@ -71,7 +75,7 @@ public final class GraphicalArray extends AbstractGraphicalObject {
             cellContent.setLayoutY(y + 10); // margin from the top
             cellContent.setPrefWidth(cellWidth - 10); // width of the textField
             cellContent.setEditable(false); 
-            cellContent.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 13;"); // supprimer le background du TextField
+            cellContent.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 13; -fx-text-fill:" + COLOR_ARRAY_TEXT + ";"); // supprimer le background du TextField
 
             Text index = new Text(String.valueOf(i)); // add the index to every cell
             index.setX(cx + cellWidth / 2 - 5);
@@ -86,6 +90,11 @@ public final class GraphicalArray extends AbstractGraphicalObject {
 
     }
 
+    /**
+     * Adds a node at the given position and redraws the array. It also updates the size of the array
+     * @param position Index of the value to be added
+     * @param value String value
+     */
     public void addNodeAt(int position, String value) {
         
         insertNodeWODraw(position, value);
@@ -120,12 +129,12 @@ public final class GraphicalArray extends AbstractGraphicalObject {
 
     }
     
-    @Override
-    public void update(int index, String value) {
+    // @Override
+    // public void update(int index, String value) {
     
-        updateValue(index, value);
-        updateRender(index, value);
-    }
+    //     updateValue(index, value);
+    //     updateRender(index, value);
+    // }
     
     public void updateValue(int index, String value){
         this.values[index] = value;
@@ -137,7 +146,6 @@ public final class GraphicalArray extends AbstractGraphicalObject {
         field.setText(value);
 
         Tooltip.install(field, new Tooltip(value));
-
 
     }
 

@@ -550,6 +550,7 @@ public class duringExecutionController  {
     @FXML private ScrollPane nblineScroller;
     @FXML private ScrollPane codeScroller;
     @FXML private Pane canvasPane;
+    @FXML private AnchorPane bottomPane;
     
     private int currentHighlightedLine = 0;
     private boolean firstLineRead = false;
@@ -569,11 +570,6 @@ public class duringExecutionController  {
     @FXML
     void continueExecution(ActionEvent event) {
         
-        // sendMessageToConsole("here we should continue execution until next breakpoint or stop from the user . Currently there is a test on the plot area");
-        // sendMessageToConsole("i am adding a new variable");
-        // sendMessageToConsole("Last line completely executed" + MainController.currentLine);
-        // rep.addAndRenderElement(new GraphicalVar("myVar2", "50", canvasPane));
-
         //  if the button was pressed when being in a breakpoint and we are not in the first line (if there is a bp in the first line we should be able to stop)
         try{
             if (mainController.currentLine == 1 && mainController.bkpoints.contains(1) && !firstLineRead) {
@@ -581,29 +577,29 @@ public class duringExecutionController  {
             // sendMessageToConsole("Breakpoint reached at line 1");
             firstLineRead = true;
             return;
-        }
-    
-        if (mainController.bkpoints.contains(mainController.currentLine)) {
-            goNextLine(event);
-        }
-    
-        while (!mainController.bkpoints.contains(mainController.currentLine) && mainController.currentLine != mainController.numberOfLines + 1) {
-            goNextLine(event);
-        }
-        // this handles the case when we have reached the end of the file. Basically, it disables the buttons and removes any possible remaining highlight. This is also treated in the goNextLine method
-        if (mainController.currentLine == mainController.numberOfLines + 1){
-            // sendMessageToConsole("Fin du fichier atteint");
-            currentHighlightedLine++;
-            highlightCurrentLine(currentHighlightedLine);
-            
-            // Disable buttons because we are in the end of the file
-            continueButton.setDisable(true);
-            nextLineButton.setDisable(true);
-        } 
-} catch (Exception e){
+            }
+        
+            if (mainController.bkpoints.contains(mainController.currentLine)) {
+                goNextLine(event);
+            }
+        
+            while (!mainController.bkpoints.contains(mainController.currentLine) && mainController.currentLine != mainController.numberOfLines + 1) {
+                goNextLine(event);
+            }
+            // this handles the case when we have reached the end of the file. Basically, it disables the buttons and removes any possible remaining highlight. This is also treated in the goNextLine method
+            if (mainController.currentLine == mainController.numberOfLines + 1){
+                // sendMessageToConsole("Fin du fichier atteint");
+                currentHighlightedLine++;
+                highlightCurrentLine(currentHighlightedLine);
+                
+                // Disable buttons because we are in the end of the file
+                continueButton.setDisable(true);
+                nextLineButton.setDisable(true);
+            } 
+        } catch (Exception e){
 
-    stopExecution(event);
-}
+            return;
+        }
     }
 
     @FXML
@@ -635,67 +631,71 @@ public class duringExecutionController  {
 
     @FXML
     void goNextLine(ActionEvent event) {
-        
-        
         // if we have finished execution, we return
         if (mainController.currentLine > mainController.numberOfLines) return;
-
-        if (reverse){
+        
+        if (reverse) {
             reverse = false;
             mainController.currentLine++;
         }
-
-        // sendMessageToConsole("Last executed line : " + mainController.currentLine);
-
-
         // ===================================HERE GOES THE IMPLEMENTATION TO READ INSTRUCTIONS=========================================
         
-        // interpret the next line ang get the variables that are modified or added. 
-        String var = interpreter.step();
-        
-        if (var != "" && var != null){
+        try {    
+            // get the affected variable from the interpreter
+            String var = interpreter.step();
 
-            try {
-                
+            /*
+             * ObjectType var = interpreter.getVariable(var);
+             *  // var contains the type and the name of the variable, if its a Var, ArrayList, Llist
+             * 
+             */
+            if (var != null && !var.isEmpty()) {
+
+                /*
+                 * switch (var) : 
+                 * case "Var" :
+                 *      String value = interpreter.getVariable(var).toString();
+                 *      value = value.substring(value.indexOf(" ") + 1);
+                 *      break;
+                 * case "Array" :
+                 *      String [] values = interpreter.getVariable(var).toString().split(" ");
+                 *       break;
+                 * case "Llist" :
+                 *      // etc
+                 * 
+                 */
                 String value = interpreter.getVariable(var).toString();
                 value = value.substring(value.indexOf(" ") + 1);
                 
-                
+
                 // add the variable to the graphical representation or check if it already exists and update it
-                
-                if (rep.getElements().keySet().contains(var)){
+                if (rep.getElements().containsKey(var)) {
                     rep.updateElement(var, value, 0);
                 } else {
                     rep.addElement(var, new GraphicalVar(var, value, canvasPane));
                 }
-                
-            } catch (Exception e) {
-                // Arrays.stream(e.getStackTrace()).forEach(x -> sendMessageToConsole(x.toString()));
-                // sendMessageToConsole(e.getStackTrace().toString());
-                sendMessageToConsole("Un probleme est survenu lors de l'exécution de la ligne " + mainController.currentLine + "\n" + e.getMessage());
-                stopExecution(event);
-                throw e;
-                // initialize();
             }
 
+        } catch (Exception e) {
+            sendMessageToConsole("Erreur dans la ligne " + mainController.currentLine + ": " + e.getMessage());
+            highlightCurrentLine(mainController.currentLine - 1);
+            continueButton.setDisable(true);
+            nextLineButton.setDisable(true);
+            throw e;
         }
-
         highlightCurrentLine(mainController.currentLine);
-
+        
         // this should be the last line of the method, we only increase the pointer to the current line once it has been correctly interpreted
         mainController.currentLine++;
-
-
-        
-        if (mainController.currentLine == mainController.numberOfLines + 1){
+    
+        if (mainController.currentLine == mainController.numberOfLines + 1) {
             sendMessageToConsole("Fin du fichier atteint");
-            
             // Disable buttons because we are in the end of the file
             continueButton.setDisable(true);
             nextLineButton.setDisable(true);
         }
-    
     }
+        
 
     @FXML
     void restartExecution(ActionEvent event) {
@@ -766,7 +766,6 @@ public class duringExecutionController  {
         // mainController.successController.show(); 
     }
 
-    // TODO : this can be private i think
     private void save(){
         // save the current scene and controller
         mainController.setSplitPaneDividerPosition(splitPane.getDividerPositions()[0]);
@@ -786,6 +785,7 @@ public class duringExecutionController  {
 
     @FXML
     void initialize() {}
+
     public void initialize2(MainController mainController, App app) {
         this.mainController = mainController;
         this.app = app;
@@ -798,9 +798,15 @@ public class duringExecutionController  {
 
 
         this.successController = mainController.successController;
-        // System.out.println(contentString);
-        // System.out.println(successController.code);
-        interpreter = new Interpreter(contentString);
+        // TODO : implementer gestion des exceptions
+        try{
+
+            interpreter = new Interpreter(contentString);
+
+        } catch (Exception e){
+            sendMessageToConsole("Un probleme est survenu lors de l'exécution de la ligne " + mainController.currentLine + "\n" + e.getMessage());
+            stopExecution(null);
+        }
 
         // after doing all the settings, we start the exeution by calling continueExecution
         continueExecution(null);
@@ -815,6 +821,8 @@ public class duringExecutionController  {
         nblineScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
         consolePanel.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
         canvasPane.setStyle("-fx-background-color: transparent;");
+        bottomPane.setStyle("-fx-background-color : #5E7B9D");;
+
         
         // set the labels for every button
         continueButton.setText("C");
@@ -862,7 +870,6 @@ public class duringExecutionController  {
                 bkButton.setMaxSize(buttonSize, buttonSize);
                 bkButton.setPrefWidth(buttonSize);
                 bkButton.setPrefHeight(buttonSize);
-                // bkButton.setStyle("-fx-background-color: black; -fx-background-radius: 50%;");
             }
             });
     }

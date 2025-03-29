@@ -43,7 +43,7 @@ public class GraphicalNode extends AbstractGraphicalObject{
         Rectangle valueBox = new Rectangle(cellWidth, cellHeight);
         valueBox.setX(x);
         valueBox.setY(y);
-        valueBox.setFill(Color.LIGHTBLUE);
+        valueBox.setFill(COLOR_LLIST_CONTENT_BOX);
         valueBox.setStroke(Color.BLACK);
     
         // Set the text inside the valuebox
@@ -52,7 +52,7 @@ public class GraphicalNode extends AbstractGraphicalObject{
         valueField.setLayoutY(y + 10);
         valueField.setPrefWidth(cellWidth - 10);
         valueField.setEditable(false);
-        valueField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 13;");
+        valueField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 13; -fx-text-fill:" + COLOR_LLIST_CONTENT_TEXT + ";"); // text color
         // if there is too much text, this allos to show it in a little screen
         Tooltip tooltip = new Tooltip(value);
         Tooltip.install(valueField, tooltip);
@@ -61,7 +61,7 @@ public class GraphicalNode extends AbstractGraphicalObject{
         Rectangle pointerBox = new Rectangle(pointerWidth, cellHeight);
         pointerBox.setX(x + cellWidth);
         pointerBox.setY(y);
-        pointerBox.setFill(Color.LIGHTYELLOW);
+        pointerBox.setFill(COLOR_LLIST_POINTER_BOX);
         pointerBox.setStroke(Color.BLACK);
     
         // add everything that has been created to the renderedNodes list
@@ -172,10 +172,10 @@ public class GraphicalNode extends AbstractGraphicalObject{
             }
             if (node instanceof Rectangle) {
                 Rectangle rectangle = (Rectangle) node;
-                if (rectangle.getFill().equals(Color.LIGHTBLUE)) {
+                if (rectangle.getFill().equals(COLOR_LLIST_CONTENT_BOX)) {
                     rectangle.setX(x);
                     rectangle.setY(y);
-                } else if (rectangle.getFill().equals(Color.LIGHTYELLOW)) {
+                } else if (rectangle.getFill().equals(COLOR_LLIST_POINTER_BOX)) {
                     rectangle.setX(x + GraphicalObject.WIDTH_LLIST_CONTENT_BOX);
                     rectangle.setY(y);
                 }
@@ -198,17 +198,18 @@ public class GraphicalNode extends AbstractGraphicalObject{
         }
     }
 
+    // @Override
+    // public void update(int index, String value) {
+    //     updateValue(index, value);
+    //     updateRender(index, value);
+    // }
     @Override
-    public void update(int index, String value) {
-        updateValue(index, value);
-        updateRender(index, value);
-    }
-    
     public void updateValue(int index, String value){
         this.value = value;
         
     }
     
+    @Override
     public void updateRender(int index, String value){
         TextField field = (TextField) renderedNodes.get(1);
         field.setText(value);

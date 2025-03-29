@@ -792,7 +792,7 @@ public class duringExecutionController  {
     @FXML
     void initialize() {}
 
-    public void initialize2(MainController mainController, App app) {
+    public void initialize2(MainController mainController, App app) throws Exception {
         this.mainController = mainController;
         this.app = app;
         setInitialVisuals();        
@@ -810,6 +810,7 @@ public class duringExecutionController  {
             interpreter = new Interpreter(contentString);
         } catch (Exception e){
             handleParsingException(e);
+            throw e; // as initialize2 is called in the main controller, we need to throw the exception to stop the execution of the program. Visuals are already charged, we just need to avoid rendering the duringExecution scene and stay in a successUpload scene
         }
 
         // after doing all the settings, we start the exeution by calling continueExecution

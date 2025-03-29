@@ -222,5 +222,9 @@ public class MainController {
     public void setApp(App app) {
         this.app = app;
     }
+
+    public void setNameFile(String nameFile) {
+        this.nameFile = nameFile;
+    }
 }
 

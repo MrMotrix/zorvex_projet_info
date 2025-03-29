@@ -113,29 +113,48 @@ public class App extends Application{
     private Stage stageWindow;
     public FXMLLoader loader;
     private MainController mainController;
+    
 
     public static void main (String[] args) throws Exception {
 
         launch(args);
     }
 
-        @Override
+    @Override
     public void start(Stage primaryStage) throws Exception {
         
         this.stageWindow = primaryStage;
         this.mainController = new MainController();
         mainController.setApp(this);
+        
+        // ================= TO BE DELETED ========================================================
+        int caseNumber = 1; // 0 = open new file, 1 = success file upload
+        Parent root;
+        // =========================================================================
+
+        if (caseNumber == 0){
+            loader = new FXMLLoader(getClass().getResource(Paths.OPEN_NEW_FILE));
+            root = loader.load();
+            openNewFileController controller = loader.getController();
+            controller.setApp(this);
+            controller.setMainController(mainController);
+        }
+        else {
+            loader = new FXMLLoader(getClass().getResource(Paths.SUCCESS_FILE_UPLOAD));
+            mainController.setNameFile("THIS IS JUST A TEST BECAUSE NO FILE HAS BEEN UPDATED");
+            root = loader.load();
+            successFileUploadController controller = loader.getController();
+            controller.initialize2(mainController, this);
+            controller.setApp(this);
+            controller.setMainController(mainController);
+
+        } 
+
 
         // String path = getClass().getResource("/").toString();
-         loader = new FXMLLoader(getClass().getResource(Paths.OPEN_NEW_FILE));
-         Parent root = loader.load();
+        //  loader = new FXMLLoader(getClass().getResource(Paths.SUCCESS_FILE_UPLOAD));
+        // loader = new FXMLLoader(getClass().getResource(Paths.DURING_EXECUTION));
 
-         openNewFileController controller = loader.getController();
-         controller.setApp(this);
-         controller.setMainController(mainController);
-         // loader = new FXMLLoader(getClass().getResource(Paths.SUCCESS_FILE_UPLOAD));
-         // loader = new FXMLLoader(getClass().getResource(Paths.DURING_EXECUTION));
-         
          // BorderPane load = FXMLLoader.load(getClass().getResource(Paths.OPEN_NEW_FILE));
          // BorderPane load = FXMLLoader.load(getClass().getResource(Paths.DURING_EXECUTION));
          // Scene scene = new Scene(root);
@@ -154,10 +173,12 @@ public class App extends Application{
         primaryStage.setMaxWidth(6000);
         primaryStage.show();
         
-
-            
     }
-
+    /**
+     * This method is used to change the scene of the application.
+     * It takes the path of the fxml file as a parameter and loads it.
+     * @param path the path of the fxml file to load
+     */
     public void setScene(String path) {
         // save the size of the screen before changing scene to make it fluid. Also check if it is fullscreen
         double width = stageWindow.getWidth();
@@ -214,20 +235,34 @@ public class App extends Application{
         }
     }
     
-
+    /**
+     * This method is used to show the stage window of the application.
+     * It is called when the application is launched and the stage window is created.
+     */
     public void show() {
         getStageWindow().show();  
     }
 
-
+    /**
+     * This method is used to get the stage window of the application.
+     * @return the stage window of the application
+     */
     public Stage getStageWindow() {
         return stageWindow;
     }
-
+    /**
+     * This method is used to set the scene of the stage window.
+     * It takes a Scene object as a parameter and sets it to the stage window.
+     * @param scene the Scene object to set to the stage window
+     */
     public void setScene(Scene scene){
         stageWindow.setScene(scene);
     }
-
+    
+    /**
+     * This method is used to get the main controller of the application.
+     * @return the main controller of the application
+     */
     public MainController getMainController() {
         return mainController;
     }

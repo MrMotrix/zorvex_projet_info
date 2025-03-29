@@ -12,4 +12,10 @@ public class Context {
     public void assignVariable(String name, ZorvexValue value) {
         variables.put(name, value);
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        variables.keySet().forEach(x -> sb.append(x + " = " + variables.get(x) + "\n"));
+        return sb.toString();
+    }
 }

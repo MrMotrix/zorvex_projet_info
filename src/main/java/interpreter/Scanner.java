@@ -34,9 +34,9 @@ public class Scanner {
 
         // virer les whitespaces au début
         int line = currentLine;
-        while (readChar() == ' ') {
+        while (readChar() == ' ' || readChar() == '\t') 
             currentPos += 1;
-        }
+        
 
         for (TokenType tokenType : TokenType.multiCharTokenTypes()) {
             String tokenCharacters = tokenType.characters();

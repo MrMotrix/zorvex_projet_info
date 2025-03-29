@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import interpreter.exceptions.ExpectedCharacterNotFound;
+import interpreter.exceptions.SyntaxErrorException;
+import interpreter.exceptions.UnexpectedTokenException;
+
 public class Scanner {
     private final List<Token> tokens;
     private final String code;
@@ -16,19 +20,19 @@ public class Scanner {
         this.tokens = new ArrayList<Token>();
     }
 
-    public static List<Token> tokenize(String input) {
+    public static List<Token> tokenize(String input) throws SyntaxErrorException {
         Scanner scanner = new Scanner(input);
         scanner.scan();
         return scanner.getTokens();
     }
 
-    private void scan() {
+    private void scan() throws SyntaxErrorException {
         while (currentPos < code.length()) {
             tokens.add(scanToken());
         }
     }
 
-    private Token scanToken() {
+    private Token scanToken() throws SyntaxErrorException {
         // Pourrait être fait de façon plus intelligente
         // Je pense que la façon actuelle est lente
 
@@ -73,8 +77,9 @@ public class Scanner {
                 tokenBuilder.append(readChar());
                 currentPos += 1;
             }
+
             if (currentPos == code.length()) {
-                // erreur ici
+                throw new ExpectedCharacterNotFound(line, '"');
             }
             currentPos += 1;
             return new Token(TokenType.CHAINE, tokenBuilder.toString(), tokenBuilder.toString(), line);

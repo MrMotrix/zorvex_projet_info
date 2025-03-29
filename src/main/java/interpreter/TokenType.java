@@ -12,8 +12,10 @@ public enum TokenType {
     SI("si"), POUR("pour"), RETOURNER("retourner"), AFFICHER("afficher"), TANT_QUE("tant que"),
     VRAI("vrai"), FAUX("faux"), ENDL("\n"), BRACKET_OUVRANT("{"), BRACKET_FERMANT("}"),
     NOMBRE(),
+    END_OF_FILE(),
     CHAINE(),
-    IDENTIFIANT();
+    IDENTIFIANT(),
+    ANYTHING_ELSE();
 
     private TokenType(String characters) {
         this.characters = characters;

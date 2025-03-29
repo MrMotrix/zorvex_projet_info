@@ -716,8 +716,12 @@ public class duringExecutionController  {
         firstLineRead = false;
 
         //reset interpreter
-        interpreter= new Interpreter(contentString);
-
+        try {
+            interpreter= new Interpreter(contentString);
+        }
+        catch (Exception e) {
+            handleParsingException(e);
+        }
 
         // restart state of buttons
         continueButton.setDisable(false);
@@ -757,7 +761,9 @@ public class duringExecutionController  {
         firstLineRead = false;
 
         // reset interpreter
-        interpreter= new Interpreter(contentString);
+        // ici s'il te plait il faudrait faire en sorte qu'on revienne a l'état d'avant le moment ou on a
+        // creer un interpréteur, sans en créer un nouveau
+        // idéalement il faudrait que le code s'affiche quand même.
 
         // mainController.bkpoints.forEach(System.out::println);
         // reuse the last scene
@@ -799,13 +805,11 @@ public class duringExecutionController  {
 
         this.successController = mainController.successController;
         // TODO : implementer gestion des exceptions
+        // partiellement fait
         try{
-
             interpreter = new Interpreter(contentString);
-
         } catch (Exception e){
-            sendMessageToConsole("Un probleme est survenu lors de l'exécution de la ligne " + mainController.currentLine + "\n" + e.getMessage());
-            stopExecution(null);
+            handleParsingException(e);
         }
 
         // after doing all the settings, we start the exeution by calling continueExecution
@@ -896,5 +900,8 @@ public class duringExecutionController  {
         consolePanel.appendText("\n>>>" + message);
     }
 
-
+    private void handleParsingException(Exception e) {
+        sendMessageToConsole("Une erreur est survenue lors de la lecture du fichier: \n" + e.toString());
+        stopExecution(null);
+    }
 }

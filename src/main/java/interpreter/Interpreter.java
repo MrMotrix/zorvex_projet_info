@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import interpreter.exceptions.SyntaxErrorException;
 import interpreter.expression.BinaryOperation;
 import interpreter.expression.BinaryOperator;
 import interpreter.expression.Literal;
@@ -21,7 +22,7 @@ public class Interpreter {
     private int currentInstruction = 0;
     private List<InstructionInfo> instructions = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SyntaxErrorException {
         Interpreter interpreter = new Interpreter();
         List<Token> tokens = Scanner.tokenize(
             """
@@ -41,7 +42,7 @@ public class Interpreter {
         stack.add(new Context());
     }
 
-    public Interpreter(String code) {
+    public Interpreter(String code) throws SyntaxErrorException {
         this();
         this.instructions = Parser.parse(Scanner.tokenize(code));
     }
@@ -59,7 +60,9 @@ public class Interpreter {
     }
 
     public String step() {
-        return interpret();
+        String result = interpret();
+        System.out.println(stack.getLast());
+        return result;
     }
 
     private String interpret() {

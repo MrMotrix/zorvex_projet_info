@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import interpreter.exceptions.ExpectedCharacterNotFound;
+import interpreter.exceptions.SyntaxErrorException;
+import interpreter.exceptions.UnexpectedTokenException;
 import interpreter.expression.*;
 import interpreter.instruction.*;
 
@@ -29,17 +32,17 @@ public class Parser {
         this.tokens = tokens;
     }
 
-    public static Expression parseExpression(List<Token> tokens) {
+    public static Expression parseExpression(List<Token> tokens) throws SyntaxErrorException {
         Parser parser = new Parser(tokens);
         return parser.expression();
     }
 
-    public static List<InstructionInfo> parse(List<Token> tokens) {
+    public static List<InstructionInfo> parse(List<Token> tokens) throws SyntaxErrorException {
         Parser parser = new Parser(tokens);
         return parser.program();
     }
 
-    public List<InstructionInfo> program() {
+    public List<InstructionInfo> program() throws SyntaxErrorException {
         List<InstructionInfo> instructions = new ArrayList<>();
 
         while (i < tokens.size()) {
@@ -50,16 +53,16 @@ public class Parser {
         return instructions;
     }
 
-    public Instruction instruction() {
+    public Instruction instruction() throws SyntaxErrorException {
         Instruction result = parse();
         if (current().type() != TokenType.ENDL) {
-            // erreur
+            throw new UnexpectedTokenException(current(), TokenType.ENDL);
         }
         advance();
         return result;
     }
 
-    public Instruction parse() {
+    public Instruction parse() throws SyntaxErrorException {
         if (current().type() == TokenType.AFFICHER) {
             advance();
             return new Afficher(expression());
@@ -69,7 +72,7 @@ public class Parser {
             String name = current().lexeme();
             advance();
             if (current().type() != TokenType.ASSIGNER) {
-                // erreur ici
+                throw new UnexpectedTokenException(current(), TokenType.ASSIGNER);
             }
             advance();
             return new Assigner(name, expression());
@@ -89,12 +92,12 @@ public class Parser {
             return new TantQue(condition, block);
         }
 
-        return null;
+        throw new UnexpectedTokenException(current());
     }
 
-    private Block block() {
+    private Block block() throws SyntaxErrorException {
         if (current().type() != TokenType.BRACKET_OUVRANT) {
-            // erreur
+            throw new UnexpectedTokenException(current(), TokenType.BRACKET_OUVRANT);
         }
         advance();
         List<Instruction> instructions = new ArrayList<>();
@@ -108,11 +111,11 @@ public class Parser {
         return new Block(instructions);
     }
 
-    private Expression expression() {
+    private Expression expression() throws SyntaxErrorException {
         return equality();
     }
 
-    private Expression equality() {
+    private Expression equality() throws SyntaxErrorException {
         Expression expr = comparaison();
         Set<TokenType> operators = Set.of(TokenType.EGAL, TokenType.DIFFERENT);
 
@@ -125,7 +128,7 @@ public class Parser {
         return expr;
     }
 
-    private Expression comparaison() {
+    private Expression comparaison() throws SyntaxErrorException {
         Expression expr = term();
         Set<TokenType> operators = Set.of(TokenType.GRAND_EGAL, TokenType.PLUS_GRAND, TokenType.PETIT_EGAL, TokenType.PLUS_PETIT);
         
@@ -138,7 +141,7 @@ public class Parser {
         return expr;
     }
 
-    private Expression term() {
+    private Expression term() throws SyntaxErrorException {
         Expression expr = factor();
         Set<TokenType> operators = Set.of(TokenType.MOINS, TokenType.PLUS);
         while (i < tokens.size() && operators.contains(current().type())) {
@@ -150,7 +153,7 @@ public class Parser {
         return expr;
     }
 
-    private Expression factor() {
+    private Expression factor() throws SyntaxErrorException {
         Expression expr = unary();
         Set<TokenType> operators = Set.of(TokenType.FOIS, TokenType.DIVISE);
         while (i < tokens.size() && operators.contains(current().type())) {
@@ -162,7 +165,7 @@ public class Parser {
         return expr;
     }
 
-    private Expression unary() {
+    private Expression unary() throws SyntaxErrorException {
         if (Set.of(TokenType.NON, TokenType.MOINS).contains(current().type())) {
             Token operator = current();
             advance();
@@ -172,7 +175,7 @@ public class Parser {
         return primary();
     }
 
-    private Expression primary() {
+    private Expression primary() throws SyntaxErrorException {
         Token token = current();
         TokenType type = token.type();
         advance();
@@ -197,10 +200,9 @@ public class Parser {
                 advance();
                 return new Grouping(expr);
             }
-            // erreur, parenthèse non fermée   
+            throw new ExpectedCharacterNotFound(current().line(), ')'); 
         }
-        // erreur, unexpected token
-        return null;   
+        throw new UnexpectedTokenException(token);
     }
 
 

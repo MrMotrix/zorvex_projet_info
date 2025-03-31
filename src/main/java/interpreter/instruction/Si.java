@@ -10,7 +10,7 @@ import interpreter.expression.Expression;
 public record Si(Expression condition, Block block) implements Instruction{
     public Optional<ZorvexValue> interpret(Context context) {
         if (!condition.value(context).isInteger())
-            // on devrait avoir une erreur ici
+            // on devrait avoir une   ici
             return Optional.empty();
 
         if (condition.value(context).asInteger() != 0) {

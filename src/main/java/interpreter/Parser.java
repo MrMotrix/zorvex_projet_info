@@ -46,15 +46,14 @@ public class Parser {
         List<InstructionInfo> instructions = new ArrayList<>();
 
         while (i < tokens.size()) {
-            int line = current().line();
-            instructions.add(new InstructionInfo(instruction(), line));
+            instructions.add(instruction());
         }
         
         return instructions;
     }
 
-    public Instruction instruction() throws SyntaxErrorException {
-        Instruction result = parse();
+    public InstructionInfo instruction() throws SyntaxErrorException {
+        InstructionInfo result = parse();
         if (current().type() != TokenType.ENDL) {
             throw new UnexpectedTokenException(current(), TokenType.ENDL);
         }
@@ -62,10 +61,11 @@ public class Parser {
         return result;
     }
 
-    public Instruction parse() throws SyntaxErrorException {
+    public InstructionInfo parse() throws SyntaxErrorException {
+        int line = current().line();
         if (current().type() == TokenType.AFFICHER) {
             advance();
-            return new Afficher(expression());
+            return new InstructionInfo(new Afficher(expression()), line);
         }
 
         if (current().type() == TokenType.IDENTIFIANT) {
@@ -75,23 +75,25 @@ public class Parser {
                 throw new UnexpectedTokenException(current(), TokenType.ASSIGNER);
             }
             advance();
-            return new Assigner(name, expression());
+            return new InstructionInfo(new Assigner(name, expression()), line);
         }
 
         if (current().type() == TokenType.SI) {
             advance();
             Expression condition = expression();
             Block block = block();
-            return new Si(condition, block);
+            return new InstructionInfo(new Si(condition, block), line);
         }
 
         if (current().type() == TokenType.TANT_QUE) {
             advance();
             Expression condition = expression();
             Block block = block();
-            return new TantQue(condition, block);
+            return new InstructionInfo(new TantQue(condition, block), line);
         }
-
+        System.out.println(current());
+        advance();
+        System.out.println(current());
         throw new UnexpectedTokenException(current());
     }
 
@@ -100,9 +102,15 @@ public class Parser {
             throw new UnexpectedTokenException(current(), TokenType.BRACKET_OUVRANT);
         }
         advance();
-        List<Instruction> instructions = new ArrayList<>();
+
+        if (current().type() != TokenType.ENDL) {
+            throw new UnexpectedTokenException(current(), TokenType.ENDL);
+        }
+        advance();
+
+        List<InstructionInfo> instructions = new ArrayList<>();
         while (i < tokens.size() && current().type() != TokenType.BRACKET_FERMANT)  {
-            Instruction inst = instruction();
+            InstructionInfo inst = instruction();
             if (inst != null)
                 instructions.add(inst);
         }

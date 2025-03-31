@@ -14,7 +14,9 @@ public class ParserTest {
             tokens = Scanner.tokenize(input);
         }
         catch (Exception e) { }
-        return Parser.parseExpression(tokens);
+        try {
+            return Parser.parseExpression(tokens);
+        } catch(Exception e) { return null; }
     }
 
     @Test

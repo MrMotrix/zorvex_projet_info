@@ -11,31 +11,41 @@ import interpreter.expression.Literal;
 import interpreter.expression.Variable;
 import interpreter.instruction.Afficher;
 import interpreter.instruction.Assigner;
+import interpreter.instruction.Block;
 import interpreter.instruction.Instruction;
 import interpreter.instruction.TantQue;
 import interpreter.instruction.InstructionInfo;
+import interpreter.instruction.Si;
 
 public class Interpreter {
     private ArrayDeque<Context> stack = new ArrayDeque<>();
-    private ArrayDeque<Integer> returnLine = new ArrayDeque<>();
+    private ExecutionState state = new ExecutionState();
 
     private int currentInstruction = 0;
-    private List<InstructionInfo> instructions = new ArrayList<>();
 
     public static void main(String[] args) throws SyntaxErrorException {
-        Interpreter interpreter = new Interpreter();
-        List<Token> tokens = Scanner.tokenize(
-            """
-            n <- 13
-            p <- 2
-            compose <- 0
-            n <- n+p
-            """);
+        List<String> program = List.of("n <- 13", "p <- 5", "compose <- 0", "i <- 1"
+        , "tant que i < n {", "i <- i+2", "p <- p+1", "si i < p {", "i <- i", "x <- i+1", "}", "x <- i+2", "}", "n <- n+p");
+        System.out.println();
+        Interpreter interpreter = new Interpreter(String.join("\n", program) + "\n");
+        
+        while (interpreter.state.inBlock()) {
+            int currentLine = interpreter.getCurrentLine();
 
-        interpreter.instructions = Parser.parse(tokens);
+            for (int i = 1; i <= program.size(); i++) {
+                if (i == currentLine)
+                    System.out.println(program.get(i-1) + " | " + interpreter.getVariable("p") + " " + interpreter.getVariable("i"));
+                else
+                    System.out.println(program.get(i-1));
+            }
+            try {
+                Thread.sleep(1500);
+            }
+            catch (Exception e) {
+                
+            }
+            interpreter.step();
 
-        while (interpreter.currentInstruction < interpreter.instructions.size()) {
-            System.out.println(interpreter.step());
         }
     }
     public Interpreter() {
@@ -44,38 +54,45 @@ public class Interpreter {
 
     public Interpreter(String code) throws SyntaxErrorException {
         this();
-        this.instructions = Parser.parse(Scanner.tokenize(code));
-    }
-
-    public int getLineCount() {
-        return instructions.getLast().line();
+        this.state.enterBlock(new Block(Parser.parse(Scanner.tokenize(code))));
     }
 
     public int getCurrentLine() {
-        return instructions.get(currentInstruction).line();
+        return state.getCurrentInstruction().line();
     }
 
     public ZorvexValue getVariable(String name) {
-        return stack.getLast().getVariable(name);
+        return stack.peekLast().getVariable(name);
     }
-
+    
     public String step() {
-        String result = interpret();
-        System.out.println(stack.getLast());
-        return result;
-    }
-
-    private String interpret() {
-        currentInstruction += 1;
-        return interpret(instructions.get(currentInstruction-1).instruction());
-    }
-
-    public String interpret(Instruction instruction) {
-        if (instruction instanceof Assigner assign) {
-            assign.interpret(stack.getLast());
-            return assign.variableName();
+        Instruction instruction = state.getCurrentInstruction().instruction();
+        String result = "";
+        
+        if (instruction instanceof Si si) {
+            state.step();
+            if (si.condition().value(stack.getLast()).asInteger() != 0) 
+                state.enterBlock(si.block());
+            return result;
         }
-        instruction.interpret(stack.getLast());
-        return "";
+
+        else if (instruction instanceof TantQue tantQue) {
+            if (tantQue.condition().value(stack.getLast()).asInteger() != 0) 
+                state.enterBlock(tantQue.block());
+            else
+                state.step();
+            return result;
+        }
+        
+        else if (instruction instanceof Assigner assign) {
+            assign.interpret(stack.getLast());
+            state.step();
+            result = assign.variableName();
+        }
+
+        if (state.hasBlockReachedEnd()) 
+            state.exitBlock();
+        
+        return result;
     }
 }

@@ -327,6 +327,22 @@ public class successFileUploadController {
     
     // ================================================================================================
 
+    public successFileUploadController() {
+        // Default constructor
+        this.consolePanel = new TextArea();
+        this.bkScroller = new ScrollPane();
+        this.nblineScroller = new ScrollPane();
+        this.codeScroller = new ScrollPane();
+        this.codeContainer = new VBox();
+        this.bkpointVbox = new VBox();
+        this.nblineVbox = new VBox();
+        this.splitPane = new SplitPane();
+        this.leftControlsPanel = new AnchorPane();
+        this.startButton = new Button();
+        this.bottomPane = new AnchorPane();
+        this.splitPane = new SplitPane();
+    }
+
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
@@ -380,42 +396,32 @@ public class successFileUploadController {
 
             String testingText = code;
             
-           
             for (String line : testingText.split("\n")){
                 myTestList.add(line);
             }
+
             mainController.numberOfLines = myTestList.size();
-
-            for (String line : myTestList){
-                
-                Label label = new Label(line);
-                label.setMaxWidth(Double.MAX_VALUE);
-                // label.setStyle("-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 1px;");
-                codeContainer.getChildren().addAll(label);
-            }
-
             mainController.content = myTestList;
-
         }
-
-        else {
-            for (String line : mainController.content){
-                Label label = new Label(line);
-                label.setMaxWidth(Double.MAX_VALUE);
-
-                codeContainer.getChildren().addAll(label);
-            }
-        }
-
+        
+        setContentLabels(mainController);
         // set nblines and breakpoints
         setNbLines();
         setBreakPoints();
         
-
-
         // syncrhonise scrolling
         codeScroller.vvalueProperty().bindBidirectional(bkScroller.vvalueProperty());
         codeScroller.vvalueProperty().bindBidirectional(nblineScroller.vvalueProperty());
+    }
+
+    private void setContentLabels(MainController mainController) {
+        codeContainer.getChildren().clear();
+        for (String line : mainController.content){
+            Label label = new Label(line);
+            label.setMaxWidth(Double.MAX_VALUE);
+
+            codeContainer.getChildren().addAll(label);
+        }
     }
 
     public void update(){

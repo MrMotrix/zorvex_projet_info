@@ -533,6 +533,7 @@ import javafx.scene.layout.VBox;
 
 public class duringExecutionController  {
 
+    // ======================== FXML ========================
     @FXML private VBox codeContainer;
     @FXML private TextArea consolePanel;
     @FXML private Button continueButton;
@@ -552,6 +553,7 @@ public class duringExecutionController  {
     @FXML private Pane canvasPane;
     @FXML private AnchorPane bottomPane;
     
+    // ======================== ATTRIBUTES ========================
     private int currentHighlightedLine = 0;
     private boolean firstLineRead = false;
     private boolean reverse = false;
@@ -561,12 +563,81 @@ public class duringExecutionController  {
     private Interpreter interpreter;
     private MainController mainController;
     private App app;
+
+    // ======================== GETTERS ========================
+    public VBox getCodeContainer() {return codeContainer;}
+    public TextArea getConsolePanel() {return consolePanel;}
+    public Button getContinueButton() {return continueButton;}
+    public Button getLastLineButton() {return lastLineButton;}
+    public Button getNextLineButton() {return nextLineButton;}
+    public Button getRestartButton() {return restartButton;}
+    public Button getStopButton() {return stopButton;}
+    public VBox getBkpointVbox() {return bkpointVbox;}
+    public VBox getNblineVbox() {return nblineVbox;}
+    public AnchorPane getLeftControlsPanel() {return leftControlsPanel;}
+    public Button getStartButton() {return startButton;}
+    public FXMLLoader getLoader() {return loader;}
+    public SplitPane getSplitPane() {return splitPane;}
+    public ScrollPane getBkScroller() {return bkScroller;}
+    public ScrollPane getNblineScroller() {return nblineScroller;}
+    public ScrollPane getCodeScroller() {return codeScroller;}
+    public Pane getCanvasPane() {return canvasPane;}
+    public AnchorPane getBottomPane() {return bottomPane;}
+    public int getCurrentHighlightedLine() {return currentHighlightedLine;}
+    public MainController getMainController() {return mainController;} 
+
+    // =============================== SETTERS ===============================
+    public void setCodeContainer(VBox codeContainer) {this.codeContainer = codeContainer;}
+    public void setConsolePanel(TextArea consolePanel) {this.consolePanel = consolePanel;}
+    public void setContinueButton(Button continueButton) {this.continueButton = continueButton;}
+    public void setLastLineButton(Button lastLineButton) {this.lastLineButton = lastLineButton;}
+    public void setNextLineButton(Button nextLineButton) {this.nextLineButton = nextLineButton;}
+    public void setRestartButton(Button restartButton) {this.restartButton = restartButton;}
+    public void setStopButton(Button stopButton) {this.stopButton = stopButton;}
+    public void setBkpointVbox(VBox bkpointVbox) {this.bkpointVbox = bkpointVbox;}
+    public void setNblineVbox(VBox nblineVbox) {this.nblineVbox = nblineVbox;}
+    public void setLeftControlsPanel(AnchorPane leftControlsPanel) {this.leftControlsPanel = leftControlsPanel;}
+    public void setStartButton(Button startButton) {this.startButton = startButton;}
+    public void setLoader(FXMLLoader loader) {this.loader = loader;}
+    public void setSplitPane(SplitPane splitPane) {this.splitPane = splitPane;}
+    public void setBkScroller(ScrollPane bkScroller) {this.bkScroller = bkScroller;}
+    public void setNblineScroller(ScrollPane nblineScroller) {this.nblineScroller = nblineScroller;}
+    public void setCodeScroller(ScrollPane codeScroller) {this.codeScroller = codeScroller;}
+    public void setCanvasPane(Pane canvasPane) {this.canvasPane = canvasPane;}
+    public void setBottomPane(AnchorPane bottomPane) {this.bottomPane = bottomPane;}    
     
     // TEST, so this can be deleteed later =================================================================
     Random random = new Random();
     int TESTING_INDEX = 5;
     // ==============================================================================
 
+
+    // under normal circcumstances this constructor is never used, but if somehow it is, it will not crash the program since nothing will be null
+    public duringExecutionController(MainController mainController, App app) {
+        this.mainController = mainController;
+        this.app = app;
+        this.consolePanel = new TextArea();
+        this.codeContainer = new VBox();
+        this.bkpointVbox = new VBox();
+        this.nblineVbox = new VBox();
+        this.splitPane = new SplitPane();
+        this.canvasPane = new Pane();
+        this.rep = new GraphicalRepresentation();      
+        this.codeScroller = new ScrollPane();
+        this.bkScroller = new ScrollPane();
+        this.nblineScroller = new ScrollPane();
+        this.leftControlsPanel = new AnchorPane();
+        this.bottomPane = new AnchorPane();
+
+        setPreviousState();
+    }
+
+
+    /**
+     * This method is executed at the beginning of the program, when the scene has just been changed. It is also
+     * executed when the user presses the continue button. 
+     * @param event
+     */
     @FXML
     void continueExecution(ActionEvent event) {
         
@@ -602,6 +673,7 @@ public class duringExecutionController  {
         }
     }
 
+    // TODO : something has still to be implemented here. Currently it just erases something random from the plot and goes to the last line
     @FXML
     void goLastLine(ActionEvent event) {
 
@@ -629,6 +701,10 @@ public class duringExecutionController  {
         // rep.getElements().get(0).update
     }
 
+    /**
+     * This method is used to go to the next line of the code. It is called when the user presses the "Next" button, and also it is called multiple times when the continue button is pressed. 
+     * @param event
+     */
     @FXML
     void goNextLine(ActionEvent event) {
         // if we have finished execution, we return
@@ -731,19 +807,18 @@ public class duringExecutionController  {
 
     }
 
-
+    /**
+     * This method is used to handle the parsing exception. It is called when the user presses the "Stop" button, and also it is called when the user presses the "Continue" button and there is an error in the code.
+     * @param event
+     */
     @FXML
     void stopExecution(ActionEvent event) {
-
-        // sendMessageToConsole("We stop execution, so we return to the previous scene");
-
 
         if (currentHighlightedLine >= 0 && currentHighlightedLine < codeContainer.getChildren().size()) {
             Node node = codeContainer.getChildren().get(currentHighlightedLine);
             node.setStyle("");
             currentHighlightedLine = 0;
         }
-
 
         // reset values for rendering
         rep.reinitializePositioningValues();
@@ -789,6 +864,10 @@ public class duringExecutionController  {
 
     }
 
+    /**
+     * This method is executed when the scene is loaded. It is used to set the initial values of the scene and to set the previous state of the scene.
+     * It is called after "initialize" so a mainController object can be created in the App class and passed to this controller.
+     */
     @FXML
     void initialize() {}
 
@@ -879,7 +958,7 @@ public class duringExecutionController  {
             });
     }
    
-    private void highlightCurrentLine(int currentLine) {
+    public void highlightCurrentLine(int currentLine) {
         for (int i = 0; i < codeContainer.getChildren().size(); i++) {
             Node node = codeContainer.getChildren().get(i);
             if (i == currentLine && node instanceof Label label) {
@@ -897,12 +976,12 @@ public class duringExecutionController  {
      * line break at the begginning
      * @param message
      */
-    private void sendMessageToConsole(String message){
+    public void sendMessageToConsole(String message){
         consolePanel.appendText("\n>>>" + message);
     }
 
     private void handleParsingException(Exception e) {
         sendMessageToConsole("Une erreur est survenue lors de la lecture du fichier: \n" + e.toString());
         stopExecution(null);
-    }
+    }  
 }

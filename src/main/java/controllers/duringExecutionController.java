@@ -516,6 +516,7 @@ import java.util.Random;
 import application.App;
 import graphics.GraphicalRepresentation;
 import graphics.GraphicalVar;
+import graphics.ModificationType;
 import interpreter.Interpreter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -585,6 +586,7 @@ public class duringExecutionController  {
     public AnchorPane getBottomPane() {return bottomPane;}
     public int getCurrentHighlightedLine() {return currentHighlightedLine;}
     public MainController getMainController() {return mainController;} 
+    public App getApp(){return this.app;}
 
     // =============================== SETTERS ===============================
     public void setCodeContainer(VBox codeContainer) {this.codeContainer = codeContainer;}
@@ -609,6 +611,7 @@ public class duringExecutionController  {
     // TEST, so this can be deleteed later =================================================================
     Random random = new Random();
     int TESTING_INDEX = 5;
+    private ExecutionStack record;
     // ==============================================================================
 
 
@@ -628,10 +631,17 @@ public class duringExecutionController  {
         this.nblineScroller = new ScrollPane();
         this.leftControlsPanel = new AnchorPane();
         this.bottomPane = new AnchorPane();
+        this.continueButton = new Button();
+        this.restartButton = new Button();
+        this.nextLineButton = new Button();
+        this.lastLineButton = new Button();
+        this.stopButton = new Button();
+        this.record = new ExecutionStack();
 
         setPreviousState();
     }
 
+    public duringExecutionController(){}
 
     /**
      * This method is executed at the beginning of the program, when the scene has just been changed. It is also
@@ -679,13 +689,7 @@ public class duringExecutionController  {
 
         // ============================================ TESTING ============================================================================================
 
-        if (TESTING_INDEX == 1){
-            
-            int index = random.nextInt(rep.getElements().size());
-            sendMessageToConsole("Erased element in position " + index);
-            rep.deleteElement(rep.getElements().get(index).getName());
-
-        }
+        record.undo(rep);
 
         // ============================================ END TEST ============================================================================================
         
@@ -718,6 +722,7 @@ public class duringExecutionController  {
         
         try {    
             // get the affected variable from the interpreter
+            //TODO : ca serait bon que l-interpreteur ait une facon de set la ligne qu-il lit, ainsi quand on fait un retour en arriere, on va aussi a linstruction precedente que l-interpreteur a lu
             String var = interpreter.step();
 
             /*
@@ -746,9 +751,13 @@ public class duringExecutionController  {
 
                 // add the variable to the graphical representation or check if it already exists and update it
                 if (rep.getElements().containsKey(var)) {
-                    rep.updateElement(var, value, 0);
+                    rep.updateElement(var, ModificationType.UPDATE, value, 0);
+                    record.push(new ModifyVarRecord(var, value));
+
                 } else {
-                    rep.addElement(var, new GraphicalVar(var, value, canvasPane));
+                    GraphicalVar temp = new GraphicalVar(var, value, canvasPane);
+                    rep.addElement(var, temp);
+                    record.push(new CreateRecord(var, temp));
                 }
             }
 
@@ -864,16 +873,19 @@ public class duringExecutionController  {
 
     }
 
+    @FXML
+    void initialize() {}
+    
     /**
      * This method is executed when the scene is loaded. It is used to set the initial values of the scene and to set the previous state of the scene.
      * It is called after "initialize" so a mainController object can be created in the App class and passed to this controller.
      */
-    @FXML
-    void initialize() {}
-
     public void initialize2(MainController mainController, App app) throws Exception {
         this.mainController = mainController;
         this.app = app;
+
+        record = new ExecutionStack();
+
         setInitialVisuals();        
         setPreviousState();
         // this has to be initializes with this format because creating a simple strign joining the lines with \n without formatting produces an error
@@ -914,7 +926,14 @@ public class duringExecutionController  {
         nextLineButton.setText(">");   
         restartButton.setText("R");    
         stopButton.setText("A");
+
         consolePanel.setWrapText(true);
+
+        continueButton.setStyle(continueButton.getStyle() + "-fx-background-color: green; -fx-text-fill: white;");
+        lastLineButton.setStyle(lastLineButton.getStyle() + "-fx-background-color: black; -fx-text-fill: white");
+        nextLineButton.setStyle(nextLineButton.getStyle() + "-fx-background-color: black; -fx-text-fill: white");
+        restartButton.setStyle(restartButton.getStyle() + "-fx-background-color: yellow; -fx-text-fill: black;");
+        stopButton.setStyle(stopButton.getStyle() + "-fx-background-color: red; -fx-text-fill: white;");
         
         // codeContainer.setWrapText(false);
 

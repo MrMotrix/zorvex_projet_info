@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-public final class GraphicalArray extends AbstractGraphicalObject {
+public final class GraphicalArray extends AbstractGraphicalObject implements IterableGraphicalObject{
     
     //TODO : Replace the 'String[]' type by the the interface or enum that contains all the accepted types, or maybe just a String is required ?
     private String[] values;

@@ -2,6 +2,7 @@ package graphics;
 
 import java.util.HashMap;
 import java.util.Map;
+import graphics.IterableGraphicalObject;
 
 public class GraphicalRepresentation {
 
@@ -30,9 +31,22 @@ public class GraphicalRepresentation {
         currentY += spaceBetweenPlots;
     }
 
-    public void updateElement(String name, String value, int index) {
+    public void updateElement(String name, ModificationType type, String value, int index) {
         if (elements.containsKey(name)) {
-            elements.get(name).update(index, value);
+            switch (type) {
+                case INSERT:
+                    IterableGraphicalObject obj1 = ((IterableGraphicalObject)elements.get(name));
+                    obj1.addNodeAt(index, value);
+                    break;
+                case REMOVE:
+                    IterableGraphicalObject obj2 = ((IterableGraphicalObject)elements.get(name));
+                    obj2.deleteNodeAt(index);
+                    break;
+                case UPDATE: 
+                    elements.get(name).update(index, value);
+                default:
+                    break;
+            }
         }
     }
 

@@ -128,7 +128,7 @@ public class App extends Application{
         mainController.setApp(this);
         
         // ================= TO BE DELETED ========================================================
-        int caseNumber = 1; // 0 = open new file, 1 = success file upload
+        int caseNumber =0; // 0 = open new file, 1 = success file upload
         Parent root;
         // =========================================================================
 
@@ -141,7 +141,7 @@ public class App extends Application{
         }
         else {
             loader = new FXMLLoader(getClass().getResource(Paths.SUCCESS_FILE_UPLOAD));
-            mainController.setNameFile("THIS IS JUST A TEST BECAUSE NO FILE HAS BEEN UPDATED");
+            mainController.setNameFile("THIS IS JUST A TEST BECAUSE NO FILE HAS BEEN UPLOADED");
             root = loader.load();
             successFileUploadController controller = loader.getController();
             controller.initialize2(mainController, this);

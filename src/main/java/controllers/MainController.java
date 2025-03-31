@@ -112,6 +112,8 @@
 
 package controllers;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -178,8 +180,8 @@ public class MainController {
 
     // under normal circumstances, this constructor should not be used
     public MainController(){
-        this.bkpoints = Set.of();
-        this.content = List.of();
+        this.bkpoints = new HashSet<>();
+        this.content = new ArrayList<>();
         this.numberOfLines = 0;
         this.currentLine = 1;
         this.consolePanel = new TextArea();

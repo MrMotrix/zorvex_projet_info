@@ -21,6 +21,10 @@ public class GraphicalRepresentation {
         return elements;
     }
 
+    public GraphicalObject getElement(String name){
+        return elements.get(name);
+    }
+
     public void setElements(Map<String, GraphicalObject> elements) {
         this.elements = elements;
     }

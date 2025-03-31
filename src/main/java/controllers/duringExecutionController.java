@@ -751,8 +751,8 @@ public class duringExecutionController  {
 
                 // add the variable to the graphical representation or check if it already exists and update it
                 if (rep.getElements().containsKey(var)) {
+                    record.push(new ModifyVarRecord(var, ((GraphicalVar)(rep.getElement(var))).getValue()));
                     rep.updateElement(var, ModificationType.UPDATE, value, 0);
-                    record.push(new ModifyVarRecord(var, value));
 
                 } else {
                     GraphicalVar temp = new GraphicalVar(var, value, canvasPane);

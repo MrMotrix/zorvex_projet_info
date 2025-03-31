@@ -9,7 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
-public final class GraphicalLinkedList extends AbstractGraphicalObject {
+public final class GraphicalLinkedList extends AbstractGraphicalObject implements IterableGraphicalObject{
 
     private String[] values;
     private List<GraphicalNode> nodes = new ArrayList<>();

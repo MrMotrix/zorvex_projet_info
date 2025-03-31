@@ -81,4 +81,23 @@ public class duringExecutionControllerTest {
             assertEquals(0, controller.getCurrentHighlightedLine());
         });
     }
+
+    @Test
+    void gettersTest(){
+        Platform.runLater(() -> {
+            
+            assertNotNull(controller.getCodeContainer());
+            assertNotNull(controller.getConsolePanel());
+            assertNotNull(controller.getContinueButton());
+            assertNotNull(controller.getLastLineButton());
+            assertNotNull(controller.getNextLineButton());
+            assertNotNull(controller.getRestartButton());
+            assertNotNull(controller.getStopButton());
+            assertNotNull(controller.getNblineScroller());
+            assertNotNull(controller.getCodeScroller());
+            assertNotNull(controller.getCanvasPane());
+            assertNotNull(controller.getBkpointVbox());
+            assertNotNull(controller.getNblineVbox());
+        });
+    }
 }

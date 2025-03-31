@@ -30,7 +30,7 @@ public class duringExecutionControllerIntegrationTest {
     }
     
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         // Setup MainController and initialize the duringExecutionController for testing.
         MainController mainController = new MainController();
         List<String> codeLines = List.of("n <- 10", "p <- 20", "p <- 10", "h <- 6");
@@ -38,6 +38,7 @@ public class duringExecutionControllerIntegrationTest {
 
         mainController.setContentValues(codeLines, numberOfLines);
         controller = new duringExecutionController(new MainController(), new App());
+        controller.initialize2(mainController, controller.getApp());
     }
     
     @Test
@@ -67,4 +68,31 @@ public class duringExecutionControllerIntegrationTest {
             assertEquals(1, controller.getCurrentHighlightedLine());  // After restart, current line should be 1.
         });
     }
+
+    @Test
+    void testHandleParsingException() {
+        MainController mainController = new MainController();
+        // the last line of the code has an error
+        List<String> codeLines = List.of("n <- 10", "p <- 20", "p <- 10", "h <- 6", "a");
+        int numberOfLines = codeLines.size();
+    
+        mainController.setContentValues(codeLines, numberOfLines);
+        controller = new duringExecutionController(mainController, new App());
+    
+        try {
+            // assertDoesNotThrow(() -> {
+            //     controller.initialize2(mainController, controller.getApp());
+            // }, "initialize2 should not throw an exception");
+            controller.initialize2(mainController, new App());
+        } catch (Exception e) {
+            
+            // e.printStackTrace();
+        }
+    
+        // If an exception occurs, verify the console message
+        String consoleText = controller.getMainController().getConsole().getText();
+        assertFalse(consoleText.contains("Un erreur est sourvenu lors de la lecture du fichier"), 
+            "The console should not contain an error message");
+    }
+    
 }

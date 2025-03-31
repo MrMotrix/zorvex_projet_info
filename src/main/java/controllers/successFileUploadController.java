@@ -320,9 +320,7 @@ public class successFileUploadController {
         n <- 10*10 / 5
         p <- 2
         compose <- 0
-        a
         n <- n+p
-        a
         """;
     
     // ================================================================================================
@@ -342,6 +340,7 @@ public class successFileUploadController {
         this.bottomPane = new AnchorPane();
         this.splitPane = new SplitPane();
     }
+
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
@@ -390,7 +389,7 @@ public class successFileUploadController {
         consolePanel.setWrapText(true);
         
         // for testing, this is executed iff we start directly on this scene
-        if (mainController.content == null ) {
+        if (mainController.content.isEmpty()) {
 
             List<String> myTestList = new ArrayList<>();
 

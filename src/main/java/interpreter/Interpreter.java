@@ -65,15 +65,14 @@ public class Interpreter {
         return stack.peekLast().getVariable(name);
     }
     
-    public String step() {
+    public Instruction step() {
         Instruction instruction = state.getCurrentInstruction().instruction();
-        String result = "";
         
         if (instruction instanceof Si si) {
             state.step();
             if (si.condition().value(stack.getLast()).asInteger() != 0) 
                 state.enterBlock(si.block());
-            return result;
+            return instruction;
         }
 
         else if (instruction instanceof TantQue tantQue) {
@@ -81,18 +80,17 @@ public class Interpreter {
                 state.enterBlock(tantQue.block());
             else
                 state.step();
-            return result;
+            return instruction;
         }
         
-        else if (instruction instanceof Assigner assign) {
-            assign.interpret(stack.getLast());
+        else {
+            instruction.interpret(stack.getLast());
             state.step();
-            result = assign.variableName();
         }
 
         if (state.hasBlockReachedEnd()) 
             state.exitBlock();
         
-        return result;
+        return instruction;
     }
 }

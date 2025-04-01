@@ -128,7 +128,7 @@ public class App extends Application{
         mainController.setApp(this);
         
         // ================= TO BE DELETED ========================================================
-        int caseNumber =1; // 0 = open new file, 1 = success file upload
+        int caseNumber = 0; // 0 = open new file, 1 = success file upload
         Parent root;
         // =========================================================================
 

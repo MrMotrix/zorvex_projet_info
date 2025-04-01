@@ -125,6 +125,9 @@ import graphics.GraphicalRepresentation;
 import graphics.GraphicalVar;
 import graphics.ModificationType;
 import interpreter.Interpreter;
+import interpreter.instruction.Instruction;
+import interpreter.instruction.Afficher;
+import interpreter.instruction.Assigner;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -138,6 +141,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+
 
 public class duringExecutionController  {
 
@@ -441,12 +445,10 @@ public class duringExecutionController  {
         try {    
             // get the affected variable from the interpreter
             //TODO : ca serait bon que l-interpreteur ait une facon de set la ligne qu-il lit, ainsi quand on fait un retour en arriere, on va aussi a linstruction precedente que l-interpreteur a lu
-            String var = interpreter.step();
+            Instruction inst = interpreter.step();
 
-            sendMessageToConsole(currentLine + "");
-            if (var != null && !var.isEmpty()) {
-
-             
+            if (inst instanceof Assigner assigner) {        
+                String var = assigner.variableName();     
                 String value = interpreter.getVariable(var).toString();
                 value = value.substring(value.indexOf(" ") + 1);
                 
@@ -461,6 +463,9 @@ public class duringExecutionController  {
                     rep.addElement(var, temp);
                     record.push(new CreateRecord(var, temp));
                 }
+            }
+            else if (inst instanceof Afficher afficher) {
+                sendMessageToConsole(afficher.result().asString());
             }
 
         } catch (Exception e) {

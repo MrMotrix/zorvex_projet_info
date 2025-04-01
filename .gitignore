@@ -83,3 +83,6 @@ fabric.properties
 # fichiers de compilation
 build
 build/**
+
+bin
+bin/**

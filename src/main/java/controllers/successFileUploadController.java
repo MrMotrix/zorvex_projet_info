@@ -317,9 +317,19 @@ public class successFileUploadController {
     // ========================================TEST========================================================
     
     public static String code =  """
-        n <- 10*10 / 5
-        p <- 2
+        n <- 13
+        p <- 5
         compose <- 0
+        i <- 1
+        tant que i < n {
+            i <- i+2
+            p <- p+1
+            si i < p {
+                i <- i
+                x <- i+1
+            }
+            x <- i+2
+        }
         n <- n+p
         """;
     

@@ -39,7 +39,7 @@ public class Interpreter {
                     System.out.println(program.get(i-1));
             }
             try {
-                Thread.sleep(1500);
+                Thread.sleep(0);
             }
             catch (Exception e) {
                 

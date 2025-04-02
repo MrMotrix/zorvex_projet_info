@@ -11,10 +11,11 @@ import interpreter.expression.*;
 import interpreter.instruction.*;
 
 // program          → instruction* EOF;
-// instruction      → afficher | assigner | condition;
+// instruction      → declfonction | afficher | assigner | condition;
+// declfonction     → "fonction " IDENTIFIER "(" ((IDENTIFIER',')* IDENTIFIER) | () ")" block;
 // afficher         → "afficher " expression ENDL;
 // assignation      → IDENTIFIER "<-" expression ENDL;
-// condition        → "si " expression "faire " block ;
+// condition        → "si " expression block ;
 // block            → "{" instruction* "}" ENDL ;
 // expression       → equality ;
 // equality         → comparison ( ( "!=" | "==" ) comparison )* ;
@@ -91,9 +92,42 @@ public class Parser {
             Block block = block();
             return new InstructionInfo(new TantQue(condition, block), line);
         }
-        System.out.println(current());
-        advance();
-        System.out.println(current());
+
+        if (current().type() == TokenType.FONCTION) {
+            advance();
+            if (current().type() != TokenType.IDENTIFIANT) 
+                throw new UnexpectedTokenException(current(), TokenType.IDENTIFIANT);
+            Token name = current();
+            advance();
+
+            if (current().type() != TokenType.PARENTHESE_GAUCHE) 
+                throw new UnexpectedTokenException(current(), TokenType.PARENTHESE_GAUCHE);
+            advance();
+            
+            List<String> arguments = new ArrayList<>();
+
+            while (i < tokens.size()-2 && current().type() != TokenType.PARENTHESE_DROIT) {
+                if (current().type() !=  TokenType.IDENTIFIANT)
+                    throw new UnexpectedTokenException(current(), TokenType.IDENTIFIANT);
+                arguments.add(current().lexeme());
+                advance();
+                
+                if (current().type() == TokenType.PARENTHESE_DROIT)
+                    break;
+                if (current().type() != TokenType.VIRGULE)
+                    throw new UnexpectedTokenException(current(), TokenType.VIRGULE);
+                advance();
+            }
+            if (i >= tokens.size()-2) 
+                throw new UnexpectedTokenException(null, TokenType.PARENTHESE_DROIT);
+            
+            advance();
+
+            Block block = block();
+            return new InstructionInfo(new FunctionDeclaration(name.lexeme(), block, arguments), name.line());
+        }
+
+
         throw new UnexpectedTokenException(current());
     }
 

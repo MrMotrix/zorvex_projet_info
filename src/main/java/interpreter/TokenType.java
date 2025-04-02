@@ -11,6 +11,7 @@ public enum TokenType {
     ASSIGNER("<-"), PARENTHESE_GAUCHE("("), PARENTHESE_DROIT(")"), ET("et"), OU("ou"),
     SI("si"), POUR("pour"), RETOURNER("retourner"), AFFICHER("afficher"), TANT_QUE("tant que"),
     VRAI("vrai"), FAUX("faux"), ENDL("\n"), BRACKET_OUVRANT("{"), BRACKET_FERMANT("}"),
+    VIRGULE(","), FONCTION("fonction"),
     NOMBRE(),
     END_OF_FILE(),
     CHAINE(),

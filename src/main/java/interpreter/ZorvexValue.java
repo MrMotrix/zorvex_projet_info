@@ -1,29 +1,25 @@
 package interpreter;
 
 public class ZorvexValue {
-    public enum Type {
-        STRING, INTEGER
-    }
-
-    private Type type;
+    private ZorvexType type;
     private Object value;
 
     public ZorvexValue(int value) {
-        this.type = Type.INTEGER;
+        this.type = ZorvexType.INTEGER;
         this.value = value;
     }
 
     public ZorvexValue(String value) {
-        this.type = Type.STRING;
+        this.type = ZorvexType.STRING;
         this.value = value;
     }
 
     public boolean isInteger() {
-        return type == Type.INTEGER;
+        return type == ZorvexType.INTEGER;
     }
 
     public boolean isString() {
-        return type == Type.STRING;
+        return type == ZorvexType.STRING;
     }
     
     public int asInteger() {

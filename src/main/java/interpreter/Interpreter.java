@@ -24,9 +24,8 @@ public class Interpreter {
     private int currentInstruction = 0;
 
     public static void main(String[] args) throws SyntaxErrorException {
-        List<String> program = List.of("n <- 13", "p <- 5", "compose <- 0", "i <- 1"
-        , "tant que i < n {", "i <- i+2", "p <- p+1", "si i < p {", "i <- i", "x <- i+1", "}", "x <- i+2", "}", "n <- n+p");
-        System.out.println();
+        List<String> program = List.of("n <- 13", "fonction test(a, b, c) {", "a <- b+c", "}", "afficher 5");
+        
         Interpreter interpreter = new Interpreter(String.join("\n", program) + "\n");
         
         while (interpreter.state.inBlock()) {
@@ -54,7 +53,9 @@ public class Interpreter {
 
     public Interpreter(String code) throws SyntaxErrorException {
         this();
-        this.state.enterBlock(new Block(Parser.parse(Scanner.tokenize(code))));
+        List<InstructionInfo> instructions = Parser.parse(Scanner.tokenize(code));
+        instructions.stream().forEach(x -> System.out.println(x.instruction()));
+        this.state.enterBlock(new Block(instructions));
     }
 
     public int getCurrentLine() {

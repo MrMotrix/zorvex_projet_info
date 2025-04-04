@@ -10,9 +10,9 @@
       <items><MenuItem fx:id="openNewItem" onAction="#openNew" text="Ouvrir nouveau" />
             <MenuItem fx:id="closeItem" onAction="#close" text="Fermer" /></items>
     </Menu>
-    <Menu text="Edit">
+    <!-- <Menu text="Edit">
       <items><MenuItem fx:id="deleteItem" text="Delete" /></items>
-    </Menu>
+    </Menu> -->
     <Menu text="Aide">
       <items><MenuItem fx:id="aboutUsItem" onAction="#aboutUs" text="A propos" />
             <MenuItem fx:id="voirDocumentationItem" onAction="#voirDocumentation" text="Voir documentation" /></items>

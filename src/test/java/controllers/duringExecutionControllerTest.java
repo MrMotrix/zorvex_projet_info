@@ -28,7 +28,7 @@ public class duringExecutionControllerTest {
     @BeforeEach
     void setUp() {
         MainController mainController = new MainController();
-        List codeLines = List.of("n <- 10", "p <- 20", "p <- 10", "h <- 6");
+        List<String> codeLines = List.of("n <- 10", "p <- 20", "p <- 10", "h <- 6");
         int numberOfLines = codeLines.size();
 
         mainController.setContentValues(codeLines, numberOfLines);

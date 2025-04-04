@@ -16,7 +16,6 @@ public class MainController {
     double splitPaneDividerPosition = 0.33;
 
     List<String> content; // used
-    // String content;
     String nameFile; // used
     int numberOfLines;
     int currentLine = 1;

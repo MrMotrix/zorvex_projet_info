@@ -28,7 +28,7 @@ class GraphicalRepresentationTest {
     void testUpdateElement() {
         TestGraphicalObject obj = new TestGraphicalObject("Test1");
         graphRep.addElement("Test1", obj);
-        graphRep.updateElement("Test1", "NewValue", 0);
+        graphRep.updateElement("Test1", ModificationType.UPDATE, "NewValue", 0);
         
         assertEquals("NewValue", obj.getLastUpdatedValue());
     }

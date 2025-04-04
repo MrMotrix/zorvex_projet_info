@@ -52,4 +52,5 @@ public interface GraphicalObject {
 
     static double POINTER_WIDTH = 30;
     static double SPACING = 20;
+
 }

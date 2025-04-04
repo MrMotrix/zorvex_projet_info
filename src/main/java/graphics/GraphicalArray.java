@@ -13,7 +13,6 @@ import javafx.scene.text.Text;
 
 public final class GraphicalArray extends AbstractGraphicalObject implements IterableGraphicalObject{
     
-    //TODO : Replace the 'String[]' type by the the interface or enum that contains all the accepted types, or maybe just a String is required ?
     private String[] values;
     private double currentX;
     private double currentY;
@@ -49,18 +48,15 @@ public final class GraphicalArray extends AbstractGraphicalObject implements Ite
         for (int i = 0; i < values.length; i++){
 
             // nouvelle position de chaque carre
-            double cx = x + i * (cellWidth ); // we could add some gab between cells, but i thing it looks better this way
+            double cx = x + i * (cellWidth ); // we could add some gap between cells, but i thing it looks better this way
 
             Rectangle cell = new Rectangle(cellWidth, cellHeight);
             
             // set coordinates
             cell.setX(cx);
             cell.setY(y);
-            // just for style, round corners // Better not
-            // cell.setArcWidth(10);
-            // cell.setArcHeight(10);
+
             // stle of the cell
-            // cell.setFill(Color.LIGHTBLUE); // background
             cell.setFill(COLOR_ARRAY_BOX); // background
             cell.setStroke(Color.BLACK); // line color
 
@@ -128,14 +124,7 @@ public final class GraphicalArray extends AbstractGraphicalObject implements Ite
         this.size++;
 
     }
-    
-    // @Override
-    // public void update(int index, String value) {
-    
-    //     updateValue(index, value);
-    //     updateRender(index, value);
-    // }
-    
+
     public void updateValue(int index, String value){
         this.values[index] = value;
         

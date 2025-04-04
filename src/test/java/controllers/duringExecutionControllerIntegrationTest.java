@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Integration tests for the duringExecutionController.
  * These tests check the interaction between various components
- * of the application (e.g., UI elements, buttons, and state changes).
+ * of the application
  */
 public class duringExecutionControllerIntegrationTest {
     
@@ -31,7 +31,7 @@ public class duringExecutionControllerIntegrationTest {
     
     @BeforeEach
     void setUp() throws Exception {
-        // Setup MainController and initialize the duringExecutionController for testing.
+
         MainController mainController = new MainController();
         List<String> codeLines = List.of("n <- 10", "p <- 20", "p <- 10", "h <- 6");
         int numberOfLines = codeLines.size();

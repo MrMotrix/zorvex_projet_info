@@ -13,4 +13,8 @@ public record BinaryOperation(Expression left, Expression right, BinaryOperator 
     public String printValue() {
         return "(" + left.printValue() + " " + op.toString() + " " + right.printValue() + ")";
     }
+
+    public Expression copy() {
+        return new BinaryOperation(left.copy(), right.copy(), op);
+    }
 }

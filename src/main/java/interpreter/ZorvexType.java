@@ -1,5 +1,5 @@
 package interpreter;
 
 public enum ZorvexType {
-    INTEGER, STRING
+    INTEGER, STRING, NaN
 }

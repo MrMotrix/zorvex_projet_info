@@ -18,11 +18,21 @@ public final class FunctionCall implements Expression {
     public List<Expression> args() {
         return args;
     }
+
+    public String name() {
+        return name;
+    }
+    
     public ZorvexValue value(Context context) {
+        // exception ici
         return returnValue;
     }
 
     public String printValue() {
         return returnValue.asString();
+    }
+
+    public Expression copy() {
+        return new FunctionCall(name, args.stream().map(x -> x.copy()).toList());
     }
 }

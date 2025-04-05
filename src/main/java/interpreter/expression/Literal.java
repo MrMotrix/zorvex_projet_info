@@ -11,4 +11,8 @@ public record Literal(ZorvexValue value) implements Expression {
     public String printValue() {
         return this.value().asString();
     }
+
+    public Expression copy() {
+        return new Literal(new ZorvexValue(value));
+    }
 }

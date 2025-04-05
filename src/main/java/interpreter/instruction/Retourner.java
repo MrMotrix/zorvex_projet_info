@@ -6,8 +6,19 @@ import interpreter.Context;
 import interpreter.ZorvexValue;
 import interpreter.expression.Expression;
 
-public record Retourner(Expression expression) implements Instruction {
+public final class Retourner implements Instruction {
+    private Expression expression;
+
+    public Retourner(Expression expression) {
+        this.expression = expression;
+    }
+    
     public Optional<ZorvexValue> interpret(Context context) {
-        return Optional.of(expression.value(context));
+        return Optional.empty();
+    }
+
+    @Override
+    public Expression expression() {
+        return expression;
     }
 }

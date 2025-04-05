@@ -1,20 +1,31 @@
 package interpreter.instruction;
 
+import java.util.List;
 import java.util.Optional;
 
 import interpreter.Context;
 import interpreter.ZorvexValue;
 import interpreter.expression.Expression;
 
-public record TantQue(Expression condition, Block block) implements Instruction{
-    public Optional<ZorvexValue> interpret(Context context) {
-        if (!condition.value(context).isInteger())
-            // on devrait avoir une erreur ici
-            return Optional.empty();
+public final class TantQue implements Instruction {
+    private Block block;
+    private Expression expression;
 
-        while (condition.value(context).asInteger() != 0) {
-            block.interpret(context);
-        } 
+    public TantQue(Expression condition, Block block) {
+        this.expression = condition;
+        this.block = block;
+    }
+
+    public Optional<ZorvexValue> interpret(Context context) {
         return Optional.empty();
-    } 
+    }
+
+    public Block block() {
+        return block;
+    }
+
+    @Override
+    public Expression expression() {
+        return expression;
+    }
 }

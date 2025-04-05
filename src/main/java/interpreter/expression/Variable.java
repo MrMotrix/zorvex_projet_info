@@ -11,4 +11,8 @@ public record Variable(String name) implements Expression {
     public String printValue() {
         return name;
     }
+
+    public Expression copy() {
+        return new Variable(name);
+    }
 }

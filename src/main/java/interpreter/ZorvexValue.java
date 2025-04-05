@@ -14,6 +14,11 @@ public class ZorvexValue {
         this.value = value;
     }
 
+    public ZorvexValue(ZorvexValue value) {
+        this.type = value.type;
+        this.value = value.value;
+    }
+    
     public boolean isInteger() {
         return type == ZorvexType.INTEGER;
     }

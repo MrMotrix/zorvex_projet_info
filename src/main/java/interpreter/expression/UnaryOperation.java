@@ -13,4 +13,8 @@ public record UnaryOperation(Expression expr, UnaryOperator op) implements Expre
     public String printValue() {
         return "(" + op.toString() + expr.printValue() + ")";
     }
+
+    public Expression copy() {
+        return new UnaryOperation(expr.copy(), op);
+    }
 }

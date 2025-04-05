@@ -25,4 +25,7 @@ public non-sealed class Grouping implements Expression {
         expr = new Literal(value);
     }
 
+    public Expression copy() {
+        return new Grouping(expr.copy());
+    }
 }

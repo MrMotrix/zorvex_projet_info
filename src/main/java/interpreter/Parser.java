@@ -22,7 +22,8 @@ import interpreter.instruction.*;
 // comparison       → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
 // term             → factor ( ( "-" | "+" ) factor )* ;
 // factor           → unary ( ( "/" | "*" ) unary )* ;
-// unary            → ( "!" | "-" ) unary | primary ;
+// unary            → ( "!" | "-" ) unary | call ;
+// call             → IDENTIFIER ( "(" arguments? ")" ) | primary ;
 // primary          → NUMBER | STRING | IDENTIFIER | "true" | "false" | "nil" | "(" expression ")" ;
 
 public class Parser {
@@ -124,7 +125,13 @@ public class Parser {
             advance();
 
             Block block = block();
-            return new InstructionInfo(new FunctionDeclaration(name.lexeme(), block, arguments), name.line());
+            return new InstructionInfo(new FunctionDeclaration(name.lexeme(), block, arguments), line);
+        }
+
+        if (current().type() == TokenType.RETOURNER) {
+            advance();
+            Expression expr = expression();
+            return new InstructionInfo(new Retourner(expr), line);
         }
 
 
@@ -214,7 +221,42 @@ public class Parser {
             return new UnaryOperation(unary(), new UUnaryOperator(operator));
         }
 
-        return primary();
+        return call();
+    }
+
+    private Expression call() throws SyntaxErrorException {
+        if (current().type() != TokenType.IDENTIFIANT)
+            return primary();
+        String functionName = current().lexeme();
+        advance();
+        if (i >= tokens.size() || current().type() != TokenType.PARENTHESE_GAUCHE) {
+            i -= 1;
+            return primary();
+        }
+        advance();
+        return functionCall(functionName);
+    }
+
+    private Expression functionCall(String functionName) throws SyntaxErrorException {
+        List<Expression> arguments = new ArrayList<>();
+        while (i < tokens.size() && current().type() != TokenType.PARENTHESE_DROIT) {
+            arguments.add(expression());
+            if (current().type() == TokenType.PARENTHESE_DROIT)
+                break;
+            if (current().type() != TokenType.VIRGULE)
+                throw new UnexpectedTokenException(current(), TokenType.VIRGULE);
+            advance();
+        }
+        
+        if (i >= tokens.size()) {
+            i = tokens.size()-1;
+            throw new ExpectedCharacterNotFound(current().line(), ')');
+        }
+        advance();
+        // only hack in this whole project i believe
+        // lack of time, couldn't think of another way
+        // to wrap the function calls (check ExpressionEvaluator pls)
+        return new Grouping(new FunctionCall(functionName, arguments));
     }
 
     private Expression primary() throws SyntaxErrorException {

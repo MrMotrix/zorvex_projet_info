@@ -1,6 +1,8 @@
 package interpreter;
 import java.util.List;
 
+import interpreter.expression.ExpressionEvaluator;
+import interpreter.expression.FunctionCall;
 import interpreter.instruction.Block;
 import interpreter.instruction.InstructionInfo;
 
@@ -23,9 +25,14 @@ public class ExecutionState {
         blocks.removeLast();
     }
 
+    public Block getCurrentBlock() {
+        return blocks.peekLast().block;
+    }
+    
     public boolean step() {
         BlockInfo blockInfo = blocks.peekLast();
         blockInfo.position += 1;
+        blockInfo.expressionEvaluator = null;
 
         return hasBlockReachedEnd();
     }
@@ -40,14 +47,37 @@ public class ExecutionState {
         
         return blockInfo.block.instructions().get(blockInfo.position);
     }
+
+    public boolean isEvaluated() {
+        BlockInfo blockInfo = blocks.peekLast();
+        if (blockInfo.expressionEvaluator == null) 
+            blockInfo.expressionEvaluator = new ExpressionEvaluator(getCurrentInstruction().instruction().expression());
+        
+        return blockInfo.expressionEvaluator.isEvaluated();
+    }
     
+    public void serveFunctionCall(ZorvexValue value) {
+        blocks.peekLast().expressionEvaluator.serveNextFunctionCall(value);
+    }
+
+    public FunctionCall getNextFunctionCall() {
+        return blocks.peekLast().expressionEvaluator.getNextFunctionCall();
+    }
+
+    public ZorvexValue result(Context context) {
+        BlockInfo blockInfo = blocks.peekLast();
+        return blocks.peekLast().expressionEvaluator.result(context);
+    }
+
     private class BlockInfo {
         private final Block block;
         private int position;
+        private ExpressionEvaluator expressionEvaluator;
 
         public BlockInfo(Block block) {
             this.block = block;
             this.position = 0;
+            this.expressionEvaluator = null;
         }
     }
 }

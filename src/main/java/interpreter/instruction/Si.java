@@ -7,15 +7,25 @@ import interpreter.Context;
 import interpreter.ZorvexValue;
 import interpreter.expression.Expression;
 
-public record Si(Expression condition, Block block) implements Instruction{
-    public Optional<ZorvexValue> interpret(Context context) {
-        if (!condition.value(context).isInteger())
-            // on devrait avoir une   ici
-            return Optional.empty();
+public final class Si implements Instruction {
+    private Block block;
+    private Expression expression;
 
-        if (condition.value(context).asInteger() != 0) {
-            block.interpret(context);
-        } 
+    public Si(Expression condition, Block block) {
+        this.expression = condition;
+        this.block = block;
+    }
+
+    public Optional<ZorvexValue> interpret(Context context) {
         return Optional.empty();
-    } 
+    }
+
+    public Block block() {
+        return block;
+    }
+
+    @Override
+    public Expression expression() {
+        return expression;
+    }
 }

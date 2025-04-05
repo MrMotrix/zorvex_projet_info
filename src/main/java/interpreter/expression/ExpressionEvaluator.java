@@ -10,7 +10,7 @@ public class ExpressionEvaluator {
     private Expression expression;
     
     public ExpressionEvaluator(Expression expression) {
-        this.expression = expression;
+        this.expression = expression.copy();
     }
 
     public FunctionCall getNextFunctionCall() {
@@ -67,7 +67,7 @@ public class ExpressionEvaluator {
         return getNextExpression(expression) == null;
     }
 
-    public ZorvexValue result() {
-        return expression.value(new Context());
+    public ZorvexValue result(Context context) {
+        return expression.value(context);
     }
 }

@@ -4,16 +4,19 @@ import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import base.JavaFXTestBase;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GraphicalLinkedListTest {
+public class GraphicalLinkedListTest extends JavaFXTestBase{
 
-    @BeforeAll
-    static void initToolkit() {
-        if (!Platform.isFxApplicationThread()) {
-            Platform.startup(() -> {});
-        }
-    }
+    // @BeforeAll
+    // static void initToolkit() {
+    //     if (!Platform.isFxApplicationThread()) {
+    //         Platform.startup(() -> {});
+    //     }
+    // }
 
     @Test
     void testInsertNodeAtMiddle() {

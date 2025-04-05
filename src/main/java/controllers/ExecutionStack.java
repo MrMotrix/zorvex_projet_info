@@ -18,4 +18,8 @@ public class ExecutionStack {
             record.undo(rep);
         }
     }
+
+    public Stack<ExecutionRecord> getHistory() {
+        return history;
+    }
 }

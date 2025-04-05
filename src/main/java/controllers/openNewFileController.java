@@ -30,12 +30,12 @@ public class openNewFileController {
         // pane to select file
         File currentDirectory = new File(System.getProperty("user.dir"));
         fileChooser.setInitialDirectory(currentDirectory);
-        File selectedFile = fileChooser.showOpenDialog(null); // i think this null can be modified
+        File selectedFile = fileChooser.showOpenDialog(null);
 
         if (selectedFile != null) {
 
             loadFile(selectedFile);
-            app.getStageWindow().setTitle("Intepreting : " + selectedFile.getName());
+            app.getStageWindow().setTitle("En interpretation : " + selectedFile.getName());
 
             mainController.nameFile = selectedFile.getName();
 

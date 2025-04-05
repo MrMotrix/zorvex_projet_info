@@ -9,17 +9,19 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import base.JavaFXTestBase;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GraphicalNodeTest {
+public class GraphicalNodeTest extends JavaFXTestBase{
 
-    // Asegura que JavaFX esté inicializado antes de ejecutar los tests
-    @BeforeAll
-    static void initToolkit() {
-        if (!javafx.application.Platform.isFxApplicationThread()) {
-            javafx.application.Platform.startup(() -> {});
-        }
-    }
+    // @BeforeAll
+    // static void initToolkit() {
+    //     if (!javafx.application.Platform.isFxApplicationThread()) {
+    //         javafx.application.Platform.startup(() -> {});
+    //     }
+    // }
 
     @Test
     void testDraw() {

@@ -8,20 +8,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 import application.App;
+import base.JavaFXTestBase;
 import javafx.application.Platform;
 
-class duringExecutionControllerFunctionalTest {
+class duringExecutionControllerFunctionalTest extends JavaFXTestBase{
 
     private duringExecutionController controller;
 
-        
-    @BeforeAll
-    static void initToolkit() {
-        // This method is called once before all tests in this class
-        if (!Platform.isFxApplicationThread()) {
-            Platform.startup(() -> {});
-        }
-    }
     @BeforeEach
     void setUp() {
         MainController mainController = new MainController();

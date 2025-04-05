@@ -2,6 +2,7 @@ package graphics;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import base.JavaFXTestBase;
 import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 
@@ -11,22 +12,22 @@ import java.util.concurrent.CountDownLatch;
 
 import org.junit.jupiter.api.BeforeAll;
 
-public class GraphicalVarTest {
+public class GraphicalVarTest extends JavaFXTestBase{
 
     private GraphicalVar var;
     
-    @BeforeAll
-    static void initToolkit() {
-        if (!Platform.isFxApplicationThread()) {
-            final CountDownLatch latch = new CountDownLatch(1);
-            Platform.startup(latch::countDown);
-            try {
-                latch.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    // @BeforeAll
+    // static void initToolkit() {
+    //     if (!Platform.isFxApplicationThread()) {
+    //         final CountDownLatch latch = new CountDownLatch(1);
+    //         Platform.startup(latch::countDown);
+    //         try {
+    //             latch.await();
+    //         } catch (InterruptedException e) {
+    //             e.printStackTrace();
+    //         }
+    //     }
+    // }
 
     @BeforeEach
     public void setUp() {

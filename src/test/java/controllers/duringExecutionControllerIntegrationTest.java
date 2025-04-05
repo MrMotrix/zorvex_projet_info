@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import javafx.application.Platform;
 import application.App;
+import base.JavaFXTestBase;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import java.util.List;
@@ -17,17 +18,9 @@ import java.util.List;
  * These tests check the interaction between various components
  * of the application
  */
-public class duringExecutionControllerIntegrationTest {
+public class duringExecutionControllerIntegrationTest extends JavaFXTestBase{
     
     private static duringExecutionController controller;
-    
-    @BeforeAll
-    static void initToolkit() {
-        // Initialize JavaFX toolkit if not already running.
-        if (!Platform.isFxApplicationThread()) {
-            Platform.startup(() -> {});
-        }
-    }
     
     @BeforeEach
     void setUp() throws Exception {

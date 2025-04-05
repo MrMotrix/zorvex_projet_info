@@ -24,12 +24,16 @@ import java.awt.Desktop;
 public class menuBarController {
     
 
-    @FXML private MenuItem aboutUsItem;
-    @FXML private MenuItem closeItem;
-    @FXML private MenuItem deleteItem;
-    @FXML private MenuBar menuBar;
-    @FXML private MenuItem openNewItem;
-    @FXML private MenuItem voirDocumentationItem;
+    @FXML public MenuItem aboutUsItem;
+    @FXML public MenuItem closeItem;
+    @FXML public MenuItem deleteItem;
+    @FXML public MenuBar menuBar;
+    public MenuBar getMenuBar() {
+        return menuBar;
+    }
+
+    @FXML public MenuItem openNewItem;
+    @FXML public MenuItem voirDocumentationItem;
 
     @FXML
     void aboutUs(ActionEvent event) {
@@ -43,7 +47,7 @@ public class menuBarController {
         content.append("Developpeurs:\n");
         content.append("• AHAMADA Houzaime \n");
         content.append("• OJEDA Martin \n");
-        content.append("• NDOUR Mohamed \n\n");
+        content.append("• NDOUR Mouhamed \n\n");
         content.append("Version du projet: 1.0.0\n");
         content.append("Date de création: Mars 2025\n\n");
         // TODO : add more information about the project ??

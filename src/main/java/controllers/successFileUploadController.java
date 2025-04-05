@@ -40,6 +40,8 @@ public class successFileUploadController {
     
     public static String code =  """
         n <- 13
+        p <- 10
+        n <- p+n
         afficher n
         """;
     
@@ -188,8 +190,6 @@ public class successFileUploadController {
         
         for (int i = 1; i <= mainController.numberOfLines; i++) {
             Label label = new Label(String.valueOf(i));
-            // label.setStyle("-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 1px;");
-            // label.setStyle("-fx-background-color: transparent;");
     
             nblineVbox.getChildren().add(label);
         }

@@ -11,19 +11,12 @@ import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import application.App;
+import base.JavaFXTestBase;
 import javafx.scene.layout.VBox;
 
-public class duringExecutionControllerTest {
+public class duringExecutionControllerTest extends JavaFXTestBase{
     
     private static duringExecutionController controller;
-    
-    @BeforeAll
-    static void initToolkit() {
-        // This method is called once before all tests in this class
-        if (!Platform.isFxApplicationThread()) {
-            Platform.startup(() -> {});
-        }
-    }
     
     @BeforeEach
     void setUp() {

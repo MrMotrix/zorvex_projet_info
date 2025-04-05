@@ -118,11 +118,14 @@
 
 package controllers;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import application.App;
+import graphics.AbstractGraphicalObject;
 import graphics.GraphicalArray;
-import graphics.GraphicalFunction;
+import graphics.GraphicalFunctionCall;
+import graphics.GraphicalFunctionDeclaration;
 import graphics.GraphicalLinkedList;
 import graphics.GraphicalRepresentation;
 import graphics.GraphicalVar;
@@ -145,7 +148,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-
+import graphics.GraphicalObject;
 public class duringExecutionController  {
 
     // ======================== FXML ========================
@@ -309,13 +312,16 @@ public class duringExecutionController  {
     void goLastLine(ActionEvent event) {
 
         record.undo(rep);
-
-        
+        for (ExecutionRecord content : record.getHistory()) {
+            sendMessageToConsole(content.toString());
+        }        
         // DO NOT TOUCH preferably :)
         currentLine--;
         if (! reverse) {
             reverse = true;
-            currentLine --;
+            // currentLine --;
+            continueButton.setDisable(false);
+            nextLineButton.setDisable(false);
         }
         highlightCurrentLine(currentLine);
         sendMessageToConsole("Last line executed : " + currentLine);
@@ -328,61 +334,7 @@ public class duringExecutionController  {
      */
     @FXML
     void goNextLine(ActionEvent event) {
-        // ===================================================================== OLD IMPLEMENTATION============================================================================================================
-        /* // if we have finished execution, we return
-        if (mainController.currentLine > mainController.numberOfLines) return;
         
-        if (reverse) {
-            reverse = false;
-            mainController.currentLine++;
-        }
-        // ===================================HERE GOES THE IMPLEMENTATION TO READ INSTRUCTIONS=========================================
-        
-        try {    
-            // get the affected variable from the interpreter
-            //TODO : ca serait bon que l-interpreteur ait une facon de set la ligne qu-il lit, ainsi quand on fait un retour en arriere, on va aussi a linstruction precedente que l-interpreteur a lu
-            String var = interpreter.step();
-
-            
-            if (var != null && !var.isEmpty()) {
-
-             
-                String value = interpreter.getVariable(var).toString();
-                value = value.substring(value.indexOf(" ") + 1);
-                
-
-                // add the variable to the graphical representation or check if it already exists and update it
-                if (rep.getElements().containsKey(var)) {
-                    record.push(new ModifyVarRecord(var, ((GraphicalVar)(rep.getElement(var))).getValue()));
-                    rep.updateElement(var, ModificationType.UPDATE, value, 0);
-
-                } else {
-                    GraphicalVar temp = new GraphicalVar(var, value, canvasPane);
-                    rep.addElement(var, temp);
-                    record.push(new CreateRecord(var, temp));
-                }
-            }
-
-        } catch (Exception e) {
-            sendMessageToConsole("Erreur dans la ligne " + mainController.currentLine + ": " + e.getMessage());
-            highlightCurrentLine(mainController.currentLine - 1);
-            continueButton.setDisable(true);
-            nextLineButton.setDisable(true);
-            throw e;
-        }
-        highlightCurrentLine(mainController.currentLine);
-        
-        // this should be the last line of the method, we only increase the pointer to the current line once it has been correctly interpreted
-        mainController.currentLine++;
-    
-        if (mainController.currentLine == mainController.numberOfLines + 1) {
-            sendMessageToConsole("Fin du fichier atteint");
-            // Disable buttons because we are in the end of the file
-            continueButton.setDisable(true);
-            nextLineButton.setDisable(true);
-        } */
-
-        // =========================================================================================================================================================================================
         currentLine = interpreter.getCurrentLine();
 
         // if we have finished execution, we return
@@ -393,6 +345,36 @@ public class duringExecutionController  {
             currentLine++;
         }
         // ===================================HERE GOES THE IMPLEMENTATION TO READ INSTRUCTIONS=========================================
+
+
+        /* 
+        
+        if assigner
+            interpreter should send : 
+                name of object
+                id of the object
+                type of objext (variable, array, linkedlist)
+                value of object
+                index of assignation (if applicable, otherwise send 0 or -1 as index)
+        if afficher : 
+            send content to console (and potentially create 
+        if function declaration : 
+            interpreter should send : 
+                name of function
+                if of the function
+                string of parameters it takes (ex : sum(a,b) should send "a,b" their names), or null or "" if it does not take anu parameters
+                string of variables, same contraints as parameters
+        if function call : 
+            interpreter should send : 
+                name of called function (optional ? )
+                id of the function
+                ""list"" of the parameters it takes, like sum(3,5) should send ArrayList<>{"3,5"}, or if variables, a list of the variables themselves
+        if return instruction :
+            interpreter should return 
+                name of the function 
+                id of the function 
+                value or variable that is returned
+        */ 
         
         try {    
             // get the affected variable from the interpreter
@@ -410,27 +392,38 @@ public class duringExecutionController  {
                     rep.updateElement(var, ModificationType.UPDATE, value, 0);
 
                 } else { // if we are creating a variable
-                /* 
-                 * switch (type) {
-                 * 
-                 * case (ARRAY) : 
-                 *      GraphicalArray array = new GraphicalArray()     
-                 * case (LLIST)
-                 * case (VARIABLE)
-                 * case (ARRAY)
-                 * 
-                 * 
-                 * }
-                 * 
-                 * 
-                 * 
-                 */
+                    // TODO : this is the switch case that should handle the tupe of assignation
+                    // AbstractGraphicalObject thisIsTheTypeOfAssignationReturned;
+                    // switch (thisIsTheTypeOfAssignationReturned){
+                    //     case GraphicalArray ARRAY -> {
+                    //         GraphicalArray array = new GraphicalArray(var, new String[]{value}, canvasPane);
+                    //         rep.addElement(var, array);
+                    //         record.push(new CreateRecord(var, array));
+                    //     }
+                    //     case GraphicalLinkedList LINKEDLIST -> {
+                    //         GraphicalLinkedList linkedlist = new GraphicalLinkedList(var, new String[]{value}, canvasPane);
+                    //         rep.addElement(var, linkedlist);
+                    //         record.push(new CreateRecord(var, linkedlist));
+                    //     }
+                    //     case GraphicalVar VARIABLE -> {
+                    //         GraphicalVar variable = GraphicalVar(var, value, canvasPane);
+                    //         rep.addElement(var, variable);
+                    //         record.push(new CreateRecord(var, variable));
+                    //     }
+                    //     default -> {sendMessageToConsole("Un type de retour est erronnee");}
+                    // }
+                        
+                        GraphicalVar temp = new GraphicalVar(var, value, canvasPane);
+                        rep.addElement(var, temp);
+                        record.push(new CreateRecord(var, temp));
+                        ArrayList<GraphicalObject> tempA = new ArrayList<>();
+                        tempA.add(temp);
+                
+                 GraphicalFunctionCall temp1 = new GraphicalFunctionCall("func1", canvasPane, tempA);
+                 rep.addElement("func" + var, temp1);
+                 record.push(new CreateRecord("func1", temp1));
 
-                 GraphicalVar temp = new GraphicalVar(var, value, canvasPane);
-                 rep.addElement(var, temp);
-                 record.push(new CreateRecord(var, temp));
-
-                //  GraphicalFunction temp2 = new GraphicalFunction(var, canvasPane, "par1, par2, par3, par4", null);
+                //  GraphicalFunctionDeclaration temp2 = new GraphicalFunctionDeclaration(var, canvasPane, "par1, par2, par3, par4", null);
                 //  rep.addElement(var, temp2);
                 //  record.push(new CreateRecord(var, temp2));
                  
@@ -445,6 +438,17 @@ public class duringExecutionController  {
             else if (inst instanceof Afficher afficher) {
                 sendMessageToConsole(afficher.result().asString());
             }
+            /* else if (inst instanceof Renvoyer renvoyer) {
+                continue;
+            }
+            else if (inst instanceof FCall fcall) {
+                GraphicalFunctionCall fc = new GraphicalFunctionCall(fcall.getName(), canvasPane,  fcall.getID(), fcall.getParameters(), fcall.getVariables());
+                rep.addElement(fcall.getName(), fc);
+            }
+            else if (inst instanceof FDeclaration fdeclaration) {
+                FunctionDeclaration fd = new GraphicalFunctionDeclaration(fdeclaration.getName(), canvasPane,  fdeclaration.getID(), fdeclaration.getParameters(), fdeclaration.getVariables());
+                rep.addElement(fdeclaration.getName(), fd);
+            } */
 
         } catch (Exception e) {
             sendMessageToConsole("Erreur dans la ligne " + currentLine + ": " + e.getMessage());

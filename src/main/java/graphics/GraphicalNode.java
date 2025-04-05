@@ -11,7 +11,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
-public class GraphicalNode extends AbstractGraphicalObject{
+public final class GraphicalNode extends AbstractGraphicalObject{
     private String value;
     private int index;
     private double x;

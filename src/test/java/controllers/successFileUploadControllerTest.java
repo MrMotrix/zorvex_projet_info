@@ -8,21 +8,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import javafx.application.Platform;
 import application.App;
+import base.JavaFXTestBase;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import java.util.List;
 
-class successFileUploadControllerTest{
+class successFileUploadControllerTest extends JavaFXTestBase{
     private successFileUploadController controller;
     private MainController mainController;
     private App app;
     
-    @BeforeAll
-    static void initToolkit() {
-        if (!Platform.isFxApplicationThread()) {
-            Platform.startup(() -> {});
-        }
-    }
     
     @BeforeEach
     void setUp() {

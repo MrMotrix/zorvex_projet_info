@@ -7,7 +7,14 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract  class AbstractGraphicalObject implements GraphicalObject {
+public abstract sealed class AbstractGraphicalObject implements GraphicalObject permits 
+        GraphicalArray,
+        GraphicalFunctionCall,
+        GraphicalFunctionDeclaration,
+        GraphicalLinkedList, 
+        GraphicalVar, 
+        GraphicalNode
+         {
     protected String name;
     protected Pane pane;
     protected List<Node> renderedNodes;
@@ -17,10 +24,16 @@ public abstract  class AbstractGraphicalObject implements GraphicalObject {
     public final Color COLOR_VARIABLE_BOX = Color.web("#5E7B9D"); // #5E7B9D
     public final Color COLOR_LLIST_CONTENT_BOX = Color.web("#CAEB0E"); // #CAEB0E
     public final Color COLOR_LLIST_POINTER_BOX = Color.web("#96423B"); // #96423B
+    public final Color COLOR_TITLE_BOX_FUNCTION = Color.DARKBLUE; // #00008B
+    public final Color COLOR_CONTENT_BOX_FUNCTION = Color.LIGHTGRAY; // #D3D3D3
+    public final Color COLOR_ACTIVE_FUNCTION_CALL_BOX = Color.RED; // #FF0000
 
     public final String COLOR_VARIABLE_TEXT = "#ffffff"; // #ffffff
     public final String COLOR_LLIST_CONTENT_TEXT = "#000000"; // #000000
     public final String COLOR_ARRAY_TEXT = "#ffffff"; // #ffffff
+    public final Color COLOR_TITLE_FUNCTION = Color.web("#ffffff"); // #ffffff
+    public final Color COLOR_CONTENT_TEXT_FUNCTION = Color.web("#000000"); // #000000
+    public final Color COLOR_ACTIVE_FUNCTION_CALL_TEXT = Color.web("#ffffff"); // #000000
 
     public AbstractGraphicalObject(String name, Pane pane) {
         this.name = name;

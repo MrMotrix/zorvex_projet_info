@@ -159,5 +159,9 @@ public class App extends Application{
     public MainController getMainController() {
         return mainController;
     }
+
+    public Scene getScene() {
+        return stageWindow.getScene();
+    }
         
 }

@@ -7,19 +7,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import javafx.application.Platform;
 import application.App;
+import base.JavaFXTestBase;
 
-public class successFileUploadControllerIntegrationTest {
+public class successFileUploadControllerIntegrationTest extends JavaFXTestBase{
 
     private static successFileUploadController controller;
     private static MainController mainController;
     private static App app;
 
-    @BeforeAll
-    static void initToolkit() {
-        if (!Platform.isFxApplicationThread()) {
-            Platform.startup(() -> {});
-        }
-    }
 
     @BeforeEach
     void setUp() {

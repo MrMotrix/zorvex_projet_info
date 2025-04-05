@@ -6,7 +6,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class GraphicalFunction extends AbstractGraphicalObject{
+public final class GraphicalFunctionDeclaration extends AbstractGraphicalObject{
 
     private final double PADDING = 10;
     private final double MIN_WIDTH = 10;
@@ -14,7 +14,7 @@ public class GraphicalFunction extends AbstractGraphicalObject{
 
     private String parameters;
     private String variables;
-    public GraphicalFunction(String name, Pane pane, String parameters, String variables) {
+    public GraphicalFunctionDeclaration(String name, Pane pane, String parameters, String variables) {
         super(name, pane);
         this.variables = variables;
         this.parameters = parameters.equals("") ? "vide" : parameters;
@@ -27,28 +27,28 @@ public class GraphicalFunction extends AbstractGraphicalObject{
         titleText.setX(x);
         titleText.setY(y);     
         titleText.setX(PADDING);
-        titleText.setFill(Color.WHITE);
+        titleText.setFill(COLOR_TITLE_FUNCTION);
+        titleText.setLayoutX(5);
+        titleText.setLayoutY(20);
 
         
         Rectangle titleRect = new Rectangle();
-        titleRect.setFill(Color.DARKBLUE);
+        titleRect.setFill(COLOR_TITLE_BOX_FUNCTION);
         titleRect.setStroke(Color.BLACK);
         titleRect.setArcWidth(10);
         titleRect.setArcHeight(10);
-        titleText.setLayoutX(5);
-        titleText.setLayoutY(20);
         titleRect.setX(x);
         titleRect.setY(y);
         Text paramText = new Text("Paramétres : " + parameters);
         if (variables != null) paramText.setText(paramText.getText() + "\nVars: " + variables);
 
         paramText.setFont(Font.font( 12));
-        paramText.setFill(Color.BLACK);
+        paramText.setFill(COLOR_CONTENT_TEXT_FUNCTION);
         paramText.setX(x);
         paramText.setY(y);
 
         Rectangle contentRect = new Rectangle();
-        contentRect.setFill(Color.LIGHTGRAY);
+        contentRect.setFill(COLOR_CONTENT_BOX_FUNCTION);
         contentRect.setStroke(Color.BLACK);
         contentRect.setArcWidth(10);
         contentRect.setArcHeight(10);
@@ -69,10 +69,10 @@ public class GraphicalFunction extends AbstractGraphicalObject{
 
         pane.getChildren().addAll(titleRect, titleText, contentRect, paramText);
 
-        renderedNodes.add(titleText);
-        renderedNodes.add(titleRect);
-        renderedNodes.add(contentRect);
-        renderedNodes.add(paramText);
+        renderedNodes.add(titleText); // index 0
+        renderedNodes.add(titleRect); // index 1
+        renderedNodes.add(contentRect); // index 2
+        renderedNodes.add(paramText); // index3
     }
 
     @Override

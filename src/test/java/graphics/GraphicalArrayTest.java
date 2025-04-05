@@ -2,6 +2,7 @@ package graphics;
 
 import org.junit.jupiter.api.Test;
 
+import base.JavaFXTestBase;
 import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 
@@ -10,17 +11,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-class GraphicalArrayTest {
+class GraphicalArrayTest extends JavaFXTestBase{
 
     private GraphicalArray array;
     
 
-    @BeforeAll
-    static void initToolkit() {
-        if (!Platform.isFxApplicationThread()) {
-            Platform.startup(() -> {});
-        }
-    }
+    // @BeforeAll
+    // static void initToolkit() {
+    //     if (!Platform.isFxApplicationThread()) {
+    //         Platform.startup(() -> {});
+    //     }
+    // }
 
     @BeforeEach
     public void setUp() {

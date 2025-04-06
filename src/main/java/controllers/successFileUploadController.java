@@ -48,7 +48,14 @@ public class successFileUploadController {
             }
             retourner fibo(n-1) + fibo(n-2)
         }
-        afficher fibo(20)
+        afficher fibo(10)
+        """;
+    
+        public static String code2 =  """
+        fonction sum(a,b) {
+            retourner a+b
+        }
+        afficher sum(1,2)
         """;
     
     // ================================================================================================

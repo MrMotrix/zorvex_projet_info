@@ -45,7 +45,7 @@ public class App extends Application{
         }
         else {
             loader = new FXMLLoader(getClass().getResource(Paths.SUCCESS_FILE_UPLOAD));
-            mainController.setNameFile("THIS IS JUST A TEST BECAUSE NO FILE HAS BEEN UPLOADED");
+            mainController.setNameFile("fibo.txt");
             root = loader.load();
             successFileUploadController controller = loader.getController();
             controller.initialize2(mainController, this);

@@ -18,15 +18,25 @@ public final class GraphicalFunctionCall extends AbstractGraphicalObject {
     private String functionName;
     private List<GraphicalObject> parameters;
 
+    
+    
     public GraphicalFunctionCall(String name, Pane pane, List<GraphicalObject> parameters) {
         super(name, pane);
         this.parameters = parameters;
         this.functionName = name;
     }
-
+    
+    public void setParameters(List<GraphicalObject> parameters) {
+        this.parameters = parameters;
+        Text t = (Text) renderedNodes.get(1);
+        t.setText(functionName + "(" + parameters.stream()
+            .map(GraphicalObject::getName)
+            .collect(Collectors.joining(", ")) + ")");
+    }
+    
     @Override
     public void draw(double x, double y) {
-        y = y - 10;
+        // y = y - 10;
         String parString = parameters.stream()
             .map(GraphicalObject::getName)
             .collect(Collectors.joining(", "));        
@@ -55,8 +65,8 @@ public final class GraphicalFunctionCall extends AbstractGraphicalObject {
         
 
         pane.getChildren().addAll(titleRect, title);
-        renderedNodes.add(titleRect);
-        renderedNodes.add(title);
+        renderedNodes.add(titleRect);// index 0
+        renderedNodes.add(title); // index 1
     }
 
     @Override

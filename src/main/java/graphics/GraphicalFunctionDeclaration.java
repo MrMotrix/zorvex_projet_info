@@ -89,5 +89,9 @@ public final class GraphicalFunctionDeclaration extends AbstractGraphicalObject{
         // there is nothing to update
         return;
     }
+
+    public List<String> getParameters() {
+        return parameters;
+    }
     
 }

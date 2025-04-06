@@ -30,9 +30,28 @@ public class GraphicalRepresentation {
     }
 
     public void addElement(String name, GraphicalObject element) {
+            
         element.draw(currentX, currentY);
         elements.put(name, element);
-        currentY += spaceBetweenPlots;
+        
+        if (element instanceof GraphicalFunctionDeclaration){
+            currentY += 80;
+        }
+        else if (element instanceof GraphicalArray){
+            currentY += spaceBetweenPlots;
+        }
+        else if (element instanceof GraphicalLinkedList){
+            currentY += spaceBetweenPlots;
+        }
+        else if (element instanceof GraphicalVar){
+            currentY += 60;
+        }
+        else if(element instanceof GraphicalFunctionCall){
+            currentY +=50;
+        }
+        else{
+            currentY += spaceBetweenPlots;
+        }
     }
 
     public void updateElement(String name, ModificationType type, String value, int index) {
@@ -86,5 +105,9 @@ public class GraphicalRepresentation {
             obj.draw(currentX, currentY);
             currentY += spaceBetweenPlots;
         }
+    }
+
+    public void increaseX(double x) {
+        this.currentX += x;
     }
 }

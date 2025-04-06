@@ -119,6 +119,7 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import application.App;
@@ -132,8 +133,10 @@ import graphics.GraphicalVar;
 import graphics.ModificationType;
 import interpreter.Interpreter;
 import interpreter.instruction.Instruction;
+import interpreter.instruction.Retourner;
 import interpreter.instruction.Afficher;
 import interpreter.instruction.Assigner;
+import interpreter.instruction.Function;
 import interpreter.instruction.FunctionDeclaration;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -385,7 +388,6 @@ public class duringExecutionController  {
                 String var = assigner.variableName(); // get the name of the variable
                 String value = interpreter.getVariable(var).toString(); // get the value of the variable
                 value = value.substring(value.indexOf(" ") + 1); // remove the type of variable
-                
 
                 // add the variable to the graphical representation or check if it already exists and update it
                 if (rep.getElements().containsKey(var)) { // if the variable already exists
@@ -417,8 +419,8 @@ public class duringExecutionController  {
                         GraphicalVar temp = new GraphicalVar(var, value, canvasPane);
                         rep.addElement(var, temp);
                         record.push(new CreateRecord(var, temp));
-                        ArrayList<GraphicalObject> tempA = new ArrayList<>();
-                        tempA.add(temp);
+                        // ArrayList<GraphicalObject> tempA = new ArrayList<>();
+                        // tempA.add(temp);
                 
                 //  GraphicalFunctionCall temp1 = new GraphicalFunctionCall("func1", canvasPane, tempA);
                 //  rep.addElement("func" + var, temp1);
@@ -439,17 +441,42 @@ public class duringExecutionController  {
             else if (inst instanceof Afficher afficher) {
                 sendMessageToConsole(afficher.result().asString());
             }
-            /* else if (inst instanceof Renvoyer renvoyer) {
-                continue;
+            else if (inst instanceof Retourner retourner) {
+                String returnValue = retourner.result().asString();
+                GraphicalVar temp = new GraphicalVar("Renvoyer", returnValue, canvasPane);
+                rep.addElement("Renvoyer", temp);
+                record.push(new CreateRecord("Renvoyer", temp));
+                rep.increaseX(-40);
+
+                
             }
-            else if (inst instanceof FCall fcall) {
-                GraphicalFunctionCall fc = new GraphicalFunctionCall(fcall.getName(), canvasPane,  fcall.getID(), fcall.getParameters(), fcall.getVariables());
-                rep.addElement(fcall.getName(), fc);
-            } */
-            // else if (inst instanceof FunctionDeclaration fdeclaration) {
-            //     GraphicalFunctionDeclaration fd = new GraphicalFunctionDeclaration(fdeclaration.getName(), canvasPane,  fdeclaration.getID(), fdeclaration.getParameters(), fdeclaration.getVariables());
-            //     rep.addElement(fdeclaration.getName(), fd);
-            // }
+            
+            else if (inst instanceof Function function) {
+                // get the name of the function
+                List<String> parsNames;
+                List<GraphicalObject> pars = new ArrayList<>();
+                String f = function.name();
+                if (rep.getElement(f) instanceof GraphicalFunctionDeclaration fd){
+                    parsNames = fd.getParameters();
+
+                }
+                else {throw new Exception("Mismatch between given arguments and function arguments");}
+
+                //get function parameters names
+                GraphicalFunctionCall fc = new GraphicalFunctionCall(f + "CALL", canvasPane, pars);
+                rep.addElement(f + "CALL", fc);
+                rep.increaseX(40);                
+                for (int i = 0; i < parsNames.size(); i++){
+                    
+                    GraphicalVar temp = new GraphicalVar(parsNames.get(i),function.args().get(i).asString() ,canvasPane);
+                    pars.add(temp);
+                    rep.addElement(parsNames.get(i), temp);
+                    record.push(new CreateRecord(parsNames.get(i), temp));
+                }
+                fc.setParameters(pars);
+                
+            }
+
             else if (inst instanceof FunctionDeclaration fdeclaration) {
                 GraphicalFunctionDeclaration fd = new GraphicalFunctionDeclaration(fdeclaration.name(), canvasPane,  fdeclaration.parameters(), null);
                 rep.addElement(fdeclaration.name(), fd);
@@ -460,7 +487,7 @@ public class duringExecutionController  {
             highlightCurrentLine(currentLine - 1);
             continueButton.setDisable(true);
             nextLineButton.setDisable(true);
-            throw e;
+            // throw e;
         }
         
         
@@ -680,7 +707,7 @@ public class duringExecutionController  {
             Node node = codeContainer.getChildren().get(i);
             if (i == currentLine && node instanceof Label label) {
                 
-                label.setStyle("-fx-background-color: #fff5a3;");
+                label.setStyle("-fx-background-color: #fff5a3; fx-text-fill: black;");
                 currentHighlightedLine = currentLine;
             } else {
                 node.setStyle("");

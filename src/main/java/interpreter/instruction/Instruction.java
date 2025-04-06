@@ -7,7 +7,7 @@ import interpreter.ZorvexValue;
 import interpreter.expression.Expression;
 import interpreter.expression.FunctionCall;
 
-public sealed interface Instruction permits Afficher, Assigner, Block, FunctionDeclaration, Retourner, Si, TantQue {
+public sealed interface Instruction permits Afficher, Assigner, Block, FunctionDeclaration, Retourner, Si, Function, TantQue {
     Optional<ZorvexValue> interpret(Context context);
     Expression expression();
 }

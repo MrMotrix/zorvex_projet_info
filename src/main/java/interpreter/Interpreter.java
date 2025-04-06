@@ -14,6 +14,7 @@ import interpreter.expression.Literal;
 import interpreter.expression.Variable;
 import interpreter.instruction.Afficher;
 import interpreter.instruction.Assigner;
+import interpreter.instruction.Function;
 import interpreter.instruction.Block;
 import interpreter.instruction.FunctionDeclaration;
 import interpreter.instruction.Instruction;
@@ -44,7 +45,17 @@ public class Interpreter {
                 "}",
                 "retourner fibo(n-1) + fibo(n-2)",
             "}",
-            "afficher fibo(20)");
+            "fonction ack(m,n) {",
+                    "si m = 0 {",
+                        "retourner n+1",
+                    "}",
+                    "si n = 0 {",
+                        "retourner ack(m-1, 1)",
+                    "}",
+                    "retourner ack(m-1, ack(m, n-1))",
+                "}", 
+            "afficher fibo(fibo(6)+3)"
+            );
         
         Interpreter interpreter = new Interpreter(String.join("\n", program) + "\n");
         
@@ -70,6 +81,17 @@ public class Interpreter {
         return stack.peekLast().getVariable(name);
     }
 
+    public int getId(String name) {
+        return stack.peekLast().getId(name);
+    }
+
+    public ZorvexValue getVariable(int id) {
+        for (Context context : stack)
+            if (context.getValueById(id) != null)
+                return context.getValueById(id);
+        return null;
+    }
+
     private Instruction handleFunctionCall(FunctionCall fc) {
         if (!functions.containsKey(fc.name())) {
             // exceptions
@@ -90,7 +112,7 @@ public class Interpreter {
         stack.addLast(newContext);
         callStack.addLast(fd.block());
         state.enterBlock(fd.block());
-        return null;
+        return new Function(args.stream().map(x -> x.value(currentContext)).toList(), fc.name());
     }
     
     public Instruction step() {
@@ -124,6 +146,7 @@ public class Interpreter {
                 break;
             case Retourner retourner:
                 lastReturnValue = state.result(stack.getLast());
+                retourner.setResult(lastReturnValue);
                 while (state.getCurrentBlock() != callStack.getLast())
                     state.exitBlock();
                 state.exitBlock();

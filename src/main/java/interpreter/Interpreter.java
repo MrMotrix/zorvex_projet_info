@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import interpreter.exceptions.RuntimeError;
 import interpreter.exceptions.SyntaxErrorException;
@@ -33,6 +34,14 @@ public class Interpreter {
     
     private HashMap<String, FunctionDeclaration> functions = new HashMap<>();
 
+    private static Set<FunctionDeclaration> reservedFunctionList = Set.of(
+        new FunctionDeclaration("ajouter_liste", null, List.of("liste", "element")), 
+        new FunctionDeclaration("supprimer_liste", null, List.of("liste", "indice")),
+        new FunctionDeclaration("taille_liste", null, List.of("liste")),
+        new FunctionDeclaration("recuperer_liste", null, List.of("liste", "indice")),
+        new FunctionDeclaration("definir_liste", null, List.of("liste", "indice", "valeur"))
+    );
+
     private int currentInstruction = 0;
 
     public static void main(String[] args) throws SyntaxErrorException, RuntimeError {
@@ -56,9 +65,42 @@ public class Interpreter {
                     "}",
                     "retourner ack(m-1, ack(m, n-1))",
                 "}", 
+            "fonction tri(l) {",
+                "i <- taille_liste(l)-1",
+                "tant que i >= 1 {",
+                    "j <- 0",
+                    "tant que j < i {",
+                        "si recuperer_liste(l, j+1) < recuperer_liste(l, j) {",
+                            "x <- recuperer_liste(l, j)",
+                            "y <- recuperer_liste(l, j+1)",
+                            "definir_liste(l, j, y)",
+                            "definir_liste(l, j+1, x)",
+                        "}",
+                        "j <- j + 1",
+                    "}",
+                    "i <- i-1",
+                "}",
+                "retourner l",
+            "}",
+
+            "fonction argmax(l) {",
+                "n <- taille_liste(l)",
+                "x <- 0",
+                "i <- 0",
+                "tant que i < n {",
+                    "si recuperer_liste(l, i) > recuperer_liste(l, x) {",
+                        "x <- i",
+                    "}",
+                    "i <- i+1",
+                "}",
+                "retourner x",
+            "}",
+
             "x <- fibo(1)",
-            "y <- [5, 3, 5]",
-            "fibo(2)",
+            "y <- [8, 3, 5, 10, 2, 4, 7, 1]",
+            "afficher argmax(y)",
+            "afficher recuperer_liste(y, argmax(y))",
+            "tri(y)",
             "afficher y"
             );
         
@@ -75,6 +117,7 @@ public class Interpreter {
     public Interpreter(String code) throws SyntaxErrorException {
         this();
         List<InstructionInfo> instructions = Parser.parse(Scanner.tokenize(code));
+        reservedFunctionList.forEach(x -> functions.put(x.name(), x));
         this.state.enterBlock(new Block(instructions));
     }
 
@@ -98,6 +141,7 @@ public class Interpreter {
     }
 
     private Instruction handleFunctionCall(FunctionCall fc) throws RuntimeError {
+
         if (!functions.containsKey(fc.name())) 
             throw new RuntimeError(-1, "Function " + fc.name() + " doesn't exist");
         
@@ -115,6 +159,30 @@ public class Interpreter {
             ZorvexValue value = new ZorvexValue(args.get(i).value(currentContext));
             newContext.assignVariable(parameters.get(i), value);
             values.add(value);
+        }
+
+        if (fc.name().equals("ajouter_liste")) {
+            values.get(0).add(values.get(1));
+            lastReturnValue = ZorvexValue.nullValue();
+            return new Function(values, fc.name());
+        }
+        else if (fc.name().equals("supprimer_liste")) {
+            values.get(0).remove(values.get(1).asInteger());
+            lastReturnValue = ZorvexValue.nullValue();
+            return new Function(values, fc.name());
+        }
+        else if (fc.name().equals("taille_liste")) {
+            lastReturnValue = new ZorvexValue(values.get(0).size());
+            return new Function(values, fc.name());
+        }
+        else if (fc.name().equals("recuperer_liste")) {
+            lastReturnValue = new ZorvexValue(values.get(0).get(values.get(1).asInteger()));
+            return new Function(values, fc.name());
+        }
+        else if (fc.name().equals("definir_liste")) {
+            values.get(0).set(values.get(1).asInteger(), values.get(2));
+            lastReturnValue = ZorvexValue.nullValue();
+            return new Function(values, fc.name());
         }
 
         stack.addLast(newContext);
@@ -150,6 +218,8 @@ public class Interpreter {
                         state.step();
                     return instruction;
                 case FunctionDeclaration fd:
+                    if (functions.containsKey(fd.name()) || reservedFunctionList.contains(fd.name()))
+                        throw new RuntimeError(-1, "Function "+fd.name()+" is already defined.");
                     functions.put(fd.name(), fd);
                     state.step();
                     break;

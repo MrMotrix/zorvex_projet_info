@@ -28,6 +28,13 @@ public class ZorvexValue {
         value = new ArrayList<ZorvexValue>(values);
         type = ZorvexType.LIST;
     }
+
+    public static ZorvexValue nullValue() {
+        ZorvexValue result = new ZorvexValue(0);
+        result.type = ZorvexType.NaN;
+        result.value = null;
+        return result;
+    }
     
     public boolean isInteger() {
         return type == ZorvexType.INTEGER;
@@ -71,6 +78,22 @@ public class ZorvexValue {
         if (index >= list.size())
             throw new RuntimeError(-1, "Index out of bounds");
         ((List<ZorvexValue>)value).remove(index);
+    }
+
+    public ZorvexValue get(int index) throws RuntimeError {
+        if (type != ZorvexType.LIST)
+            throw new RuntimeError(-1, "Cannot remove in" + this + " as it is not a list.");
+        List<ZorvexValue> list = (List<ZorvexValue>)value;
+        if (index >= list.size())
+            throw new RuntimeError(-1, "Index out of bounds");
+        return list.get(index);
+    }
+
+    public int size() throws RuntimeError {
+        if (type != ZorvexType.LIST)
+            throw new RuntimeError(-1, "Cannot get " + this + "'s size as it is not a list.");
+        List<ZorvexValue> list = (List<ZorvexValue>)value;
+        return list.size();
     }
 
     public String asString() {

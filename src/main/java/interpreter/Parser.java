@@ -161,29 +161,6 @@ public class Parser {
     }
 
     private Expression expression() throws SyntaxErrorException {
-        int line = current().line();
-        if (current().type() == TokenType.CROCHET_OUVRANT) {
-            advance();
-            List<ZorvexValue> list = new ArrayList<>();
-            while (i < tokens.size()) {
-                if (current().type() == TokenType.CHAINE)
-                    list.add(new ZorvexValue((String)current().data()));
-                else if (current().type() == TokenType.NOMBRE)
-                    list.add(new ZorvexValue((int)current().data()));
-                else
-                    throw new UnexpectedTokenException(current(), TokenType.NOMBRE);
-                advance();
-                if (current().type() == TokenType.CROCHET_FERMANT)
-                    break;
-                if (current().type() != TokenType.VIRGULE)
-                    throw new UnexpectedTokenException(current(), TokenType.VIRGULE);
-                advance();
-            }
-            if (i >= tokens.size())
-                throw new ExpectedCharacterNotFound(line, ']');
-            advance();
-            return new Literal(new ZorvexValue(list));
-        }
         return equality();
     }
 
@@ -308,6 +285,29 @@ public class Parser {
                 return new Grouping(expr);
             }
             throw new ExpectedCharacterNotFound(current().line(), ')'); 
+        }
+        int line = current().line();
+
+        if (type == TokenType.CROCHET_OUVRANT) {
+            List<ZorvexValue> list = new ArrayList<>();
+            while (i < tokens.size()) {
+                if (current().type() == TokenType.CHAINE)
+                    list.add(new ZorvexValue((String)current().data()));
+                else if (current().type() == TokenType.NOMBRE)
+                    list.add(new ZorvexValue((int)current().data()));
+                else
+                    throw new UnexpectedTokenException(current(), TokenType.NOMBRE);
+                advance();
+                if (current().type() == TokenType.CROCHET_FERMANT)
+                    break;
+                if (current().type() != TokenType.VIRGULE)
+                    throw new UnexpectedTokenException(current(), TokenType.VIRGULE);
+                advance();
+            }
+            if (i >= tokens.size())
+                throw new ExpectedCharacterNotFound(line, ']');
+            advance();
+            return new Literal(new ZorvexValue(list));
         }
         throw new UnexpectedTokenException(token);
     }

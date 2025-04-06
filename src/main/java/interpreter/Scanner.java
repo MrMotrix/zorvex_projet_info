@@ -27,8 +27,14 @@ public class Scanner {
     }
 
     private void scan() throws SyntaxErrorException {
-        while (currentPos < code.length()) {
+        if (currentPos < code.length())
             tokens.add(scanToken());
+        Token last = tokens.get(0);
+        while (currentPos < code.length()) {
+            Token current = scanToken();
+            if (last.type() != TokenType.ENDL || current.type() != last.type()) // permet d'éviter d'ajouter plein de ENDL successifs
+                tokens.add(current);
+            last = current;
         }
     }
 

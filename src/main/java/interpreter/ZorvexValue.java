@@ -43,4 +43,13 @@ public class ZorvexValue {
     public String toString() {
         return type + " " + value;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object == null)
+            return false;
+        if (object instanceof ZorvexValue other) 
+            return type == other.type && value == other.value;
+        return false;
+    }
 }

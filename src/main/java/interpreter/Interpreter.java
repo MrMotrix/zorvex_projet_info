@@ -54,7 +54,7 @@ public class Interpreter {
                     "}",
                     "retourner ack(m-1, ack(m, n-1))",
                 "}", 
-            "afficher fibo(fibo(6)+3)"
+            "afficher fibo(fibo(6))"
             );
         
         Interpreter interpreter = new Interpreter(String.join("\n", program) + "\n");

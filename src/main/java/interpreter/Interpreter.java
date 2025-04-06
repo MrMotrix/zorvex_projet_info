@@ -38,6 +38,7 @@ public class Interpreter {
     public static void main(String[] args) throws SyntaxErrorException, RuntimeError {
         List<String> program = List.of(
             "fonction fibo(n) {",
+                "afficher \"hello world\"",
                 "si n = 0 {",
                     "retourner 0"   ,
                 "}",
@@ -57,6 +58,7 @@ public class Interpreter {
                 "}", 
             "x <- fibo(1)",
             "y <- [5, 3, 5]",
+            "fibo(2)",
             "afficher y"
             );
         

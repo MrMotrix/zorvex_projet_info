@@ -15,6 +15,8 @@ public class Context {
     }
 
     public void assignVariable(String name, ZorvexValue value) {
+        if (name.equals(""))
+            return;
         if (!variables.containsKey(name)) {
             variables.put(name, new LocalVariable(value, id));
             id += 1;

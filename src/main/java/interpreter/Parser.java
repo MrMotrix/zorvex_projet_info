@@ -73,6 +73,10 @@ public class Parser {
         if (current().type() == TokenType.IDENTIFIANT) {
             String name = current().lexeme();
             advance();
+            if (current().type() == TokenType.PARENTHESE_GAUCHE) {          // void function calls
+                i -= 1;
+                return new InstructionInfo(new Assigner("", expression()), line);
+            }
             if (current().type() != TokenType.ASSIGNER) {
                 throw new UnexpectedTokenException(current(), TokenType.ASSIGNER);
             }

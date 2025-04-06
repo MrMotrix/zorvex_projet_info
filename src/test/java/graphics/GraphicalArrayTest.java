@@ -14,14 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 class GraphicalArrayTest extends JavaFXTestBase{
 
     private GraphicalArray array;
-    
-
-    // @BeforeAll
-    // static void initToolkit() {
-    //     if (!Platform.isFxApplicationThread()) {
-    //         Platform.startup(() -> {});
-    //     }
-    // }
 
     @BeforeEach
     public void setUp() {
@@ -69,6 +61,18 @@ class GraphicalArrayTest extends JavaFXTestBase{
         
         array.deleteNodeAt(2);
         assertArrayEquals(new String[]{"A", "B"}, array.getValues());
+    }
+
+    @Test
+    void testUpdateValue() {
+        array.draw(0, 0);
+        array.update(1, "Updated");
+        assertArrayEquals(new String[]{"A", "Updated", "C"}, array.getValues());
+    }
+
+    @Test 
+    void testSize(){
+        assertEquals(3, array.size());
     }
 }
 

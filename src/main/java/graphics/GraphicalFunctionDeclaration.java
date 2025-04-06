@@ -1,5 +1,7 @@
 package graphics;
 
+import java.util.List;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -12,12 +14,12 @@ public final class GraphicalFunctionDeclaration extends AbstractGraphicalObject{
     private final double MIN_WIDTH = 10;
     private final double MIN_HEIGHT = 10;
 
-    private String parameters;
+    private List<String> parameters;
     private String variables;
-    public GraphicalFunctionDeclaration(String name, Pane pane, String parameters, String variables) {
+    public GraphicalFunctionDeclaration(String name, Pane pane, List<String> parameters, String variables) {
         super(name, pane);
         this.variables = variables;
-        this.parameters = parameters.equals("") ? "vide" : parameters;
+        this.parameters = parameters.isEmpty() ? List.of("vide") : parameters;
     }
 
     @Override
@@ -39,7 +41,8 @@ public final class GraphicalFunctionDeclaration extends AbstractGraphicalObject{
         titleRect.setArcHeight(10);
         titleRect.setX(x);
         titleRect.setY(y);
-        Text paramText = new Text("Paramétres : " + parameters);
+        String p = parameters.isEmpty() ? "vide" : String.join(", ", parameters);
+        Text paramText = new Text("Paramétres : " + p);
         if (variables != null) paramText.setText(paramText.getText() + "\nVars: " + variables);
 
         paramText.setFont(Font.font( 12));

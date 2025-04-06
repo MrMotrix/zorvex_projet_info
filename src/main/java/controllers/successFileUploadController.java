@@ -39,10 +39,16 @@ public class successFileUploadController {
     // ========================================TEST========================================================
     
     public static String code =  """
-        n <- 13
-        p <- 10
-        n <- p+n
-        afficher n
+        fonction fibo(n) {
+            si n = 0 {
+                retourner 0
+            }
+            si n = 1 {
+                retourner 1
+            }
+            retourner fibo(n-1) + fibo(n-2)
+        }
+        afficher fibo(20)
         """;
     
     // ================================================================================================
@@ -64,19 +70,11 @@ public class successFileUploadController {
     }
 
 
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
-    }
+    public void setMainController(MainController mainController) {this.mainController = mainController;}
+    
+    public SplitPane getSplitPane() {return splitPane;}
 
-    public SplitPane getSplitPane() {
-        return splitPane;
-    }
-
-
-    public void setSplitPaneDivider(double size) {
-        this.splitPane.setDividerPosition(0, size);
-    }
-
+    public void setSplitPaneDivider(double size) {this.splitPane.setDividerPosition(0, size);}
 
     @FXML
     void beginExecution(ActionEvent event) {
@@ -92,9 +90,7 @@ public class successFileUploadController {
 
 
     @FXML
-    void initialize() {
-
-    }
+    void initialize() {}
 
     public void initialize2(MainController mainController, App app) {
         this.mainController = mainController;
@@ -203,10 +199,8 @@ public class successFileUploadController {
         // TODO slight disalignment t be fixed. Currently the best value to almost fit the other lines is 9
         bkpointVbox.setSpacing(9.4);
         bkpointVbox.setAlignment(Pos.TOP_CENTER); 
-        // bkScroller.setPadding(new Insets(5,0,5,0));
 
         bkpointVbox.setStyle(bkpointVbox.getStyle() + "-fx-background-color: transparent;");
-        // bkpointVbox.setStyle("-fx-border-color: black;");
 
         //size of the button
         double buttonSize = 8; 
@@ -214,7 +208,6 @@ public class successFileUploadController {
 
         for (int i = 1; i <= mainController.numberOfLines; i++) {
             Button bkButton = new Button(i + "");
-            // bkButton.setStyle("-fx-background-color: transparent; -fx-text-fill: red;");
             
             // set style
             bkButton.setMinSize(buttonSize, buttonSize);
@@ -228,10 +221,8 @@ public class successFileUploadController {
 
                 // if disabled
                 if (bkButton.getStyle().contains("black")) {
-                    
                     //set style
                     bkButton.setStyle("-fx-background-color: red; -fx-background-radius: 50%;");
-                    
                     // add button to set of bkpoints
                     mainController.bkpoints.add(Integer.parseInt(bkButton.getText()));
                 
@@ -239,19 +230,13 @@ public class successFileUploadController {
                 } else {
                     //revert style
                     bkButton.setStyle("-fx-background-color: black; -fx-background-radius: 50%;");
-                    // bkButton.setStyle("-fx-background-color: black; -fx-text-fill: blue; -fx-background-radius: 50%;");
                     // remove
                     mainController.bkpoints.remove(Integer.parseInt(bkButton.getText()));
-
                 }
             });
-            
             bkpointVbox.getChildren().add(bkButton);
         }
-
-
     }
-
 
     void setPreviousState(){
         splitPane.setDividerPosition(0,mainController.getSplitPaneDividerPosition());

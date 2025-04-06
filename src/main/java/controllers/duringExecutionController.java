@@ -134,6 +134,7 @@ import interpreter.Interpreter;
 import interpreter.instruction.Instruction;
 import interpreter.instruction.Afficher;
 import interpreter.instruction.Assigner;
+import interpreter.instruction.FunctionDeclaration;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -419,9 +420,9 @@ public class duringExecutionController  {
                         ArrayList<GraphicalObject> tempA = new ArrayList<>();
                         tempA.add(temp);
                 
-                 GraphicalFunctionCall temp1 = new GraphicalFunctionCall("func1", canvasPane, tempA);
-                 rep.addElement("func" + var, temp1);
-                 record.push(new CreateRecord("func1", temp1));
+                //  GraphicalFunctionCall temp1 = new GraphicalFunctionCall("func1", canvasPane, tempA);
+                //  rep.addElement("func" + var, temp1);
+                //  record.push(new CreateRecord("func1", temp1));
 
                 //  GraphicalFunctionDeclaration temp2 = new GraphicalFunctionDeclaration(var, canvasPane, "par1, par2, par3, par4", null);
                 //  rep.addElement(var, temp2);
@@ -444,11 +445,15 @@ public class duringExecutionController  {
             else if (inst instanceof FCall fcall) {
                 GraphicalFunctionCall fc = new GraphicalFunctionCall(fcall.getName(), canvasPane,  fcall.getID(), fcall.getParameters(), fcall.getVariables());
                 rep.addElement(fcall.getName(), fc);
-            }
-            else if (inst instanceof FDeclaration fdeclaration) {
-                FunctionDeclaration fd = new GraphicalFunctionDeclaration(fdeclaration.getName(), canvasPane,  fdeclaration.getID(), fdeclaration.getParameters(), fdeclaration.getVariables());
-                rep.addElement(fdeclaration.getName(), fd);
             } */
+            // else if (inst instanceof FunctionDeclaration fdeclaration) {
+            //     GraphicalFunctionDeclaration fd = new GraphicalFunctionDeclaration(fdeclaration.getName(), canvasPane,  fdeclaration.getID(), fdeclaration.getParameters(), fdeclaration.getVariables());
+            //     rep.addElement(fdeclaration.getName(), fd);
+            // }
+            else if (inst instanceof FunctionDeclaration fdeclaration) {
+                GraphicalFunctionDeclaration fd = new GraphicalFunctionDeclaration(fdeclaration.name(), canvasPane,  fdeclaration.parameters(), null);
+                rep.addElement(fdeclaration.name(), fd);
+            }
 
         } catch (Exception e) {
             sendMessageToConsole("Erreur dans la ligne " + currentLine + ": " + e.getMessage());
@@ -625,8 +630,8 @@ public class duringExecutionController  {
         consolePanel.setWrapText(true);
 
         continueButton.setStyle(continueButton.getStyle() + "-fx-background-color: green; -fx-text-fill: white;");
-        lastLineButton.setStyle(lastLineButton.getStyle() + "-fx-background-color: black; -fx-text-fill: white");
-        nextLineButton.setStyle(nextLineButton.getStyle() + "-fx-background-color: black; -fx-text-fill: white");
+        lastLineButton.setStyle(lastLineButton.getStyle() + "-fx-background-color: black; -fx-text-fill: white;");
+        nextLineButton.setStyle(nextLineButton.getStyle() + "-fx-background-color: black; -fx-text-fill: white;");
         restartButton.setStyle(restartButton.getStyle() + "-fx-background-color: yellow; -fx-text-fill: black;");
         stopButton.setStyle(stopButton.getStyle() + "-fx-background-color: red; -fx-text-fill: white;");
         

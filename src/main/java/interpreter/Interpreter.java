@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import interpreter.exceptions.RuntimeError;
 import interpreter.exceptions.SyntaxErrorException;
 import interpreter.expression.BinaryOperation;
 import interpreter.expression.Expression;
@@ -34,7 +35,7 @@ public class Interpreter {
 
     private int currentInstruction = 0;
 
-    public static void main(String[] args) throws SyntaxErrorException {
+    public static void main(String[] args) throws SyntaxErrorException, RuntimeError {
         List<String> program = List.of(
             "fonction fibo(n) {",
                 "si n = 0 {",
@@ -54,7 +55,7 @@ public class Interpreter {
                     "}",
                     "retourner ack(m-1, ack(m, n-1))",
                 "}", 
-            "afficher fibo(fibo(6))"
+            "x <- fibo(1,2)"
             );
         
         Interpreter interpreter = new Interpreter(String.join("\n", program) + "\n");
@@ -92,90 +93,99 @@ public class Interpreter {
         return null;
     }
 
-    private Instruction handleFunctionCall(FunctionCall fc) {
-        if (!functions.containsKey(fc.name())) {
-            // exceptions
-        }
+    private Instruction handleFunctionCall(FunctionCall fc) throws RuntimeError {
+        if (!functions.containsKey(fc.name())) 
+            throw new RuntimeError(-1, "Function " + fc.name() + " doesn't exist");
+        
         FunctionDeclaration fd = functions.get(fc.name());
-        if (fc.args().size() != fd.parameters().size()) {
-            // exceptions
-        }
+        if (fc.args().size() != fd.parameters().size()) 
+            throw new RuntimeError(-1, "Wrong arguments for " + fc.name() + " call, expected " + fd.parameters().size() + " got " + fc.args().size());
+        
         Context currentContext = stack.getLast();
         Context newContext = new Context();
         List<String> parameters = fd.parameters();
         List<Expression> args = fc.args();
+        List<ZorvexValue> values = new ArrayList<>();
 
         for (int i = 0; i < args.size(); i++) {
-            newContext.assignVariable(parameters.get(i), new ZorvexValue(args.get(i).value(currentContext)));
+            ZorvexValue value = new ZorvexValue(args.get(i).value(currentContext));
+            newContext.assignVariable(parameters.get(i), value);
+            values.add(value);
         }
 
         stack.addLast(newContext);
         callStack.addLast(fd.block());
         state.enterBlock(fd.block());
-        return new Function(args.stream().map(x -> x.value(currentContext)).toList(), fc.name());
+        return new Function(values, fc.name());
     }
     
-    public Instruction step() {
-        Instruction instruction = state.getCurrentInstruction().instruction();
-        if (!state.isEvaluated()) {
-            if (lastReturnValue != null) {
-                state.serveFunctionCall(lastReturnValue);
-                lastReturnValue = null;
-                return null;
-            }
+    public Instruction step() throws RuntimeError {
+        try {
+            Instruction instruction = state.getCurrentInstruction().instruction();
+            if (!state.isEvaluated()) {
+                if (lastReturnValue != null) {
+                    state.serveFunctionCall(lastReturnValue);
+                    lastReturnValue = null;
+                    return null;
+                }
 
-            FunctionCall fc = state.getNextFunctionCall();
-            return handleFunctionCall(fc);
-        }   
-        ZorvexValue result = state.result(stack.getLast());        
-        switch (instruction) {
-            case Si si:
-                state.step();
-                if (result.asInteger() != 0) 
-                    state.enterBlock(si.block());
-                return instruction;
-            case TantQue tantQue:
-                if (result.asInteger() != 0) 
-                    state.enterBlock(tantQue.block());
-                else
+                FunctionCall fc = state.getNextFunctionCall();
+                return handleFunctionCall(fc);
+            }   
+            ZorvexValue result = state.result(stack.getLast());        
+            switch (instruction) {
+                case Si si:
                     state.step();
-                return instruction;
-            case FunctionDeclaration fd:
-                functions.put(fd.name(), fd);
-                state.step();
-                break;
-            case Retourner retourner:
-                lastReturnValue = state.result(stack.getLast());
-                retourner.setResult(lastReturnValue);
-                while (state.getCurrentBlock() != callStack.getLast())
+                    if (result.asInteger() != 0) 
+                        state.enterBlock(si.block());
+                    return instruction;
+                case TantQue tantQue:
+                    if (result.asInteger() != 0) 
+                        state.enterBlock(tantQue.block());
+                    else
+                        state.step();
+                    return instruction;
+                case FunctionDeclaration fd:
+                    functions.put(fd.name(), fd);
+                    state.step();
+                    break;
+                case Retourner retourner:
+                    lastReturnValue = state.result(stack.getLast());
+                    retourner.setResult(lastReturnValue);
+                    while (state.getCurrentBlock() != callStack.getLast())
+                        state.exitBlock();
                     state.exitBlock();
-                state.exitBlock();
-                stack.removeLast();
-                callStack.removeLast();
-                break;
-            case Assigner assigner:
-                assigner.serveResult(result);
-                instruction.interpret(stack.getLast());
-                state.step();
-                break;
-            case Afficher afficher:
-                afficher.setResult(result);
-            default:
-                instruction.interpret(stack.getLast());
-                state.step();
-                break;
-        }
-
-        if (state.hasBlockReachedEnd()) {
-            if (callStack.size() > 0 && callStack.getLast() == state.getCurrentBlock()) {
-                callStack.removeLast();
-                stack.removeLast();
-                // ici il faudrait un espece de NaN
+                    stack.removeLast();
+                    callStack.removeLast();
+                    break;
+                case Assigner assigner:
+                    assigner.serveResult(result);
+                    instruction.interpret(stack.getLast());
+                    state.step();
+                    break;
+                case Afficher afficher:
+                    afficher.setResult(result);
+                default:
+                    instruction.interpret(stack.getLast());
+                    state.step();
+                    break;
             }
 
-            state.exitBlock();
+            if (state.hasBlockReachedEnd()) {
+                if (callStack.size() > 0 && callStack.getLast() == state.getCurrentBlock()) {
+                    callStack.removeLast();
+                    stack.removeLast();
+                    // ici il faudrait un espece de NaN
+                }
+
+                state.exitBlock();
+            }
+            
+            return instruction;
         }
-        
-        return instruction;
+        catch (RuntimeError error) {
+            error.setLineNumber(getCurrentLine());
+            throw error;
+        }
     }
 }

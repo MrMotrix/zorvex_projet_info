@@ -4,6 +4,7 @@ import interpreter.Context;
 import interpreter.Parser;
 import interpreter.Scanner;
 import interpreter.ZorvexValue;
+import interpreter.exceptions.RuntimeError;
 import interpreter.exceptions.SyntaxErrorException;
 
 public class ExpressionEvaluator {
@@ -16,7 +17,7 @@ public class ExpressionEvaluator {
     public FunctionCall getNextFunctionCall() {
         Grouping result = getNextExpression(expression);
         if (result == null) {
-            // exception
+            
         }
         if (result.expr() instanceof FunctionCall fc)
             return fc;
@@ -67,7 +68,7 @@ public class ExpressionEvaluator {
         return getNextExpression(expression) == null;
     }
 
-    public ZorvexValue result(Context context) {
+    public ZorvexValue result(Context context) throws RuntimeError {
         return expression.value(context);
     }
 }

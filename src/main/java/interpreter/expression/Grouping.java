@@ -2,6 +2,7 @@ package interpreter.expression;
 
 import interpreter.Context;
 import interpreter.ZorvexValue;
+import interpreter.exceptions.RuntimeError;
 
 public non-sealed class Grouping implements Expression {
     private Expression expr;
@@ -13,7 +14,7 @@ public non-sealed class Grouping implements Expression {
     public Expression expr() {
         return expr;
     }
-    public ZorvexValue value(Context context) {
+    public ZorvexValue value(Context context) throws RuntimeError {
         return expr.value(context);
     }
 

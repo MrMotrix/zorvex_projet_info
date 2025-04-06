@@ -1,6 +1,7 @@
 package interpreter;
 import java.util.List;
 
+import interpreter.exceptions.RuntimeError;
 import interpreter.expression.ExpressionEvaluator;
 import interpreter.expression.FunctionCall;
 import interpreter.instruction.Block;
@@ -64,7 +65,7 @@ public class ExecutionState {
         return blocks.peekLast().expressionEvaluator.getNextFunctionCall();
     }
 
-    public ZorvexValue result(Context context) {
+    public ZorvexValue result(Context context) throws RuntimeError  {
         BlockInfo blockInfo = blocks.peekLast();
         return blocks.peekLast().expressionEvaluator.result(context);
     }

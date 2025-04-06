@@ -4,6 +4,9 @@ import interpreter.Token;
 import interpreter.TokenType;
 import interpreter.ZorvexType;
 import interpreter.ZorvexValue;
+import interpreter.exceptions.RuntimeError;
+import interpreter.exceptions.UnexpectedTypeException;
+import interpreter.exceptions.UnsupportedOperationError;
 
 public class UBinaryOperator implements BinaryOperator {
     private Token operation;
@@ -13,7 +16,7 @@ public class UBinaryOperator implements BinaryOperator {
     }
 
     @Override
-    public ZorvexValue apply(ZorvexValue obj1, ZorvexValue obj2) {
+    public ZorvexValue apply(ZorvexValue obj1, ZorvexValue obj2) throws RuntimeError {
         if (operation.type() == TokenType.EGAL) 
             return new ZorvexValue(obj1.equals(obj2) ? 1 : 0);
         
@@ -24,12 +27,18 @@ public class UBinaryOperator implements BinaryOperator {
         if (obj1.isString() && !obj2.isString() || obj2.isString() && !obj1.isString()) 
             return apply(new ZorvexValue(obj1.asString()), new ZorvexValue(obj2.asString()));
         
-        if (obj1.isString() && operation.type() == TokenType.PLUS) 
+        if (obj1.isString()) {
+            if (operation.type() != TokenType.PLUS)
+                throw new UnsupportedOperationError(-1, obj1, obj2, operation.type());
             return new ZorvexValue(obj1.asString() + obj2.asString());
+        } 
         
-        if (!obj1.isInteger() || !obj2.isInteger()) {
-            // exception
-        }
+        if (!obj1.isInteger()) 
+            throw new UnexpectedTypeException(-1, obj1, ZorvexType.INTEGER);
+        
+        if (!obj2.isInteger())
+            throw new UnexpectedTypeException(-1, obj1, ZorvexType.INTEGER);
+
 
         return switch (operation.type()) {
             case PLUS -> new ZorvexValue(obj1.asInteger() + obj2.asInteger());

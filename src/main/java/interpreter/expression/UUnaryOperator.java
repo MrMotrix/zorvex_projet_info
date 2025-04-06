@@ -1,7 +1,12 @@
 package interpreter.expression;
 
 import interpreter.Token;
+import interpreter.TokenType;
+import interpreter.ZorvexType;
 import interpreter.ZorvexValue;
+import interpreter.exceptions.RuntimeError;
+import interpreter.exceptions.UnexpectedTypeException;
+import interpreter.exceptions.UnsupportedOperationError;
 
 public class UUnaryOperator implements UnaryOperator {
     private Token operation;
@@ -11,11 +16,12 @@ public class UUnaryOperator implements UnaryOperator {
     }
 
     @Override
-    public ZorvexValue apply(ZorvexValue obj) {
-        return switch (operation.type()) {
-            case MOINS -> new ZorvexValue(-(obj.asInteger()));
-            default -> new ZorvexValue(0);
-        };
+    public ZorvexValue apply(ZorvexValue obj) throws RuntimeError {
+        if (!obj.isInteger())
+            throw new UnsupportedOperationError(-1, obj, null, operation.type());
+        if (operation.type() != TokenType.MOINS)
+            throw new UnsupportedOperationError(-1, obj, null, operation.type());
+        return new ZorvexValue(-(obj.asInteger()));
     }
 
     @Override

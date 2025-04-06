@@ -1,5 +1,7 @@
 package interpreter;
 
+import interpreter.exceptions.RuntimeError;
+
 public class ZorvexValue {
     private ZorvexType type;
     private Object value;
@@ -27,13 +29,12 @@ public class ZorvexValue {
         return type == ZorvexType.STRING;
     }
     
-    public int asInteger() {
+    public int asInteger() throws RuntimeError {
         if (isInteger())
             return (int)value;
         if (isString())
             return Integer.valueOf((String)value);
-        // erreur ici normalement
-        return -1;
+        throw new RuntimeError(-1, "Cannot convert " + this + " to integer");
     }
 
     public String asString() {

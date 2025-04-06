@@ -24,7 +24,6 @@ public final class FunctionCall implements Expression {
     }
     
     public ZorvexValue value(Context context) {
-        // exception ici
         return returnValue;
     }
 

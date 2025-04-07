@@ -159,38 +159,37 @@ public class Interpreter {
             newContext.assignVariable(parameters.get(i), value);
             values.add(value);
         }
-        String variableName = "";
+        int variableId = -1;
         if (args.size() >= 1 && args.get(0) instanceof Variable var)  
-            variableName = var.name();
-        lastReturnValue = new ZorvexValue(variableName);
+            variableId = getId(var.name());
         
         if (fc.name().equals("ajouter_liste")) {
             values.get(0).add(values.get(1));
             lastReturnValue = ZorvexValue.nullValue();
-            return new Function(List.of(new ZorvexValue(variableName)), fc.name());
+            return new Function(List.of(new ZorvexValue(variableId), values.get(1)), fc.name());
         }
         else if (fc.name().equals("supprimer_liste")) {
             values.get(0).remove(values.get(1).asInteger());
             lastReturnValue = ZorvexValue.nullValue();
-            return new Function(List.of(new ZorvexValue(variableName)), fc.name());
+            return new Function(List.of(new ZorvexValue(variableId), values.get(1)), fc.name());
         }
         else if (fc.name().equals("inserer_liste")) {
             values.get(0).insert(values.get(1).asInteger(), values.get(2));
             lastReturnValue = ZorvexValue.nullValue();
-            return new Function(List.of(new ZorvexValue(variableName)), fc.name());
-        }
-        else if (fc.name().equals("taille_liste")) {
-            lastReturnValue = new ZorvexValue(values.get(0).size());
-            return new Function(List.of(new ZorvexValue(variableName)), fc.name());
-        }
-        else if (fc.name().equals("recuperer_liste")) {
-            lastReturnValue = new ZorvexValue(values.get(0).get(values.get(1).asInteger()));
-            return new Function(List.of(new ZorvexValue(variableName)), fc.name());
+            return new Function(List.of(new ZorvexValue(variableId), values.get(1), values.get(2)), fc.name());
         }
         else if (fc.name().equals("modifier_liste")) {
             values.get(0).set(values.get(1).asInteger(), values.get(2));
             lastReturnValue = ZorvexValue.nullValue();
-            return new Function(List.of(new ZorvexValue(variableName)), fc.name());
+            return new Function(List.of(new ZorvexValue(variableId), values.get(1), values.get(2)), fc.name());
+        }
+        else if (fc.name().equals("taille_liste")) {
+            lastReturnValue = new ZorvexValue(values.get(0).size());
+            return new Function(values, fc.name());
+        }
+        else if (fc.name().equals("recuperer_liste")) {
+            lastReturnValue = new ZorvexValue(values.get(0).get(values.get(1).asInteger()));
+            return new Function(values, fc.name());
         }
 
         lastReturnValue = null;

@@ -1,7 +1,6 @@
 package controllers;
 
 import graphics.GraphicalRepresentation;
-import graphics.IterableGraphicalObject;
 import graphics.ModificationType;
 
 public class IterableModifyRecord

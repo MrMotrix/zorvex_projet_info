@@ -15,6 +15,7 @@ import graphics.GraphicalVar;
 import graphics.IterableGraphicalObject;
 import graphics.ModificationType;
 import interpreter.Interpreter;
+import interpreter.exceptions.RuntimeError;
 import interpreter.instruction.Instruction;
 import interpreter.instruction.Retourner;
 import interpreter.instruction.Afficher;
@@ -163,37 +164,26 @@ public class duringExecutionController  {
                 currentLine = interpreter.getCurrentLine();
                 try{
                     if (currentLine == 1 && mainController.bkpoints.contains(1) && !firstLineRead) {
-                    highlightCurrentLine(currentLine - 1);
-                    // sendMessageToConsole("Breakpoint reached at line 1");
-                    firstLineRead = true;
-                    // currentLine = interpreter.getCurrentLine();
-
-                    return;
+                        highlightCurrentLine(currentLine - 1);
+                        firstLineRead = true;
+                        return;
                     }
                 
                     if (mainController.bkpoints.contains(currentLine)) {
                         goNextLine(event);
                         currentLine = interpreter.getCurrentLine();
-
                     }
                 
                     while (!mainController.bkpoints.contains(currentLine) && currentLine != mainController.numberOfLines + 1) {
                         goNextLine(event);
                         currentLine = interpreter.getCurrentLine();
-
                     }
-                    // this handles the case when we have reached the end of the file. Basically, it disables the buttons and removes any possible remaining highlight. This is also treated in the goNextLine method
-                    // if (currentLine == mainController.numberOfLines + 1){
-                    //     // sendMessageToConsole("Fin du fichier atteint");
-                    //     currentHighlightedLine++;
-                    //     highlightCurrentLine(currentHighlightedLine);
-                        
-                    //     // Disable buttons because we are in the end of the file
-                    //     continueButton.setDisable(true);
-                    //     nextLineButton.setDisable(true);
-                    // } 
+
                 } catch (Exception e){
-        
+                    if ((e instanceof RuntimeError)){
+
+                        sendMessageToConsole(e.getMessage());
+                    }
                     return;
                 }
     }
@@ -321,7 +311,7 @@ public class duringExecutionController  {
                     case "STRING":
                     case "INTEGER" :
                         if (rep.getElements().containsKey(interpreter.getId(name))) { // if the variable already exists
-                            record.push(new ModifyVarRecord(interpreter.getId(name), value)); // TODO fix index
+                            record.push(new ModifyVarRecord(interpreter.getId(name), value)); 
                             rep.updateElement(interpreter.getId(name), ModificationType.UPDATE, value, 0);
                         } else {
                             GraphicalVar var = new GraphicalVar(name, value, canvasPane, interpreter.getId(name));
@@ -356,7 +346,7 @@ public class duringExecutionController  {
             
                     // previous.addPar(temp);
                     previous.addId(temp);
-                    // previous.setParameters(previous.getParameters()); // Redibuja el nombre con los nuevos parámetros
+                    // previous.setParameters(previous.getParameters()); 
                 }
        
             }
@@ -379,8 +369,6 @@ public class duringExecutionController  {
                         oldValue));
                     rep.updateElement(id, ModificationType.INSERT, value, index + 1);
 
-                    // String name = function.args().get(0).asString();
-                    // int id = interpreter.getVariable(name);
     
                 }
                 else if (f.equals("inserer_liste")){ // id, index, value
@@ -448,16 +436,50 @@ public class duringExecutionController  {
                     rep.increaseX(40);
                     
                     ArrayList<GraphicalObject> ids = new ArrayList<>();
-                    
+                    String type;
+
                     for (int i = 0; i < parsNames.size(); i++){
+                        type = function.args().get(0).type().toString();
+                        AbstractGraphicalObject temp;
                         
-                        GraphicalVar temp = new GraphicalVar(parsNames.get(i),
-                        function.args().get(i).asString() ,
-                        canvasPane, 
-                        // interpreter.getId(function.args().get(i).asString()));
-                        interpreter.getId(parsNames.get(i)));
+                        switch(type){
+                            case "LIST" : 
+                            temp = new GraphicalArray(
+                                parsNames.get(i), 
+                                function.args().get(i).asString().substring(1, function.args().get(i).asString().length() - 1).split(","),
+                                canvasPane, 
+                                interpreter.getId(parsNames.get(i)));
+                                
+                                break;
+                            case "LLIST" : 
+                                temp = new GraphicalLinkedList(
+                                    parsNames.get(i), 
+                                    function.args().get(i).asString().split(","), 
+                                    canvasPane, 
+                                    interpreter.getId(parsNames.get(i)));
+                                break;
+
+                            case "INTEGER" :
+                            case "STRING" :
+                                temp = new GraphicalVar(
+                                    parsNames.get(i), 
+                                    function.args().get(i).asString(),
+                                     canvasPane, interpreter.getId(parsNames.get(i)));
+
+                                
+                                break;
+                            default:
+                                throw new Exception("Unknown type of variable : " + type);
+                        }
                         pars.add(temp);
+                        // GraphicalVar temp = new GraphicalVar(parsNames.get(i),
+                        //     function.args().get(i).asString() ,
+                        //     canvasPane, 
+                        //     interpreter.getId(parsNames.get(i)));
+                        //     pars.add(temp);
+
                         rep.addElement(interpreter.getId(parsNames.get(i)), temp);
+
                         record.push(new CreateRecord(temp.getID(), temp));
                         ids.add(temp);
                     }

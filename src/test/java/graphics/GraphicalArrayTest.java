@@ -3,12 +3,10 @@ package graphics;
 import org.junit.jupiter.api.Test;
 
 import base.JavaFXTestBase;
-import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 class GraphicalArrayTest extends JavaFXTestBase{

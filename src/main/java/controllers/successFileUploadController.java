@@ -73,8 +73,73 @@ public class successFileUploadController {
         maListeChainee <- liste_chainee()
         
             """;
+    public static String code4 =  """
+    fonction fibo(n) {
+    afficher "hello world"
+    si n = 0 {
+        retourner 0   
+    }
+    si n = 1 {
+        retourner 1
+    }
+    retourner fibo(n-1) + fibo(n-2)
+}
+fonction ack(m,n) {
+    si m = 0 {
+        retourner n+1
+    }
+    si n = 0 {
+        retourner ack(m-1, 1)
+    }
+    retourner ack(m-1, ack(m, n-1))
+} 
+
+fonction tri(l) {
+    i <- taille_liste(l)-1
+    tant que i >= 1 {
+        j <- 0
+        tant que j < i {
+            si recuperer_liste(l, j+1) < recuperer_liste(l, j) {
+                x <- recuperer_liste(l, j)
+                y <- recuperer_liste(l, j+1)
+                modifier_liste(l, j, y)
+                modifier_liste(l, j+1, x)
+            }
+            j <- j + 1
+        }
+        i <- i-1
+    }
+}
+
+fonction argmax(l) {
+    n <- taille_liste(l)
+    x <- 0
+    i <- 0
+    tant que i < n {
+        si recuperer_liste(l, i) > recuperer_liste(l, x) {
+            x <- i
+        }
+        i <- i+1
+    }
+    retourner x
+}
+
+x <- [7,8,52,3,4,15]
+tri(x)
+afficher x
+    """;
+          
+    
+    public static String code5 = """
+            fonction bidon(l){
+                afficher(l)
+            }
+            a <- [1,2,3,4]
+            bidon(a)            
+            """;
             
-    public static String code = code1;
+            
+    public static String code = code4;
     // ================================================================================================
 
     public successFileUploadController() {

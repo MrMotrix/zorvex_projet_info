@@ -36,10 +36,11 @@ public class Interpreter {
 
     private static Set<FunctionDeclaration> reservedFunctionList = Set.of(
         new FunctionDeclaration("ajouter_liste", null, List.of("liste", "element")), 
+        new FunctionDeclaration("inserer_liste", null, List.of("liste", "indice", "element")),
         new FunctionDeclaration("supprimer_liste", null, List.of("liste", "indice")),
         new FunctionDeclaration("taille_liste", null, List.of("liste")),
         new FunctionDeclaration("recuperer_liste", null, List.of("liste", "indice")),
-        new FunctionDeclaration("definir_liste", null, List.of("liste", "indice", "valeur"))
+        new FunctionDeclaration("modifier_liste", null, List.of("liste", "indice", "valeur"))
     );
 
     private int currentInstruction = 0;
@@ -73,14 +74,13 @@ public class Interpreter {
                         "si recuperer_liste(l, j+1) < recuperer_liste(l, j) {",
                             "x <- recuperer_liste(l, j)",
                             "y <- recuperer_liste(l, j+1)",
-                            "definir_liste(l, j, y)",
-                            "definir_liste(l, j+1, x)",
+                            "modifier_liste(l, j, y)",
+                            "modifier_liste(l, j+1, x)",
                         "}",
                         "j <- j + 1",
                     "}",
                     "i <- i-1",
                 "}",
-                "retourner l",
             "}",
 
             "fonction argmax(l) {",
@@ -96,12 +96,11 @@ public class Interpreter {
                 "retourner x",
             "}",
 
-            "x <- fibo(1)",
-            "y <- [8, 3, 5, 10, 2, 4, 7, 1]",
-            "afficher argmax(y)",
-            "afficher recuperer_liste(y, argmax(y))",
-            "tri(y)",
-            "afficher y"
+            "x <- [7,85,2,3,4,15]",
+            "inserer_liste(x, 3, 5)",
+            "afficher x",
+            "tri(x)",
+            "afficher x"
             );
         
         Interpreter interpreter = new Interpreter(String.join("\n", program) + "\n");
@@ -174,6 +173,11 @@ public class Interpreter {
             lastReturnValue = ZorvexValue.nullValue();
             return new Function(values, fc.name());
         }
+        else if (fc.name().equals("inserer_liste")) {
+            values.get(0).insert(values.get(1).asInteger(), values.get(2));
+            lastReturnValue = ZorvexValue.nullValue();
+            return new Function(values, fc.name());
+        }
         else if (fc.name().equals("taille_liste")) {
             lastReturnValue = new ZorvexValue(values.get(0).size());
             return new Function(values, fc.name());
@@ -182,7 +186,7 @@ public class Interpreter {
             lastReturnValue = new ZorvexValue(values.get(0).get(values.get(1).asInteger()));
             return new Function(values, fc.name());
         }
-        else if (fc.name().equals("definir_liste")) {
+        else if (fc.name().equals("modifier_liste")) {
             values.get(0).set(values.get(1).asInteger(), values.get(2));
             lastReturnValue = ZorvexValue.nullValue();
             return new Function(values, fc.name());
@@ -197,6 +201,17 @@ public class Interpreter {
     
     public Instruction step() throws RuntimeError {
         try {
+            if (state.hasBlockReachedEnd()) {
+                if (callStack.size() > 0 && callStack.getLast() == state.getCurrentBlock()) {
+                    callStack.removeLast();
+                    stack.removeLast();
+                    lastReturnValue = ZorvexValue.nullValue();
+                }
+
+                state.exitBlock();
+                return null;
+            }
+
             Instruction instruction = state.getCurrentInstruction().instruction();
             if (!state.isEvaluated()) {
                 if (lastReturnValue != null) {
@@ -253,7 +268,7 @@ public class Interpreter {
                 if (callStack.size() > 0 && callStack.getLast() == state.getCurrentBlock()) {
                     callStack.removeLast();
                     stack.removeLast();
-                    // ici il faudrait un espece de NaN
+                    lastReturnValue = ZorvexValue.nullValue();
                 }
 
                 state.exitBlock();

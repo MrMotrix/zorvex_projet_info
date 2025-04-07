@@ -89,6 +89,15 @@ public class ZorvexValue {
         return list.get(index);
     }
 
+    public void insert(int index, ZorvexValue element) throws RuntimeError {
+        if (type != ZorvexType.LIST)
+            throw new RuntimeError(-1, "Cannot remove in" + this + " as it is not a list.");
+        List<ZorvexValue> list = (List<ZorvexValue>)value;
+        if (index >= list.size())
+            throw new RuntimeError(-1, "Index out of bounds");
+        list.add(index, element);
+    }
+
     public int size() throws RuntimeError {
         if (type != ZorvexType.LIST)
             throw new RuntimeError(-1, "Cannot get " + this + "'s size as it is not a list.");

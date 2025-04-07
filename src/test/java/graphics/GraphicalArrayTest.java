@@ -18,7 +18,7 @@ class GraphicalArrayTest extends JavaFXTestBase{
     @BeforeEach
     public void setUp() {
         Pane pane = new Pane(); // Create a new Pane for each test
-        array = new GraphicalArray("myArray", new String[]{"A", "B", "C"}, pane);
+        array = new GraphicalArray("myArray", new String[]{"A", "B", "C"}, pane, 0);
     }
 
     @Test

@@ -9,6 +9,8 @@ import javafx.scene.text.Text;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +32,7 @@ public class GraphicalFunctionDeclarationTest extends JavaFXTestBase{
     @BeforeEach
     public void setUp() {
         pane = new Pane(); // Create a new Pane for each test
-        functionDeclaration = new GraphicalFunctionDeclaration("myFunctionDeclaration",pane, "param1, param2, param3", "var1, var2, var3");
+        functionDeclaration = new GraphicalFunctionDeclaration("myFunctionDeclaration",pane, List.of("param1, param2, param3"), "var1, var2, var3", 0);
     }
 
     @Test
@@ -42,7 +44,7 @@ public class GraphicalFunctionDeclarationTest extends JavaFXTestBase{
 
     @Test
     void testNullVars(){
-        functionDeclaration = new GraphicalFunctionDeclaration("myFunctionDeclaration", pane, "param1, param2, param3", null);
+        functionDeclaration = new GraphicalFunctionDeclaration("myFunctionDeclaration",pane, List.of("param1, param2, param3"), null, 0);
         functionDeclaration.draw(100, 100);
         Text text = (Text) functionDeclaration.getRenderedNodes().get(3);
         assertEquals(text.getText(),"Paramétres : param1, param2, param3");

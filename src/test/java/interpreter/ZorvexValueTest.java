@@ -1,12 +1,14 @@
 package interpreter;
 import org.junit.jupiter.api.Test;
 
+import interpreter.exceptions.RuntimeError;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ZorvexValueTest {
 
     @Test
-    void testIntegerValue() {
+    void testIntegerValue() throws RuntimeError {
         ZorvexValue intValue = new ZorvexValue(269);
 
         assertTrue(intValue.isInteger());
@@ -16,7 +18,7 @@ public class ZorvexValueTest {
     }
 
     @Test
-    void testNumericStringValue() {
+    void testNumericStringValue() throws RuntimeError {
         ZorvexValue stringValue = new ZorvexValue("269");
 
         assertTrue(stringValue.isString());

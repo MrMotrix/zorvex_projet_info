@@ -33,7 +33,7 @@ public class GraphicalVarTest extends JavaFXTestBase{
     public void setUp() {
         Pane pane = new Pane(); // Create a new Pane for each test
         
-        var = new GraphicalVar("x", "5", pane); 
+        var = new GraphicalVar("x", "5", pane, 0); 
         var.draw(0, 0);
     }
 

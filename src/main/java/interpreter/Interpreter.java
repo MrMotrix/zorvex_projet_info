@@ -160,7 +160,10 @@ public class Interpreter {
             newContext.assignVariable(parameters.get(i), value);
             values.add(value);
         }
-
+        
+        if (args.size() >= 1 && args.get(0) instanceof Variable var) 
+            lastReturnValue = new ZorvexValue(var.name());
+        
         if (fc.name().equals("ajouter_liste")) {
             values.get(0).add(values.get(1));
             lastReturnValue = ZorvexValue.nullValue();
@@ -185,6 +188,7 @@ public class Interpreter {
             return new Function(values, fc.name());
         }
 
+        lastReturnValue = null;
         stack.addLast(newContext);
         callStack.addLast(fd.block());
         state.enterBlock(fd.block());

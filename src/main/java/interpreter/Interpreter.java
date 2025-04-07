@@ -97,8 +97,6 @@ public class Interpreter {
             "}",
 
             "x <- [7,85,2,3,4,15]",
-            "inserer_liste(x, 3, 5)",
-            "afficher x",
             "tri(x)",
             "afficher x"
             );
@@ -142,11 +140,11 @@ public class Interpreter {
     private Instruction handleFunctionCall(FunctionCall fc) throws RuntimeError {
 
         if (!functions.containsKey(fc.name())) 
-            throw new RuntimeError(-1, "Function " + fc.name() + " doesn't exist");
+            throw new RuntimeError("Function " + fc.name() + " doesn't exist");
         
         FunctionDeclaration fd = functions.get(fc.name());
         if (fc.args().size() != fd.parameters().size()) 
-            throw new RuntimeError(-1, "Wrong arguments for " + fc.name() + " call, expected " + fd.parameters().size() + " got " + fc.args().size());
+            throw new RuntimeError("Wrong arguments for " + fc.name() + " call, expected " + fd.parameters().size() + " got " + fc.args().size());
         
         Context currentContext = stack.getLast();
         Context newContext = new Context();
@@ -200,85 +198,79 @@ public class Interpreter {
     }
     
     public Instruction step() throws RuntimeError {
-        try {
-            if (state.hasBlockReachedEnd()) {
-                if (callStack.size() > 0 && callStack.getLast() == state.getCurrentBlock()) {
-                    callStack.removeLast();
-                    stack.removeLast();
-                    lastReturnValue = ZorvexValue.nullValue();
-                }
+        if (state.hasBlockReachedEnd()) {
+            if (callStack.size() > 0 && callStack.getLast() == state.getCurrentBlock()) {
+                callStack.removeLast();
+                stack.removeLast();
+                lastReturnValue = ZorvexValue.nullValue();
+            }
 
-                state.exitBlock();
+            state.exitBlock();
+            return null;
+        }
+
+        Instruction instruction = state.getCurrentInstruction().instruction();
+        if (!state.isEvaluated()) {
+            if (lastReturnValue != null) {
+                state.serveFunctionCall(lastReturnValue);
+                lastReturnValue = null;
                 return null;
             }
 
-            Instruction instruction = state.getCurrentInstruction().instruction();
-            if (!state.isEvaluated()) {
-                if (lastReturnValue != null) {
-                    state.serveFunctionCall(lastReturnValue);
-                    lastReturnValue = null;
-                    return null;
-                }
-
-                FunctionCall fc = state.getNextFunctionCall();
-                return handleFunctionCall(fc);
-            }   
-            ZorvexValue result = state.result(stack.getLast());        
-            switch (instruction) {
-                case Si si:
+            FunctionCall fc = state.getNextFunctionCall();
+            return handleFunctionCall(fc);
+        }   
+        ZorvexValue result = state.result(stack.getLast());        
+        switch (instruction) {
+            case Si si:
+                state.step();
+                if (result.asInteger() != 0) 
+                    state.enterBlock(si.block());
+                return instruction;
+            case TantQue tantQue:
+                if (result.asInteger() != 0) 
+                    state.enterBlock(tantQue.block());
+                else
                     state.step();
-                    if (result.asInteger() != 0) 
-                        state.enterBlock(si.block());
-                    return instruction;
-                case TantQue tantQue:
-                    if (result.asInteger() != 0) 
-                        state.enterBlock(tantQue.block());
-                    else
-                        state.step();
-                    return instruction;
-                case FunctionDeclaration fd:
-                    if (functions.containsKey(fd.name()) || reservedFunctionList.contains(fd.name()))
-                        throw new RuntimeError(-1, "Function "+fd.name()+" is already defined.");
-                    functions.put(fd.name(), fd);
-                    state.step();
-                    break;
-                case Retourner retourner:
-                    lastReturnValue = state.result(stack.getLast());
-                    retourner.setResult(lastReturnValue);
-                    while (state.getCurrentBlock() != callStack.getLast())
-                        state.exitBlock();
+                return instruction;
+            case FunctionDeclaration fd:
+                if (functions.containsKey(fd.name()) || reservedFunctionList.contains(fd.name()))
+                    throw new RuntimeError("Function "+fd.name()+" is already defined.");
+                functions.put(fd.name(), fd);
+                state.step();
+                break;
+            case Retourner retourner:
+                lastReturnValue = state.result(stack.getLast());
+                retourner.setResult(lastReturnValue);
+                while (state.getCurrentBlock() != callStack.getLast())
                     state.exitBlock();
-                    stack.removeLast();
-                    callStack.removeLast();
-                    break;
-                case Assigner assigner:
-                    assigner.serveResult(result);
-                    instruction.interpret(stack.getLast());
-                    state.step();
-                    break;
-                case Afficher afficher:
-                    afficher.setResult(result);
-                default:
-                    instruction.interpret(stack.getLast());
-                    state.step();
-                    break;
-            }
-
-            if (state.hasBlockReachedEnd()) {
-                if (callStack.size() > 0 && callStack.getLast() == state.getCurrentBlock()) {
-                    callStack.removeLast();
-                    stack.removeLast();
-                    lastReturnValue = ZorvexValue.nullValue();
-                }
-
                 state.exitBlock();
+                stack.removeLast();
+                callStack.removeLast();
+                break;
+            case Assigner assigner:
+                assigner.serveResult(result);
+                instruction.interpret(stack.getLast());
+                state.step();
+                break;
+            case Afficher afficher:
+                afficher.setResult(result);
+            default:
+                instruction.interpret(stack.getLast());
+                state.step();
+                break;
+        }
+
+        if (state.hasBlockReachedEnd()) {
+            if (callStack.size() > 0 && callStack.getLast() == state.getCurrentBlock()) {
+                callStack.removeLast();
+                stack.removeLast();
+                lastReturnValue = ZorvexValue.nullValue();
             }
-            
-            return instruction;
+
+            state.exitBlock();
         }
-        catch (RuntimeError error) {
-            error.setLineNumber(getCurrentLine());
-            throw error;
-        }
+        
+        return instruction;
     }
 }

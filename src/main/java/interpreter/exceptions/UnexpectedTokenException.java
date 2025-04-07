@@ -23,4 +23,9 @@ public class UnexpectedTokenException extends SyntaxErrorException {
     public String toString() {
         return  "Unexpected token on line " + lineNumber + " got " + got + (this.expected != null ? (" expected " + expected) : "") ;
     }
+
+    @Override
+    public String getMessage() {
+        return toString();
+    }
 }

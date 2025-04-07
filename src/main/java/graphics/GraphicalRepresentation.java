@@ -22,6 +22,7 @@ public class GraphicalRepresentation {
         this.elements = new HashMap<>();
         this.graphicalRenderOrderIds = new ArrayList<>();
         this.graphicalFCOrder = new Stack<>();
+        this.functions = new HashMap<>();
         reinitializePositioningValues();
     }
 
@@ -82,7 +83,7 @@ public class GraphicalRepresentation {
         else if(element instanceof GraphicalFunctionCall){
             currentY +=50;
         }
-        else{
+        else if (element != null){
             currentY += spaceBetweenPlots;
         }
     }
@@ -126,6 +127,9 @@ public class GraphicalRepresentation {
             obj.removeFromPane();
         }
         elements.clear();
+        graphicalRenderOrderIds.clear();
+        graphicalFCOrder.clear();
+        functions.clear();
         this.reinitializePositioningValues();
     }
 

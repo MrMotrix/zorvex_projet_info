@@ -22,4 +22,8 @@ public class ExecutionStack {
     public Stack<ExecutionRecord> getHistory() {
         return history;
     }
+
+    public void clear(){
+        history.clear();
+    }
 }

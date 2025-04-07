@@ -43,7 +43,7 @@ public final class GraphicalArray extends AbstractGraphicalObject implements Ite
         double cellHeight = HEIGHT_ARRAY_BOX;
         double cellWidth = WIDTH_ARRAY_BOX;
         
-        Text title = new Text(name); // name of the array
+        Text title = new Text( "(Tableau) "+ name); // name of the array
         title.setX(x);
         title.setY(y-10); // a little bit higher than the first cell
         

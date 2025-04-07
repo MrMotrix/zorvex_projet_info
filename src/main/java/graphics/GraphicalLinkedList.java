@@ -43,7 +43,7 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject implement
         // double SPACING = 20;
 
         // Draw the list title
-        Text title = new Text(name);
+        Text title = new Text("(Liste chaînée) " + name);
         title.setX(x);
         title.setY(y - 10);
         pane.getChildren().add(title);

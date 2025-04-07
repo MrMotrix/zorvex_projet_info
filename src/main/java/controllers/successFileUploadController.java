@@ -235,14 +235,14 @@ public class successFileUploadController {
                 // if disabled
                 if (bkButton.getStyle().contains("black")) {
                     //set style
-                    bkButton.setStyle("-fx-background-color: red; -fx-background-radius: 50%;");
+                    bkButton.setStyle("-fx-background-color: red; -fx-background-radius: 50%;-fx-text-fill: red;");
                     // add button to set of bkpoints
                     mainController.bkpoints.add(Integer.parseInt(bkButton.getText()));
                 
                 // if enabled
                 } else {
                     //revert style
-                    bkButton.setStyle("-fx-background-color: black; -fx-background-radius: 50%;");
+                    bkButton.setStyle("-fx-background-color: black; -fx-background-radius: 50%;-fx-text-fill: black;");
                     // remove
                     mainController.bkpoints.remove(Integer.parseInt(bkButton.getText()));
                 }

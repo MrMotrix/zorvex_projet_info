@@ -109,9 +109,12 @@ public final class GraphicalFunctionCall extends AbstractGraphicalObject {
     @Override
     public void removeFromPane() {
         super.removeFromPane();
-        parameters.forEach(GraphicalObject::removeFromPane);
-        ids.forEach(GraphicalObject::removeFromPane);
+        removeInternal();
         
     }
 
+    public void removeInternal(){
+        parameters.forEach(GraphicalObject::removeFromPane);
+        ids.forEach(GraphicalObject::removeFromPane);
+    }
 }

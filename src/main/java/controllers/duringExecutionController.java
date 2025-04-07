@@ -36,6 +36,7 @@ import javafx.scene.layout.VBox;
 
 import graphics.GraphicalObject;
 import graphics.GraphicalObjectIDGenerator;
+import graphics.GraphicalPile;
 public class duringExecutionController  {
 
     // ======================== FXML ========================
@@ -267,14 +268,29 @@ public class duringExecutionController  {
         try {    
             // get the affected variable from the interpreter
             Instruction inst = interpreter.step();
-
-            if (inst instanceof Assigner assigner) {    
+            
+            // if (inst == null) return;
+             if (inst instanceof Assigner assigner) {    
                 
                 // switch(assigner.()){
 
                 // }
                 String name = assigner.variableName(); // get the name of the variable
-                if (name.equals("")) return;
+                if (name.equals("")) {
+                    try{
+                        // we try to get the current line of the interpreter, it will raise an exception if there is no more lines to read, i.e. we have just executed the last line of code
+                        highlightCurrentLine(interpreter.getCurrentLine()-1);
+            
+                    } catch(Exception e){
+                        highlightCurrentLine(-1);
+                        sendMessageToConsole("Fin du fichier atteint");
+                        // Disable buttons because we are in the end of the file
+                        continueButton.setDisable(true);
+                        nextLineButton.setDisable(true);
+                        return;
+                    }
+                    return;
+                }; // anonuymous variable, nothing to display
                 String value = interpreter.getVariable(name).toString(); // get the value of the variable
                 String type = interpreter.getVariable(name).type().toString(); // get the type of the variable
                 value = value.substring(value.indexOf(" ") + 1); // remove the type of variable
@@ -286,8 +302,19 @@ public class duringExecutionController  {
                             rep.updateElement(interpreter.getId(name), ModificationType.UPDATE, value, 0);
                         } else {
                             GraphicalArray array = new GraphicalArray(name, value.split(","), canvasPane, interpreter.getId(name));
+                            // GraphicalPile array = new GraphicalPile(name, List.of(value.split(",")), canvasPane, interpreter.getId(name));
                             rep.addElement(interpreter.getId(name), array );
                             record.push(new CreateRecord(array.getID(), array));
+                        }
+                        break;
+                    case "LLIST" : 
+                        if (rep.getElements().containsKey(interpreter.getId(name))) { // if the variable already exists
+                            record.push(new IterableModifyRecord(interpreter.getId(name), ModificationType.UPDATE,0, value)); // TODO fix index
+                            rep.updateElement(interpreter.getId(name), ModificationType.UPDATE, value, 0);
+                        } else {
+                            GraphicalLinkedList llist = new GraphicalLinkedList(name, value.split(","), canvasPane, interpreter.getId(name));
+                            rep.addElement(interpreter.getId(name), llist );
+                            record.push(new CreateRecord(llist.getID(), llist));
                         }
                         break;
                     case "STRING":
@@ -360,12 +387,23 @@ public class duringExecutionController  {
                 GraphicalVar temp = new GraphicalVar("Renvoyer", returnValue, canvasPane, GraphicalObjectIDGenerator.getNextId());
                 rep.addElement(temp.getID(), temp);
                 record.push(new CreateRecord(temp.getID(), temp));
+                
+
+                sendMessageToConsole(rep.fcalls().toString());
+                
+
+                lastCalledFunctionID = rep.fcalls().pop().intValue();
+                GraphicalFunctionCall fcall = (GraphicalFunctionCall)(rep.getElement(lastCalledFunctionID));
+
+                fcall.getParameters().forEach(m -> rep.deleteElement(((AbstractGraphicalObject)m).getID())); 
+                fcall.getIds().forEach(m -> rep.deleteElement(((AbstractGraphicalObject)m).getID())); 
+
+                sendMessageToConsole(fcall.toString());
 
                 // returnValue.getParameters().forEache(m -> rep.deleteElement(m.getID()));
                 
             
-                
-
+        
                 // lastCalledFunctionID = rep.fcalls().pop().intValue();
                 
                 // GraphicalFunctionCall fcall = (GraphicalFunctionCall)(rep.getElement(lastCalledFunctionID));
@@ -383,7 +421,7 @@ public class duringExecutionController  {
                     
                 
                 // fcall.addId(temp.getID());
-                rep.increaseX(-40);
+                // rep.increaseX(-40);
 
                 
             }
@@ -459,22 +497,23 @@ public class duringExecutionController  {
                     
                     for (int i = 0; i < parsNames.size(); i++){
                         
-                    GraphicalVar temp = new GraphicalVar(parsNames.get(i),
-                    function.args().get(i).asString() ,
-                    canvasPane, 
-                    // interpreter.getId(function.args().get(i).asString()));
-                    interpreter.getId(parsNames.get(i)));
-                    pars.add(temp);
-                    rep.addElement(interpreter.getId(parsNames.get(i)), temp);
-                    record.push(new CreateRecord(temp.getID(), temp));
-                    ids.add(temp);
+                        GraphicalVar temp = new GraphicalVar(parsNames.get(i),
+                        function.args().get(i).asString() ,
+                        canvasPane, 
+                        // interpreter.getId(function.args().get(i).asString()));
+                        interpreter.getId(parsNames.get(i)));
+                        pars.add(temp);
+                        rep.addElement(interpreter.getId(parsNames.get(i)), temp);
+                        record.push(new CreateRecord(temp.getID(), temp));
+                        ids.add(temp);
+                    }
+
+                    fc.setParameters(pars);
+                    fc.setIds(ids);
+                    rep.fcalls().push(fc.getID());
                 }
-                fc.setParameters(pars);
-                fc.setIds(ids);
-                rep.fcalls().push(fc.getID());
-            
-            }
-            else {throw new Exception("Mismatch between given arguments and function arguments");}
+                
+                else {throw new Exception("Mismatch between given arguments and function arguments");}
                 // lastCalledFunctionID = fc.getID();
             }
 
@@ -530,7 +569,11 @@ public class duringExecutionController  {
         highlightCurrentLine(-1); 
         // restart checker of first line breakpoint
         firstLineRead = false;
+        lastCalledFunctionID = 0;
 
+
+        record.clear(); 
+        
         //reset interpreter
         try {
             interpreter= new Interpreter(contentString);
@@ -543,6 +586,7 @@ public class duringExecutionController  {
         continueButton.setDisable(false);
         nextLineButton.setDisable(false);
         //restart execution
+
         continueExecution(event);
 
     }

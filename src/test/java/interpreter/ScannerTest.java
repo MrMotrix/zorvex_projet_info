@@ -1,91 +1,133 @@
 package interpreter;
-import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import interpreter.exceptions.SyntaxErrorException;
 
 import java.util.List;
-/* 
+
 public class ScannerTest {
 
     @Test
-    void testStings() {
-        Scanner scanner = new Scanner("\"hello\" \"world\\\"some\\\"thing\"");
-        List<Token> tokens = scanner.tokenize(input);
-
-        assertEquals(TokenType.STRING, tokens.get(0).getType());
-        assertEquals("hello", tokens.get(0).getLexeme());
-
-        assertEquals(TokenType.STRING, tokens.get(1).getType());
-        assertEquals("world\"some\"thing", tokens.get(1).getLexeme());
+    public void testTokenizeAffichage() {
+        String code = "afficher 5";
+        try {
+            List<Token> tokens = Scanner.tokenize(code);
+            assertEquals(2, tokens.size(), "Le nombre de tokens devrait être 2");
+            assertToken(tokens.get(0), TokenType.AFFICHER, "afficher");
+            assertToken(tokens.get(1), TokenType.NOMBRE, "5");
+        } catch (SyntaxErrorException e) {
+            fail("Erreur de syntaxe : " + e.getMessage());
+        }
     }
 
     @Test
-    void testNumbers() {
-        Scanner scanner = new Scanner("123 3.14");
-        List<Token> tokens = scanner.tokenize(input);
-
-        assertEquals(TokenType.NUMBER, tokens.get(0).getType());
-        assertEquals(123, tokens.get(0).getLexeme());
-
-        assertEquals(TokenType.NUMBER, tokens.get(1).getType());
-        assertEquals(3.14, tokens.get(1).getLexeme());
-    }
-
-
-    @Test
-    void testKeywords() {
-        Scanner scanner = new Scanner("if else while return");
-        List<Token> tokens = scanner.tokenize(input);
-
-        assertEquals(TokenType.IF, tokens.get(0).getType());
-        assertEquals(TokenType.ELSE, tokens.get(1).getType());
-        assertEquals(TokenType.WHILE, tokens.get(2).getType());
-        assertEquals(TokenType.RETURN, tokens.get(3).getType());
+    public void testTokenizeAssignation() {
+        String code = "n <- 10";
+        try {
+            List<Token> tokens = Scanner.tokenize(code);
+            assertEquals(3, tokens.size(), "Le nombre de tokens devrait être 3");
+            assertToken(tokens.get(0), TokenType.IDENTIFIANT, "n");
+            assertToken(tokens.get(1), TokenType.ASSIGNER, "<-");
+            assertToken(tokens.get(2), TokenType.NOMBRE, "10");
+        } catch (SyntaxErrorException e) {
+            fail("Erreur de syntaxe : " + e.getMessage());
+        }
     }
 
     @Test
-    void testSymbolsAndOperators() {
-        Scanner scanner = new Scanner("= + - * / == != < <= > >= ( ) { } ; ,");
-        List<Token> tokens = scanner.tokenize(input);
-
-        assertEquals(TokenType.ASSIGN, tokens.get(0).getType());
-        assertEquals(TokenType.PLUS, tokens.get(1).getType());
-        assertEquals(TokenType.MINUS, tokens.get(2).getType());
-        assertEquals(TokenType.MULTIPLY, tokens.get(3).getType());
-        assertEquals(TokenType.DIVIDE, tokens.get(4).getType());
-        assertEquals(TokenType.EQUAL, tokens.get(5).getType());
-        assertEquals(TokenType.NOT_EQUAL, tokens.get(6).getType());
-        assertEquals(TokenType.LESS, tokens.get(7).getType());
-        assertEquals(TokenType.LESS_EQUAL, tokens.get(8).getType());
-        assertEquals(TokenType.GREATER, tokens.get(9).getType());
-        assertEquals(TokenType.GREATER_EQUAL, tokens.get(10).getType());
-        assertEquals(TokenType.LEFT_PAREN, tokens.get(11).getType());
-        assertEquals(TokenType.RIGHT_PAREN, tokens.get(12).getType());
-        assertEquals(TokenType.LEFT_BRACE, tokens.get(13).getType());
-        assertEquals(TokenType.RIGHT_BRACE, tokens.get(14).getType());
-        assertEquals(TokenType.SEMICOLON, tokens.get(15).getType());
-        assertEquals(TokenType.COMMA, tokens.get(16).getType());
+    public void testTokenizeConditionIf() {
+        String code = "si n > 5 { afficher \"n est plus grand que 5\" }";
+        try {
+            List<Token> tokens = Scanner.tokenize(code);
+            assertEquals(8, tokens.size(), "Le nombre de tokens devrait être 8");
+            assertToken(tokens.get(0), TokenType.SI, "si");
+            assertToken(tokens.get(1), TokenType.IDENTIFIANT, "n");
+            assertToken(tokens.get(2), TokenType.PLUS_GRAND, ">");
+            assertToken(tokens.get(3), TokenType.NOMBRE, "5");
+            assertToken(tokens.get(4), TokenType.BRACKET_OUVRANT, "{");
+            assertToken(tokens.get(5), TokenType.AFFICHER, "afficher");
+            assertToken(tokens.get(6), TokenType.CHAINE, "n est plus grand que 5");
+            assertToken(tokens.get(7), TokenType.BRACKET_FERMANT, "}");
+        } catch (SyntaxErrorException e) {
+            fail("Erreur de syntaxe : " + e.getMessage());
+        }
     }
 
     @Test
-    void testIdentifiers(){
-        Scanner scanner = new Scanner("variable x1 _bar");
-        List<Token> tokens = scanner.tokenize(input);
-
-        assertEquals(TokenType.IDENTIFIER, tokens.get(0).getType());
-        assertEquals("variable", tokens.get(0).getLexeme());
-
-        assertEquals(TokenType.IDENTIFIER, tokens.get(1).getType());
-        assertEquals("x1", tokens.get(1).getLexeme());
-
-        assertEquals(TokenType.IDENTIFIER, tokens.get(2).getType());
-        assertEquals("_bar", tokens.get(2).getLexeme());
+    public void testTokenizeWhileLoop() {
+        String code = "tant que n < 20 { n <- n + 1 }";
+        try {
+            List<Token> tokens = Scanner.tokenize(code);
+            assertEquals(11, tokens.size(), "Le nombre de tokens devrait être 11");
+            assertToken(tokens.get(0), TokenType.TANT_QUE, "tant que");
+            assertToken(tokens.get(1), TokenType.IDENTIFIANT, "n");
+            assertToken(tokens.get(2), TokenType.PLUS_PETIT, "<");
+            assertToken(tokens.get(3), TokenType.NOMBRE, "20");
+            assertToken(tokens.get(4), TokenType.BRACKET_OUVRANT, "{");
+            assertToken(tokens.get(5), TokenType.IDENTIFIANT, "n");
+            assertToken(tokens.get(6), TokenType.ASSIGNER, "<-");
+            assertToken(tokens.get(7), TokenType.IDENTIFIANT, "n");
+            assertToken(tokens.get(8), TokenType.PLUS, "+");
+        } catch (SyntaxErrorException e) {
+            fail("Erreur de syntaxe : " + e.getMessage());
+        }
     }
-    
 
-    // ici pas mal de choses peuvent mal se passer clairement
-    // faut faire attention avec les string, les identifiants, les espaces et autres trucs du genre
-    // les nombres aussi c'est important
+    @Test
+    public void testTokenizeExpression() {
+        String code = "a <- (b + 2) * (c - 3)";
+        try {
+            List<Token> tokens = Scanner.tokenize(code);
+            assertEquals(13, tokens.size(), "Le nombre de tokens devrait être 13");
+
+            assertToken(tokens.get(0), TokenType.IDENTIFIANT, "a");
+            assertToken(tokens.get(1), TokenType.ASSIGNER, "<-");
+            assertToken(tokens.get(2), TokenType.PARENTHESE_GAUCHE, "(");
+            assertToken(tokens.get(3), TokenType.IDENTIFIANT, "b");
+            assertToken(tokens.get(4), TokenType.PLUS, "+");
+            assertToken(tokens.get(5), TokenType.NOMBRE, "2");
+            assertToken(tokens.get(6), TokenType.PARENTHESE_DROIT, ")");
+            assertToken(tokens.get(7), TokenType.FOIS, "*");
+            assertToken(tokens.get(8), TokenType.PARENTHESE_GAUCHE, "(");
+            assertToken(tokens.get(9), TokenType.IDENTIFIANT, "c");
+            assertToken(tokens.get(10), TokenType.MOINS, "-");
+            assertToken(tokens.get(11), TokenType.NOMBRE, "3");
+            assertToken(tokens.get(12), TokenType.PARENTHESE_DROIT, ")");
+        } catch (SyntaxErrorException e) {
+            fail("Erreur de syntaxe : " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testInvalidSyntax() {
+        String code = "si x { afficher 5 }"; // Syntaxe invalide (car condition manquante)
+
+        try {
+            List<Token> tokens = Scanner.tokenize(code);
+            System.out.println("Tokens générés : " + tokens);
+        } catch (SyntaxErrorException e) {
+            System.out.println("Message d'erreur : " + e.getMessage());
+            assertTrue(e.getMessage().contains("Erreur de syntaxe"));
+        }
+    }
+
+    @Test
+    public void testMissingParenthesis() {
+        String code = "si (x > 5 { afficher 5 }"; // Parenthèse droite manquante
+
+        try {
+            List<Token> tokens = Scanner.tokenize(code);
+        } catch (SyntaxErrorException e) {
+            assertTrue(e.getMessage().contains("Parenthèse fermante manquante"));
+        }
+    }
+
+
+    // Méthode pour vérifier que le token correspond au type attendu
+    private void assertToken(Token token, TokenType expectedType, String expectedLexeme) {
+        assertEquals(expectedType, token.type(), "Type de token incorrect");
+        assertEquals(expectedLexeme, token.lexeme(), "Lexème de token incorrect");
+    }
 }
 
-*/

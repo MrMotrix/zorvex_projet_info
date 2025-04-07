@@ -41,10 +41,6 @@ public class successFileUploadController {
     
     public static String code1 =  """
     x <- [2, "coucou ca", 3]
-    ajouter_liste(x, 4)
-    inserer_liste(x, 1, "insertion")
-    supprimer_liste(x, 2)
-    recuperer_liste(x, 2)
     modifier_liste(x, 1, "modification")
     taille <- taille_liste(x)
     fonction fibo(n) {

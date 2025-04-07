@@ -330,40 +330,6 @@ public class duringExecutionController  {
                         }
                 }   
                 
-
-                    
-
-                // add the variable to the graphical representation or check if it already exists and update it
-
-                // } else { 
-                    // if we are creating a variable
-                    // TODO : this is the switch case that should handle the tupe of assignation
-                    // AbstractGraphicalObject thisIsTheTypeOfAssignationReturned;
-                    // switch (thisIsTheTypeOfAssignationReturned){
-                    //     case GraphicalArray ARRAY -> {
-                    //         GraphicalArray array = new GraphicalArray(var, new String[]{value}, canvasPane);
-                    //         rep.addElement(var, array);
-                    //         record.push(new CreateRecord(var, array));
-                    //     }
-                    //     case GraphicalLinkedList LINKEDLIST -> {
-                    //         GraphicalLinkedList linkedlist = new GraphicalLinkedList(var, new String[]{value}, canvasPane);
-                    //         rep.addElement(var, linkedlist);
-                    //         record.push(new CreateRecord(var, linkedlist));
-                    //     }
-                    //     case GraphicalVar VARIABLE -> {
-                    //         GraphicalVar variable = GraphicalVar(var, value, canvasPane);
-                    //         rep.addElement(var, variable);
-                    //         record.push(new CreateRecord(var, variable));
-                    //     }
-                    //     default -> {sendMessageToConsole("Un type de retour est erronnee");}
-                    // }
-                        
-                        // GraphicalVar temp = new GraphicalVar(name, value, canvasPane, interpreter.getId(name));
-                        // rep.addElement(interpreter.getId(var), temp );
-                        // record.push(new CreateRecord(temp.getID(), temp));
-                        // ArrayList<GraphicalObject> tempA = new ArrayList<>();
-                        // tempA.add(temp);
-                
             }
             else if (inst instanceof Afficher afficher) {
                 sendMessageToConsole(afficher.result().asString());
@@ -411,10 +377,13 @@ public class duringExecutionController  {
                         ModificationType.INSERT, 
                         index,
                         oldValue));
-                    rep.updateElement(id, ModificationType.INSERT, value, index);
+                    rep.updateElement(id, ModificationType.INSERT, value, index + 1);
+
+                    // String name = function.args().get(0).asString();
+                    // int id = interpreter.getVariable(name);
     
                 }
-                if (f.equals("inserer_liste")){ // id, index, value
+                else if (f.equals("inserer_liste")){ // id, index, value
 
                     int id = Integer.parseInt(function.args().get(0).asString());
                     int index = Integer.parseInt(function.args().get(1).asString());
@@ -433,10 +402,6 @@ public class duringExecutionController  {
                     int index = Integer.parseInt(function.args().get(1).asString());
                     
                     String oldValue = ((IterableGraphicalObject) rep.getElement(id)).getValues()[index];
-                    record.push(new IterableModifyRecord(id, 
-                        ModificationType.INSERT, 
-                        index,
-                        oldValue));
                     
                     // rep.updateElement(interpreter.getId("x"), ModificationType.REMOVE,"0" , 0);
                     
@@ -453,7 +418,6 @@ public class duringExecutionController  {
                     // int id = Integer.parseInt(function.args().get(0).asString());
                     // int index = Integer.parseInt(function.args().get(1).asString());
                     
-                    
                     // String value = ((IterableGraphicalObject) rep.getElement(id)).getValues()[index];
 
     
@@ -463,7 +427,16 @@ public class duringExecutionController  {
 
                 } else if(f.equals("modifier_liste")){ // id, index, newValue
 
+                    int id = Integer.parseInt(function.args().get(0).asString());
+                    int index = Integer.parseInt(function.args().get(1).asString());
+                    String value = function.args().get(2).asString();
 
+                    String oldValue = ((IterableGraphicalObject) rep.getElement(id)).getValues()[index];
+                    record.push(new IterableModifyRecord(id, 
+                        ModificationType.UPDATE, 
+                        index,
+                        oldValue));
+                    rep.updateElement(id, ModificationType.UPDATE, value, index);
 
                 } else if (rep.getFunction(f) instanceof GraphicalFunctionDeclaration fd){
                     parsNames = fd.getParameters();

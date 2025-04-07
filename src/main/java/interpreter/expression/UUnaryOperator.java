@@ -18,9 +18,9 @@ public class UUnaryOperator implements UnaryOperator {
     @Override
     public ZorvexValue apply(ZorvexValue obj) throws RuntimeError {
         if (!obj.isInteger())
-            throw new UnsupportedOperationError(-1, obj, null, operation.type());
+            throw new UnsupportedOperationError(obj, null, operation.type());
         if (operation.type() != TokenType.MOINS)
-            throw new UnsupportedOperationError(-1, obj, null, operation.type());
+            throw new UnsupportedOperationError(obj, null, operation.type());
         return new ZorvexValue(-(obj.asInteger()));
     }
 

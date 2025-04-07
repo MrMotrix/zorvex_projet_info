@@ -14,4 +14,9 @@ public class ExpectedCharacterNotFound extends SyntaxErrorException {
     public String toString() {
         return "Expected character on line " + lineNumber + ": " + expectedCharacter + " not found"; 
     }
+
+    @Override
+    public String getMessage() {
+        return toString();
+    }
 }

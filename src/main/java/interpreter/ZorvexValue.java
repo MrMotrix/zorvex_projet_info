@@ -49,58 +49,58 @@ public class ZorvexValue {
             return (int)value;
         if (isString())
             return Integer.valueOf((String)value);
-        throw new RuntimeError(-1, "Cannot convert " + this + " to integer");
+        throw new RuntimeError("Cannot convert " + this + " to integer");
     }
 
     public void add(ZorvexValue element) throws RuntimeError {
         if (type != ZorvexType.LIST)
-            throw new RuntimeError(-1, "Cannot add to" + this + " as it is not a list.");
+            throw new RuntimeError("Cannot add to" + this + " as it is not a list.");
         if (element.type == ZorvexType.LIST)
-            throw new RuntimeError(-1, "List of lists aren't supported yet.");
+            throw new RuntimeError("List of lists aren't supported yet.");
         ((List<ZorvexValue>)value).add(element);
     }
 
     public void set(int index, ZorvexValue element) throws RuntimeError {
         if (type != ZorvexType.LIST)
-            throw new RuntimeError(-1, "Cannot set in" + this + " as it is not a list.");
+            throw new RuntimeError("Cannot set in" + this + " as it is not a list.");
         if (element.type == ZorvexType.LIST)
-            throw new RuntimeError(-1, "List of lists aren't supported yet.");
+            throw new RuntimeError("List of lists aren't supported yet.");
         List<ZorvexValue> list = (List<ZorvexValue>)value;
         if (index >= list.size())
-            throw new RuntimeError(-1, "Index out of bounds");
+            throw new RuntimeError("Index out of bounds");
         ((List<ZorvexValue>)value).set(index, element);
     }
 
     public void remove(int index) throws RuntimeError {
         if (type != ZorvexType.LIST)
-            throw new RuntimeError(-1, "Cannot remove in" + this + " as it is not a list.");
+            throw new RuntimeError("Cannot remove in" + this + " as it is not a list.");
         List<ZorvexValue> list = (List<ZorvexValue>)value;
         if (index >= list.size())
-            throw new RuntimeError(-1, "Index out of bounds");
+            throw new RuntimeError("Index out of bounds");
         ((List<ZorvexValue>)value).remove(index);
     }
 
     public ZorvexValue get(int index) throws RuntimeError {
         if (type != ZorvexType.LIST)
-            throw new RuntimeError(-1, "Cannot remove in" + this + " as it is not a list.");
+            throw new RuntimeError("Cannot remove in" + this + " as it is not a list.");
         List<ZorvexValue> list = (List<ZorvexValue>)value;
         if (index >= list.size())
-            throw new RuntimeError(-1, "Index out of bounds");
+            throw new RuntimeError("Index out of bounds");
         return list.get(index);
     }
 
     public void insert(int index, ZorvexValue element) throws RuntimeError {
         if (type != ZorvexType.LIST)
-            throw new RuntimeError(-1, "Cannot remove in" + this + " as it is not a list.");
+            throw new RuntimeError("Cannot remove in" + this + " as it is not a list.");
         List<ZorvexValue> list = (List<ZorvexValue>)value;
         if (index >= list.size())
-            throw new RuntimeError(-1, "Index out of bounds");
+            throw new RuntimeError("Index out of bounds");
         list.add(index, element);
     }
 
     public int size() throws RuntimeError {
         if (type != ZorvexType.LIST)
-            throw new RuntimeError(-1, "Cannot get " + this + "'s size as it is not a list.");
+            throw new RuntimeError("Cannot get " + this + "'s size as it is not a list.");
         List<ZorvexValue> list = (List<ZorvexValue>)value;
         return list.size();
     }

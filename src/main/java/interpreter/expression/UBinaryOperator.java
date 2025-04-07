@@ -29,15 +29,15 @@ public class UBinaryOperator implements BinaryOperator {
         
         if (obj1.isString()) {
             if (operation.type() != TokenType.PLUS)
-                throw new UnsupportedOperationError(-1, obj1, obj2, operation.type());
+                throw new UnsupportedOperationError(obj1, obj2, operation.type());
             return new ZorvexValue(obj1.asString() + obj2.asString());
         } 
         
         if (!obj1.isInteger()) 
-            throw new UnexpectedTypeException(-1, obj1, ZorvexType.INTEGER);
+            throw new UnexpectedTypeException(obj1, ZorvexType.INTEGER);
         
         if (!obj2.isInteger())
-            throw new UnexpectedTypeException(-1, obj1, ZorvexType.INTEGER);
+            throw new UnexpectedTypeException(obj1, ZorvexType.INTEGER);
 
 
         return switch (operation.type()) {

@@ -9,7 +9,7 @@ public enum TokenType {
     PLUS("+"), MOINS("-"), FOIS("*"), DIVISE("/"), EGAL("="), PLUS_GRAND(">"),
     PLUS_PETIT("<"), GRAND_EGAL(">="), PETIT_EGAL("<="), NON("!"), DIFFERENT("!="),
     ASSIGNER("<-"), PARENTHESE_GAUCHE("("), PARENTHESE_DROIT(")"), ET("et"), OU("ou"),
-    SI("si"), POUR("pour"), RETOURNER("retourner"), AFFICHER("afficher"), TANT_QUE("tant que"),
+    SINON("sinon"), SI("si"), POUR("pour"), RETOURNER("retourner"), AFFICHER("afficher"), TANT_QUE("tant que"),
     VRAI("vrai"), FAUX("faux"), ENDL("\n"), BRACKET_OUVRANT("{"), BRACKET_FERMANT("}"),
     VIRGULE(","), FONCTION("fonction"), CROCHET_OUVRANT("["), CROCHET_FERMANT("]"),
     NOMBRE(),

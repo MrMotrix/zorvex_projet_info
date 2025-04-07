@@ -21,19 +21,43 @@ public abstract sealed class AbstractGraphicalObject implements GraphicalObject 
     protected final int id;
 
     public final Color COLOR_ARRAY_BOX = Color.web("#646B3C"); // #646B3C
+    public final String COLOR_ARRAY_TEXT = "#ffffff"; // #ffffff
+
+
     public final Color COLOR_VARIABLE_BOX = Color.web("#5E7B9D"); // #5E7B9D
+    public final String COLOR_VARIABLE_TEXT = "#ffffff"; // #ffffff
+
+
     public final Color COLOR_LLIST_CONTENT_BOX = Color.web("#CAEB0E"); // #CAEB0E
     public final Color COLOR_LLIST_POINTER_BOX = Color.web("#96423B"); // #96423B
-    public final Color COLOR_TITLE_BOX_FUNCTION = Color.DARKBLUE; // #00008B
-    public final Color COLOR_CONTENT_BOX_FUNCTION = Color.LIGHTGRAY; // #D3D3D3
-    public final Color COLOR_ACTIVE_FUNCTION_CALL_BOX = Color.RED; // #FF0000
-
-    public final String COLOR_VARIABLE_TEXT = "#ffffff"; // #ffffff
     public final String COLOR_LLIST_CONTENT_TEXT = "#000000"; // #000000
-    public final String COLOR_ARRAY_TEXT = "#ffffff"; // #ffffff
+
+
+    public final Color COLOR_TITLE_BOX_FUNCTION = Color.DARKBLUE; // #00008B
     public final Color COLOR_TITLE_FUNCTION = Color.web("#ffffff"); // #ffffff
+    public final Color COLOR_CONTENT_BOX_FUNCTION = Color.LIGHTGRAY; // #D3D3D3
     public final Color COLOR_CONTENT_TEXT_FUNCTION = Color.web("#000000"); // #000000
+    
+    public final Color COLOR_ACTIVE_FUNCTION_CALL_BOX = Color.RED; // #FF0000
     public final Color COLOR_ACTIVE_FUNCTION_CALL_TEXT = Color.web("#ffffff"); // #000000
+
+
+
+    // public final Color COLOR_ARRAY_BOX = Color.web("ffffff"); // #646B3C
+    // public final Color COLOR_VARIABLE_BOX = Color.web("ffffff"); // #5E7B9D
+    // public final Color COLOR_LLIST_CONTENT_BOX = Color.web("ffffff"); // #CAEB0E
+    // public final Color COLOR_LLIST_POINTER_BOX = Color.web("ffffff"); // #96423B
+    // public final Color COLOR_TITLE_BOX_FUNCTION = Color.DARKBLUE; // #00008B
+    // public final Color COLOR_CONTENT_BOX_FUNCTION = Color.WHITE; // #D3D3D3
+    // public final Color COLOR_ACTIVE_FUNCTION_CALL_BOX = Color.WHITE; // #FF0000
+
+    // public final String COLOR_VARIABLE_TEXT = "#000000"; // #ffffff
+    // public final String COLOR_LLIST_CONTENT_TEXT = "#000000"; // #000000
+    // public final String COLOR_ARRAY_TEXT = "#000000"; // #ffffff
+    // public final Color COLOR_TITLE_FUNCTION = Color.web("#000000"); // #000000
+    // public final Color COLOR_CONTENT_TEXT_FUNCTION = Color.web("#000000"); // #000000
+    // public final Color COLOR_ACTIVE_FUNCTION_CALL_TEXT = Color.web("#ffffff"); // #000000
+
 
     public AbstractGraphicalObject(String name, Pane pane, int id) {
         this.name = name;

@@ -53,7 +53,7 @@ public class successFileUploadController {
         }
         retourner fibo(n-1) + fibo(n-2)
     }
-    afficher fibo(3)
+    afficher fibo(10)
             """;
             
     public static String code2 =  """

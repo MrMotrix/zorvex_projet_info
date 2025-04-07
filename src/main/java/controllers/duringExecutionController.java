@@ -396,9 +396,9 @@ public class duringExecutionController  {
                 GraphicalFunctionCall fcall = (GraphicalFunctionCall)(rep.getElement(lastCalledFunctionID));
 
                 fcall.getParameters().forEach(m -> rep.deleteElement(((AbstractGraphicalObject)m).getID())); 
-                fcall.getIds().forEach(m -> rep.deleteElement(((AbstractGraphicalObject)m).getID())); 
+                // fcall.getIds().forEach(m -> rep.deleteElement(((AbstractGraphicalObject)m).getID())); 
 
-                sendMessageToConsole(fcall.toString());
+                // sendMessageToConsole(fcall.toString());
 
                 // returnValue.getParameters().forEache(m -> rep.deleteElement(m.getID()));
                 
@@ -465,7 +465,7 @@ public class duringExecutionController  {
                     // String oldValue = ((GraphicalArray) rep.getElement(interpreter.getId(function.args().get(0)))).getValues()[index];
                     
                     rep.updateElement(interpreter.getId("x"), ModificationType.REMOVE,"0" , 0);
-    
+                    
                     // record.push(new IterableModifyRecord(interpreter.getId(function.args().get(1).asString()), 
                         // ModificationType.REMOVE, index,oldValue));
                     // rep.updateElement(interpreter.getId(function.args().get(0)), ModificationType.REMOVE, oldValue, index);

@@ -41,9 +41,9 @@ public class successFileUploadController {
     
     public static String code1 =  """
     x <- [2, "coucou ca", 3]
+    ajouter_liste(x, 4)
     recuperer_liste(x, 0)
     taille <- taille_liste(x)
-
     fonction fibo(n) {
         si n = 0 {
             retourner 0
@@ -60,7 +60,19 @@ public class successFileUploadController {
         fonction sum(a,b) {
             retourner a+b
             }
-            afficher sum(1,2)
+        afficher sum(1,2)
+            """;
+
+    public static String code3 =  """
+        fonction maFonction(a,b) {
+            retourner a * b
+        }
+        
+        var <- 0
+        monTableau <- [1,2,3,4]
+        maPile <- pile()
+        maListeChainee <- liste_chainee()
+        
             """;
             
     public static String code = code1;

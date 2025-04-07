@@ -363,104 +363,51 @@ public class duringExecutionController  {
                         // ArrayList<GraphicalObject> tempA = new ArrayList<>();
                         // tempA.add(temp);
                 
-                //  GraphicalFunctionCall temp1 = new GraphicalFunctionCall("func1", canvasPane, tempA);
-                //  rep.addElement("func" + var, temp1);
-                //  record.push(new CreateRecord("func1", temp1));
-
-                //  GraphicalFunctionDeclaration temp2 = new GraphicalFunctionDeclaration(var, canvasPane, "par1, par2, par3, par4", null);
-                //  rep.addElement(var, temp2);
-                //  record.push(new CreateRecord(var, temp2));
-                 
-                /*GraphicalArray temp = new GraphicalArray(var, new String[]{value}, canvasPane);
-                 rep.addElement(var, temp);
-                 record.push(new CreateRecord(var, temp)); */
-                 /* GraphicalLinkedList temp = new GraphicalLinkedList(var, new String[]{value}, canvasPane);
-                 rep.addElement(var, temp);
-                 record.push(new CreateRecord(var, temp)); */
-                
             }
             else if (inst instanceof Afficher afficher) {
                 sendMessageToConsole(afficher.result().asString());
             }
             else if (inst instanceof Retourner retourner) {
                 String returnValue = retourner.result().asString();
-                GraphicalVar temp = new GraphicalVar("Renvoyer", returnValue, canvasPane, GraphicalObjectIDGenerator.getNextId());
-                rep.addElement(temp.getID(), temp);
-                record.push(new CreateRecord(temp.getID(), temp));
-                
-
-                sendMessageToConsole(rep.fcalls().toString());
-                
-
-                lastCalledFunctionID = rep.fcalls().pop().intValue();
-                GraphicalFunctionCall fcall = (GraphicalFunctionCall)(rep.getElement(lastCalledFunctionID));
-
-                fcall.getParameters().forEach(m -> rep.deleteElement(((AbstractGraphicalObject)m).getID())); 
-                // fcall.getIds().forEach(m -> rep.deleteElement(((AbstractGraphicalObject)m).getID())); 
-
-                // sendMessageToConsole(fcall.toString());
-
-                // returnValue.getParameters().forEache(m -> rep.deleteElement(m.getID()));
-                
-            
-        
-                // lastCalledFunctionID = rep.fcalls().pop().intValue();
-                
-                // GraphicalFunctionCall fcall = (GraphicalFunctionCall)(rep.getElement(lastCalledFunctionID));
-                
-                // fcall.getIds().forEach(m -> rep.deleteElement(m)); 
-                // rep.deleteElement(fcall.getID());
-                
-                
-                // fcall.addId(temp); // add to the function that has just returned a valie, the graphicalVar containing the value 
-                
-                // if (!rep.fcalls().isEmpty()) {
-                //     GraphicalFunctionCall fcall2 = (GraphicalFunctionCall)(rep.getElement(rep.fcalls().getLast().intValue()));
-                //     fcall2.addId(fcall);
-                // }
-                    
-                
-                // fcall.addId(temp.getID());
-                // rep.increaseX(-40);
-
-                
-            }
-
-    /*         else if (inst instanceof Retourner retourner) {
-                String returnValue = retourner.result().asString();
-                GraphicalVar temp = new GraphicalVar("Renvoyer", returnValue, canvasPane, GraphicalObjectIDGenerator.getNextId());
+                GraphicalVar temp = new GraphicalVar("(Renv)", returnValue, canvasPane, GraphicalObjectIDGenerator.getNextId());
                 rep.addElement(temp.getID(), temp);
                 record.push(new CreateRecord(temp.getID(), temp));
             
-                lastCalledFunctionID = rep.fcalls().pop();
-                GraphicalFunctionCall fcall = (GraphicalFunctionCall)(rep.getElement(lastCalledFunctionID));
-                fcall.removeFromPane();
-                rep.deleteElement(fcall.getID());
+                // Delete the current function
+                int finishedFunctionId = rep.fcalls().pop();
+                GraphicalFunctionCall finished = (GraphicalFunctionCall)(rep.getElement(finishedFunctionId));
             
+                // Delete ids and vars from the function that returned a value
+                finished.getParameters().forEach(p -> rep.deleteElement(((AbstractGraphicalObject) p).getID()));
+                finished.getIds().forEach(id -> rep.deleteElement(((AbstractGraphicalObject) id).getID()));
+                rep.deleteElement(finishedFunctionId);
+            
+                // Add return variable to the last function if possible
                 if (!rep.fcalls().isEmpty()) {
-                    GraphicalFunctionCall fcall2 = (GraphicalFunctionCall)(rep.getElement(rep.fcalls().getLast()));
-                    fcall2.addId(fcall); // por si quieres conservar rastro visual de la llamada
-                    fcall2.addId(temp);  // <-- SOLUCIÓN: guardar también el valor retornado
+                    int previousFunctionId = rep.fcalls().peek();
+                    GraphicalFunctionCall previous = (GraphicalFunctionCall)(rep.getElement(previousFunctionId));
+            
+                    // previous.addPar(temp);
+                    previous.addId(temp);
+                    // previous.setParameters(previous.getParameters()); // Redibuja el nombre con los nuevos parámetros
                 }
-            } */
-            
-            
-            
+       
+            }
             else if (inst instanceof Function function) {
                 // get the name of the function
                 List<String> parsNames;
                 List<GraphicalObject> pars = new ArrayList<>();
                 String f = function.name();
                 
-                // if (f.equals("ajouter_liste")){
+                if (f.equals("ajouter_liste")){
 
                 //     String oldValue = ((GraphicalArray) rep.getElement(interpreter.getId(function.args().get(0)))).getValues()[1];
                 //     record.push(new IterableModifyRecord(interpreter.getId(function.args().get(1).asString()), 
                 //         ModificationType.INSERT, Integer.parseInt(function.args().get(1).asString()),oldValue));
                 //     rep.updateElement(interpreter.getId(f), ModificationType.INSERT, f, Integer.parseInt(function.args().get(1).asString()));
     
-                // }
-                if (f.equals("supprimer_liste")){
+                }
+                else if (f.equals("supprimer_liste")){
                     // int index = Integer.parseInt(function.args().get(1).asString());
                     // String oldValue = ((GraphicalArray) rep.getElement(interpreter.getId(function.args().get(0)))).getValues()[index];
                     
@@ -482,7 +429,7 @@ public class duringExecutionController  {
     
                 }else if (f.equals("taille_liste")){
 
-
+                    // nothing to do, it just returns a value
 
                 }else if (rep.getFunction(f) instanceof GraphicalFunctionDeclaration fd){
                     parsNames = fd.getParameters();
@@ -762,7 +709,7 @@ public class duringExecutionController  {
     }
 
     /**
-     * This method is used to send messages to the console. It already adds a prefix to the message and a 
+     * Send messages to the console. It already adds a prefix to the message and a 
      * line break at the begginning
      * @param message
      */

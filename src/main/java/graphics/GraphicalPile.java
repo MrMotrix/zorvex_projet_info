@@ -33,6 +33,8 @@ public final class GraphicalPile extends AbstractGraphicalObject{
                 } else {
                     this.values.add(parts[1]); 
                 }
+            } else {
+                this.values.add(parts[0]); 
             }
         }        size = values.size();
     }
@@ -60,7 +62,7 @@ public final class GraphicalPile extends AbstractGraphicalObject{
             cell.setY(y);
     
             // style of the cell
-            cell.setFill(COLOR_ARRAY_BOX); // background
+            cell.setFill(COLOR_PILE_BOX); // background
             cell.setStroke(Color.BLACK); // line color
     
             TextField cellContent = new TextField(values.get(i).toString());
@@ -73,7 +75,7 @@ public final class GraphicalPile extends AbstractGraphicalObject{
             cellContent.setLayoutY(y + 10); 
             cellContent.setPrefWidth(cellWidth - 10); 
             cellContent.setEditable(false); 
-            cellContent.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 13; -fx-text-fill:" + COLOR_ARRAY_TEXT + ";"); 
+            cellContent.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 13; -fx-text-fill:" + COLOR_PILE_TEXT + ";"); 
     
             // Add the cell, its content, and tooltips
             pane.getChildren().addAll(cell, cellContent); 
@@ -137,6 +139,10 @@ public final class GraphicalPile extends AbstractGraphicalObject{
             pane.getChildren().remove(node);
         }
         renderedNodes.clear();
+    }
+
+    public List<String> getValues(){
+        return values;
     }
 
 }

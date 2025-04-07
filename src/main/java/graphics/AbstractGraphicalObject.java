@@ -20,8 +20,8 @@ public abstract sealed class AbstractGraphicalObject implements GraphicalObject 
     protected List<Node> renderedNodes;
     protected final int id;
 
-    public final Color COLOR_ARRAY_BOX = Color.web("#646B3C"); // #646B3C
-    public final String COLOR_ARRAY_TEXT = "#ffffff"; // #ffffff
+    public final Color COLOR_ARRAY_BOX = Color.web("#D3D3D3"); // #D3D3D3
+    public final String COLOR_ARRAY_TEXT = "#000000"; // #000000
 
 
     public final Color COLOR_VARIABLE_BOX = Color.web("#5E7B9D"); // #5E7B9D
@@ -40,6 +40,9 @@ public abstract sealed class AbstractGraphicalObject implements GraphicalObject 
     
     public final Color COLOR_ACTIVE_FUNCTION_CALL_BOX = Color.RED; // #FF0000
     public final Color COLOR_ACTIVE_FUNCTION_CALL_TEXT = Color.web("#ffffff"); // #000000
+
+    public final Color COLOR_PILE_BOX = Color.YELLOW; // #FFFF00
+    public final Color COLOR_PILE_TEXT = Color.web("#ffffff"); // #000000
 
 
 

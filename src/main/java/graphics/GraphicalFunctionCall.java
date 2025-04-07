@@ -1,5 +1,6 @@
 package graphics;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,7 @@ public final class GraphicalFunctionCall extends AbstractGraphicalObject {
     private static final double MIN_WIDTH = 100;
     private static final double MIN_HEIGHT = 50;
     private static final double BOX_HEIGHT = 40;
-
+    private boolean alreadyDrawn = false;
     private String functionName;
     private List<GraphicalObject> parameters;
     public List<GraphicalObject> getParameters() {
@@ -42,14 +43,18 @@ public final class GraphicalFunctionCall extends AbstractGraphicalObject {
         super(name, pane, id);
         this.parameters = parameters;
         this.functionName = name;
+        this.ids = new ArrayList<>();
     }
     
     public void setParameters(List<GraphicalObject> parameters) {
         this.parameters = parameters;
-        Text t = (Text) renderedNodes.get(1);
-        t.setText(functionName + "(" + parameters.stream()
+        if (!alreadyDrawn){
+            alreadyDrawn = true;
+            Text t = (Text) renderedNodes.get(1);
+            t.setText(functionName + "(" + parameters.stream()
             .map(GraphicalObject::getName)
             .collect(Collectors.joining(", ")) + ")");
+        }
     }
     
     @Override

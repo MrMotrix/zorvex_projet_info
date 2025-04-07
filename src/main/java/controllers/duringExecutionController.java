@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.naming.OperationNotSupportedException;
+
 import application.App;
 import graphics.AbstractGraphicalObject;
 import graphics.GraphicalArray;
@@ -16,6 +18,7 @@ import graphics.IterableGraphicalObject;
 import graphics.ModificationType;
 import interpreter.Interpreter;
 import interpreter.exceptions.RuntimeError;
+import interpreter.exceptions.UnexpectedTokenException;
 import interpreter.instruction.Instruction;
 import interpreter.instruction.Retourner;
 import interpreter.instruction.Afficher;
@@ -116,11 +119,9 @@ public class duringExecutionController  {
     public void setBottomPane(AnchorPane bottomPane) {this.bottomPane = bottomPane;}    
     
     // TEST, so this can be deleteed later =================================================================
-    Random random = new Random();
-    int TESTING_INDEX = 5;
+    
     private ExecutionStack record;
     private int currentLine;
-    private int lastCalledFunctionID;
     // ==============================================================================
 
 
@@ -160,51 +161,53 @@ public class duringExecutionController  {
     @FXML
     void continueExecution(ActionEvent event) {
 
-                //  if the button was pressed when being in a breakpoint and we are not in the first line (if there is a bp in the first line we should be able to stop)
+        //  if the button was pressed when being in a breakpoint and we are not in the first line (if there is a bp in the first line we should be able to stop)
+        currentLine = interpreter.getCurrentLine();
+        try{
+            if (currentLine == 1 && mainController.bkpoints.contains(1) && !firstLineRead) {
+                highlightCurrentLine(currentLine - 1);
+                firstLineRead = true;
+                return;
+            }
+        
+            if (mainController.bkpoints.contains(currentLine)) {
+                goNextLine(event);
                 currentLine = interpreter.getCurrentLine();
-                try{
-                    if (currentLine == 1 && mainController.bkpoints.contains(1) && !firstLineRead) {
-                        highlightCurrentLine(currentLine - 1);
-                        firstLineRead = true;
-                        return;
-                    }
-                
-                    if (mainController.bkpoints.contains(currentLine)) {
-                        goNextLine(event);
-                        currentLine = interpreter.getCurrentLine();
-                    }
-                
-                    while (!mainController.bkpoints.contains(currentLine) && currentLine != mainController.numberOfLines + 1) {
-                        goNextLine(event);
-                        currentLine = interpreter.getCurrentLine();
-                    }
+            }
+        
+            while (!mainController.bkpoints.contains(currentLine) && currentLine != mainController.numberOfLines + 1) {
+                goNextLine(event);
+                currentLine = interpreter.getCurrentLine();
+            }
 
-                } catch (Exception e){
-                    if ((e instanceof RuntimeError)){
+        } catch (Exception e){
+            if ((e instanceof RuntimeError)){
 
-                        sendMessageToConsole(e.getMessage());
-                    }
-                    return;
-                }
+                sendMessageToConsole(e.getMessage());
+            }
+            return;
+        }
     }
-    // TODO : something has still to be implemented here. Currently it just erases something random from the plot and goes to the last line
+
     @FXML
     void goLastLine(ActionEvent event) {
 
         record.undo(rep);
-        for (ExecutionRecord content : record.getHistory()) {
-            sendMessageToConsole(content.toString());
-        }        
         // DO NOT TOUCH preferably :)
-        currentLine--;
+        currentLine = record.currentLine();
         if (! reverse) {
             reverse = true;
             // currentLine --;
-            continueButton.setDisable(false);
-            nextLineButton.setDisable(false);
+            // continueButton.setDisable(false);
+            // nextLineButton.setDisable(false);
+            continueButton.setDisable(true);
+            nextLineButton.setDisable(true);
         }
-        highlightCurrentLine(currentLine);
-        sendMessageToConsole("Last line executed : " + currentLine);
+        if (currentLine == 1) {
+            stopExecution(event);
+        }
+        highlightCurrentLine(currentLine - 1);
+        // sendMessageToConsole("Last line executed : " + currentLine);
         
     }
 
@@ -224,53 +227,17 @@ public class duringExecutionController  {
             reverse = false;
             currentLine++;
         }
-        // ===================================HERE GOES THE IMPLEMENTATION TO READ INSTRUCTIONS=========================================
 
-
-        /* 
-        
-        if assigner
-            interpreter should send : 
-                name of object
-                id of the object
-                type of objext (variable, array, linkedlist)
-                value of object
-                index of assignation (if applicable, otherwise send 0 or -1 as index)
-        if afficher : 
-            send content to console (and potentially create 
-        if function declaration : 
-            interpreter should send : 
-                name of function
-                if of the function
-                string of parameters it takes (ex : sum(a,b) should send "a,b" their names), or null or "" if it does not take anu parameters
-                string of variables, same contraints as parameters
-        if function call : 
-            interpreter should send : 
-                name of called function (optional ? )
-                id of the function
-                ""list"" of the parameters it takes, like sum(3,5) should send ArrayList<>{"3,5"}, or if variables, a list of the variables themselves
-        if return instruction :
-            interpreter should return 
-                name of the function 
-                id of the function 
-                value or variable that is returned
-        */ 
-        
         try {    
             // get the affected variable from the interpreter
             Instruction inst = interpreter.step();
-            
-            // if (inst == null) return;
-             if (inst instanceof Assigner assigner) {    
-                
-                // switch(assigner.()){
+            if (inst == null) {goNextLine(event);}
+             else if (inst instanceof Assigner assigner) {        
 
-                // }
                 String name = assigner.variableName(); // get the name of the variable
                 if (name.equals("")) {
                     try{
-                        // we try to get the current line of the interpreter, it will raise an exception if there is no more lines to read, i.e. we have just executed the last line of code
-                        highlightCurrentLine(interpreter.getCurrentLine()-1);
+                        highlightCurrentLine(interpreter.getCurrentLine()-1); // we try to get the current line of the interpreter, it will raise an exception if there is no more lines to read, i.e. we have just executed the last line of code
             
                     } catch(Exception e){
                         highlightCurrentLine(-1);
@@ -289,46 +256,61 @@ public class duringExecutionController  {
                 switch (type){
                     case "LIST" : 
                         if (rep.getElements().containsKey(interpreter.getId(name))) { // if the variable already exists
-                            record.push(new IterableModifyRecord(interpreter.getId(name), ModificationType.UPDATE,0, value)); // TODO fix index
+                            record.push(new IterableModifyRecord(interpreter.getId(name), ModificationType.UPDATE,0, value, currentLine)); // TODO fix index
                             rep.updateElement(interpreter.getId(name), ModificationType.UPDATE, value, 0);
                         } else {
                             GraphicalArray array = new GraphicalArray(name, value.split(","), canvasPane, interpreter.getId(name));
                             // GraphicalPile array = new GraphicalPile(name, List.of(value.split(",")), canvasPane, interpreter.getId(name));
                             rep.addElement(interpreter.getId(name), array );
-                            record.push(new CreateRecord(array.getID(), array));
+                            record.push(new CreateRecord(array.getID(), array, currentLine));
                         }
                         break;
                     case "LLIST" : 
                         if (rep.getElements().containsKey(interpreter.getId(name))) { // if the variable already exists
-                            record.push(new IterableModifyRecord(interpreter.getId(name), ModificationType.UPDATE,0, value)); // TODO fix index
+                            record.push(new IterableModifyRecord(interpreter.getId(name), ModificationType.UPDATE,0, value, currentLine)); // TODO fix index
                             rep.updateElement(interpreter.getId(name), ModificationType.UPDATE, value, 0);
                         } else {
                             GraphicalLinkedList llist = new GraphicalLinkedList(name, value.split(","), canvasPane, interpreter.getId(name));
                             rep.addElement(interpreter.getId(name), llist );
-                            record.push(new CreateRecord(llist.getID(), llist));
+                            record.push(new CreateRecord(llist.getID(), llist, currentLine));
                         }
-                        break;
+                        break;              
+                    case "STACK" :
+                        if (rep.getElements().containsKey(interpreter.getId(name))) { // for piles only push operation as Assigner operation is accepted, so index  = 0
+                            record.push(new IterableModifyRecord(interpreter.getId(name), ModificationType.UPDATE,0, value, currentLine)); //TODO : fix index
+                            rep.updateElement(interpreter.getId(name), ModificationType.UPDATE, value, 0);
+                        } else {
+                            GraphicalPile pile = new GraphicalPile(name, List.of(value.split(",")), canvasPane, interpreter.getId(name));
+                            rep.addElement(interpreter.getId(name), pile );
+                            record.push(new CreateRecord(pile.getID(), pile, currentLine));
+                        }
+                        break;          
                     case "STRING":
                     case "INTEGER" :
                         if (rep.getElements().containsKey(interpreter.getId(name))) { // if the variable already exists
-                            record.push(new ModifyVarRecord(interpreter.getId(name), value)); 
+                            record.push(new ModifyVarRecord(interpreter.getId(name), value, currentLine)); 
                             rep.updateElement(interpreter.getId(name), ModificationType.UPDATE, value, 0);
                         } else {
                             GraphicalVar var = new GraphicalVar(name, value, canvasPane, interpreter.getId(name));
                             rep.addElement(interpreter.getId(name), var );
-                            record.push(new CreateRecord(var.getID(), var));
+                            record.push(new CreateRecord(var.getID(), var, currentLine));
                         }
+                
+                        break;
+                    default : 
+        
                 }   
                 
             }
             else if (inst instanceof Afficher afficher) {
                 sendMessageToConsole(afficher.result().asString());
+                record.push(new AfficherRecord(Integer.MAX_VALUE, afficher.result().asString(), currentLine));
             }
             else if (inst instanceof Retourner retourner) {
                 String returnValue = retourner.result().asString();
                 GraphicalVar temp = new GraphicalVar("(Renv)", returnValue, canvasPane, GraphicalObjectIDGenerator.getNextId());
                 rep.addElement(temp.getID(), temp);
-                record.push(new CreateRecord(temp.getID(), temp));
+                record.push(new CreateRecord(temp.getID(), temp, currentLine));
             
                 // Delete the current function
                 int finishedFunctionId = rep.fcalls().pop();
@@ -366,7 +348,8 @@ public class duringExecutionController  {
                     record.push(new IterableModifyRecord(id, 
                         ModificationType.INSERT, 
                         index,
-                        oldValue));
+                        oldValue, 
+                        currentLine));
                     rep.updateElement(id, ModificationType.INSERT, value, index + 1);
 
     
@@ -381,7 +364,7 @@ public class duringExecutionController  {
                     record.push(new IterableModifyRecord(id, 
                         ModificationType.INSERT, 
                         index,
-                        oldValue));
+                        oldValue, currentLine));
                     rep.updateElement(id, ModificationType.INSERT, value, index);
     
                 }
@@ -396,23 +379,21 @@ public class duringExecutionController  {
                     record.push(new IterableModifyRecord(id, 
                         ModificationType.REMOVE, 
                         index,
-                        oldValue));
+                        oldValue, currentLine));
                     rep.updateElement(id, ModificationType.REMOVE, oldValue, index); // here old value should be given as parameter but it wont be used
     
                 } else if (f.equals("recuperer_liste")){ // id, index
-
+                    goNextLine(event);
+                    return;
                     // NOTHING TO DO SINCE ANY MODIFICATION IS DONE TO ANY GRAPHICAL OBJECT
 
-                    // int id = Integer.parseInt(function.args().get(0).asString());
-                    // int index = Integer.parseInt(function.args().get(1).asString());
-                    
-                    // String value = ((IterableGraphicalObject) rep.getElement(id)).getValues()[index];
 
     
                 }else if (f.equals("taille_liste")){ // id
 
                     // nothing to do, it just returns a value
-
+                    goNextLine(event);
+                    return;
                 } else if(f.equals("modifier_liste")){ // id, index, newValue
 
                     int id = Integer.parseInt(function.args().get(0).asString());
@@ -423,10 +404,48 @@ public class duringExecutionController  {
                     record.push(new IterableModifyRecord(id, 
                         ModificationType.UPDATE, 
                         index,
-                        oldValue));
+                        oldValue, 
+                        currentLine));
                     rep.updateElement(id, ModificationType.UPDATE, value, index);
 
-                } else if (rep.getFunction(f) instanceof GraphicalFunctionDeclaration fd){
+                } else if (f.equals("pile_vide")){ // list.of trucs
+
+                    // nothing to do, assignation is done later
+                    goNextLine(event);
+                    return;
+                } else if (f.equals("empiler")){ // id, value
+
+                    int id = Integer.parseInt(function.args().get(0).asString());
+                    String value = function.args().get(1).asString();
+
+                    String oldValue = ((GraphicalPile) rep.getElement(id)).peek();
+                    record.push(new IterableModifyRecord(id, 
+                        ModificationType.UPDATE, 
+                        0,
+                        oldValue, 
+                        currentLine));
+                    rep.updateElement(id, ModificationType.INSERT, value, 0);
+
+                } else if (f.equals("depiler")){ // id
+
+                    int id = Integer.parseInt(function.args().get(0).asString());
+                    String value = function.args().get(1).asString();
+
+                    String oldValue = ((GraphicalPile) rep.getElement(id)).peek();
+                    record.push(new IterableModifyRecord(id, 
+                        ModificationType.REMOVE, 
+                        0,
+                        oldValue, 
+                        currentLine));
+
+                    rep.updateElement(id, ModificationType.REMOVE, null, 0);
+                } else if (f.equals("est_pile_vide")){ // list.of ids ?
+                    // nothing to do
+                    goNextLine(event);
+                    return;
+                }
+                
+                else if (rep.getFunction(f) instanceof GraphicalFunctionDeclaration fd){
                     parsNames = fd.getParameters();
 
                     
@@ -464,29 +483,33 @@ public class duringExecutionController  {
                                 temp = new GraphicalVar(
                                     parsNames.get(i), 
                                     function.args().get(i).asString(),
-                                     canvasPane, interpreter.getId(parsNames.get(i)));
+                                     canvasPane, 
+                                     interpreter.getId(parsNames.get(i)));
 
                                 
                                 break;
+                            case "PILE" :
+                                temp = new GraphicalPile(
+                                    parsNames.get(i), 
+                                    function.args().get(i).asString().split(","),
+                                    canvasPane, 
+                                    i);
                             default:
                                 throw new Exception("Unknown type of variable : " + type);
                         }
                         pars.add(temp);
-                        // GraphicalVar temp = new GraphicalVar(parsNames.get(i),
-                        //     function.args().get(i).asString() ,
-                        //     canvasPane, 
-                        //     interpreter.getId(parsNames.get(i)));
-                        //     pars.add(temp);
 
                         rep.addElement(interpreter.getId(parsNames.get(i)), temp);
 
-                        record.push(new CreateRecord(temp.getID(), temp));
+                        record.push(new CreateRecord(temp.getID(), temp, currentLine));
                         ids.add(temp);
                     }
 
                     fc.setParameters(pars);
                     fc.setIds(ids);
                     rep.fcalls().push(fc.getID());
+
+                    record.push(new CreateRecord(fc.getID(), fc, currentLine));
                 }
                 
                 else {throw new Exception("Mismatch between given arguments and function arguments");}
@@ -496,6 +519,8 @@ public class duringExecutionController  {
                 GraphicalFunctionDeclaration fd = new GraphicalFunctionDeclaration(fdeclaration.name(), canvasPane,  fdeclaration.parameters(), null, GraphicalObjectIDGenerator.getNextId());
                 rep.addElement(fd.getID(), fd);
                 rep.addFunction(fdeclaration.name(), fd);
+
+                record.push(new CreateRecord(fd.getID(), fd, currentLine));
             }
 
         } catch (Exception e) {
@@ -544,8 +569,6 @@ public class duringExecutionController  {
         highlightCurrentLine(-1); 
         // restart checker of first line breakpoint
         firstLineRead = false;
-        lastCalledFunctionID = 0;
-
 
         record.clear(); 
         
@@ -653,7 +676,7 @@ public class duringExecutionController  {
     private void setInitialVisuals() {
         // codeContainer.setEditable(false);
         codeContainer.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;"); // supprimer le background du TextField
-        // TODO : probably this is factorizable with css
+        
         codeScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
         bkScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
         nblineScroller.setStyle("-fx-focus-color: lightgrey; -fx-faint-focus-color: transparent;");
@@ -745,7 +768,7 @@ public class duringExecutionController  {
         consolePanel.appendText("\n>>>" + message);
     }
 
-    private void handleParsingException(Exception e) {
+        private void handleParsingException(Exception e) {
         sendMessageToConsole("Une erreur est survenue lors de la lecture du fichier: \n" + e.toString());
         stopExecution(null);
     }  

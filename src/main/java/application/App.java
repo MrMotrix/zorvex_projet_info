@@ -20,7 +20,6 @@ public class App extends Application{
     
 
     public static void main (String[] args) throws Exception {
-
         launch(args);
     }
 
@@ -76,7 +75,6 @@ public class App extends Application{
         // save the size of the screen before changing scene to make it fluid. Also check if it is fullscreen
         double width = stageWindow.getWidth();
         double height = stageWindow.getHeight();
-        // boolean isFullScreen = stageWindow.isFullScreen();
         
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
@@ -159,7 +157,10 @@ public class App extends Application{
     public MainController getMainController() {
         return mainController;
     }
-
+    /**
+     * This method is used to get the scene of the stage window.
+     * @return
+     */
     public Scene getScene() {
         return stageWindow.getScene();
     }

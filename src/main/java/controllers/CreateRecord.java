@@ -7,8 +7,8 @@ import graphics.GraphicalRepresentation;
 public class CreateRecord extends ExecutionRecord {
     private AbstractGraphicalObject graphic;
 
-    public CreateRecord(int id, AbstractGraphicalObject graphic) {
-        super(id);
+    public CreateRecord(int id, AbstractGraphicalObject graphic, int nbline) {
+        super(id, nbline);
         this.graphic = graphic;
     }
 

@@ -56,77 +56,136 @@ public class successFileUploadController {
             """;
             
     public static String code2 =  """
-        fonction sum(a,b) {
-            retourner a+b
+        fonction fibo(n) {
+                afficher \"hello world\"
+                si n = 0 {
+                    retourner 0
+                }
+                si n = 1 {
+                    retourner 1
+                }
+                retourner fibo(n-1) + fibo(n-2)
             }
-        afficher sum(1,2)
+            fonction ack(m,n) {
+                    si m = 0 {
+                        retourner n+1
+                    }
+                    si n = 0 {
+                        retourner ack(m-1, 1)
+                    }
+                    retourner ack(m-1, ack(m, n-1))
+                }
+            fonction tri(l) {
+                i <- taille_liste(l)-1
+                tant que i >= 1 {
+                    j <- 0
+                    tant que j < i {
+                        si recuperer_liste(l, j+1) < recuperer_liste(l, j) {
+                            x <- recuperer_liste(l, j)
+                            y <- recuperer_liste(l, j+1)
+                            modifier_liste(l, j, y)
+                            modifier_liste(l, j+1, x)
+                        }
+                        j <- j + 1
+                    }
+                    i <- i-1
+                }
+            }
+
+            fonction argmax(l) {
+                n <- taille_liste(l)
+                x <- 0
+                i <- 0
+                tant que i < n {
+                    si recuperer_liste(l, i) > recuperer_liste(l, x) {
+                        x <- i
+                    }
+                    i <- i+1
+                }
+                retourner x
+            }
+
+            x <- pile_vide()
+            empiler(x, 5)
+            empiler(x, 2)
+            empiler(x, 3)
+            y <- depiler(x)
+            depiler(x)
+            depiler(x)
+            si est_pile_vide(x) {
+                afficher \"ok\"
+            }
+            z <- x+\" coucou\"
+            afficher y
+            afficher x
+            afficher z
             """;
 
     public static String code3 =  """
-        fonction maFonction(a,b) {
-            retourner a * b
-        }
-        
-        var <- 0
-        monTableau <- [1,2,3,4]
-        maPile <- pile()
-        maListeChainee <- liste_chainee()
+        maPile <- pile_vide()
+        empiler(maPile, 1)
+        afficher(est_pile_vide(maPile))
+        empiler(maPile, 2)
+        depiler(maPile)
+        depiler(maPile)
+        afficher(est_pile_vide(maPile))
+
         
             """;
     public static String code4 =  """
-    fonction fibo(n) {
-    afficher "hello world"
-    si n = 0 {
-        retourner 0   
-    }
-    si n = 1 {
-        retourner 1
-    }
-    retourner fibo(n-1) + fibo(n-2)
-}
-fonction ack(m,n) {
-    si m = 0 {
-        retourner n+1
-    }
-    si n = 0 {
-        retourner ack(m-1, 1)
-    }
-    retourner ack(m-1, ack(m, n-1))
-} 
-
-fonction tri(l) {
-    i <- taille_liste(l)-1
-    tant que i >= 1 {
-        j <- 0
-        tant que j < i {
-            si recuperer_liste(l, j+1) < recuperer_liste(l, j) {
-                x <- recuperer_liste(l, j)
-                y <- recuperer_liste(l, j+1)
-                modifier_liste(l, j, y)
-                modifier_liste(l, j+1, x)
+            fonction fibo(n) {
+            afficher "hello world"
+            si n = 0 {
+                retourner 0   
             }
-            j <- j + 1
+            si n = 1 {
+                retourner 1
+            }
+            retourner fibo(n-1) + fibo(n-2)
         }
-        i <- i-1
-    }
-}
+        fonction ack(m,n) {
+            si m = 0 {
+                retourner n+1
+            }
+            si n = 0 {
+                retourner ack(m-1, 1)
+            }
+            retourner ack(m-1, ack(m, n-1))
+        } 
 
-fonction argmax(l) {
-    n <- taille_liste(l)
-    x <- 0
-    i <- 0
-    tant que i < n {
-        si recuperer_liste(l, i) > recuperer_liste(l, x) {
-            x <- i
+        fonction tri(l) {
+            i <- taille_liste(l)-1
+            tant que i >= 1 {
+                j <- 0
+                tant que j < i {
+                    si recuperer_liste(l, j+1) < recuperer_liste(l, j) {
+                        x <- recuperer_liste(l, j)
+                        y <- recuperer_liste(l, j+1)
+                        modifier_liste(l, j, y)
+                        modifier_liste(l, j+1, x)
+                    }
+                    j <- j + 1
+                }
+                i <- i-1
+            }
         }
-        i <- i+1
-    }
-    retourner x
-}
 
-x <- [7,8,52,3,4,15]
-tri(x)
-afficher x
+        fonction argmax(l) {
+            n <- taille_liste(l)
+            x <- 0
+            i <- 0
+            tant que i < n {
+                si recuperer_liste(l, i) > recuperer_liste(l, x) {
+                    x <- i
+                }
+                i <- i+1
+            }
+            retourner x
+        }
+
+        x <- [7,8,52,3,4,15]
+        tri(x)
+        afficher(x)
     """;
           
     
@@ -135,7 +194,8 @@ afficher x
                 afficher(l)
             }
             a <- [1,2,3,4]
-            bidon(a)            
+            bidon(a)     
+            afficher(a)       
             """;
             
             
@@ -159,12 +219,15 @@ afficher x
     }
 
 
-    public void setMainController(MainController mainController) {this.mainController = mainController;}
-    
+    public MainController getMainController() {return mainController;}
     public SplitPane getSplitPane() {return splitPane;}
-
+    public void setMainController(MainController mainController) {this.mainController = mainController;}
     public void setSplitPaneDivider(double size) {this.splitPane.setDividerPosition(0, size);}
-
+    public void setApp(App app) {this.app = app;}
+    /**
+     * Start the execution of the program.
+     * @param event
+     */
     @FXML
     void beginExecution(ActionEvent event) {
         app.getStageWindow().setTitle("En éxécution : " + mainController.nameFile);
@@ -180,7 +243,11 @@ afficher x
 
     @FXML
     void initialize() {}
-
+    /**
+     * * This method is used to initialize the controller with the main controller and the application instance. Shuld be called after the FXML file is loaded.
+     * @param mainController
+     * @param app
+     */
     public void initialize2(MainController mainController, App app) {
         this.mainController = mainController;
         this.app = app; 
@@ -220,6 +287,10 @@ afficher x
         codeScroller.vvalueProperty().bindBidirectional(nblineScroller.vvalueProperty());
     }
 
+    /**
+     * Set the content of the code container with the lines of code.
+     * @param mainController
+     */
     private void setContentLabels(MainController mainController) {
         codeContainer.getChildren().clear();
         for (String line : mainController.content){
@@ -230,6 +301,9 @@ afficher x
         }
     }
 
+    /**
+     * Update the current state of the application. Called when the user changes the scene from another tho this one.
+     */
     public void update(){
         splitPane.setDividerPosition(0,mainController.getSplitPaneDividerPosition());
         // console
@@ -245,7 +319,9 @@ afficher x
         this.nblineVbox = mainController.getNblineVbox();
     }
 
-
+    /**
+     * Save the current state of the application.
+     */
     public void save(){
 
         // save the current scene and controller
@@ -278,14 +354,16 @@ afficher x
             nblineVbox.getChildren().add(label);
         }
     }
-    
+    /**
+     * Set the breakpoints in the code container. The breakpoints are represented by buttons that can be clicked to enable or disable them.
+     */
     private void setBreakPoints() {
         
         // initialize set
         if (mainController.bkpoints == null) mainController.bkpoints = new HashSet<>();
         
-        // TODO slight disalignment t be fixed. Currently the best value to almost fit the other lines is 9
-        bkpointVbox.setSpacing(9.4);
+        // slight disalignment t be fixed. Currently the best value to almost fit the other lines is 9
+        bkpointVbox.setSpacing(9.45);
         bkpointVbox.setAlignment(Pos.TOP_CENTER); 
 
         bkpointVbox.setStyle(bkpointVbox.getStyle() + "-fx-background-color: transparent;");
@@ -325,7 +403,9 @@ afficher x
             bkpointVbox.getChildren().add(bkButton);
         }
     }
-
+    /**
+     * Set the previous state of the application.
+     */
     void setPreviousState(){
         splitPane.setDividerPosition(0,mainController.getSplitPaneDividerPosition());
         // console
@@ -343,13 +423,4 @@ afficher x
         bkpointVbox.getChildren().setAll(mainController.getBkpointVbox().getChildren());
 
     }
-    
-    public void setApp(App app) {
-        this.app = app;
-    }
-
-    public MainController getMainController() {
-        return mainController;
-    }
-
 }

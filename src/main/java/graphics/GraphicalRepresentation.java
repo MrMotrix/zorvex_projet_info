@@ -72,6 +72,9 @@ public class GraphicalRepresentation {
         else if (element instanceof GraphicalArray){
             currentY += spaceBetweenPlots;
         }
+        else if (element instanceof GraphicalPile){
+            currentY += spaceBetweenPlots;
+        }        
         else if (element instanceof GraphicalLinkedList){
             currentY += spaceBetweenPlots;
         }
@@ -90,10 +93,18 @@ public class GraphicalRepresentation {
         if (elements.containsKey(id)) {
             switch (type) {
                 case INSERT:
+                if(elements.get(id) instanceof GraphicalPile pile){
+                    pile.push(value);
+                    return;
+                }
                     IterableGraphicalObject obj1 = ((IterableGraphicalObject)elements.get(id));
                     obj1.addNodeAt(index, value);
                     break;
                 case REMOVE:
+                    if(elements.get(id) instanceof GraphicalPile pile){
+                        pile.pop();
+                        return;
+                    }
                     IterableGraphicalObject obj2 = ((IterableGraphicalObject)elements.get(id));
                     obj2.deleteNodeAt(index);
                     break;

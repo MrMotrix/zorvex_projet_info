@@ -11,8 +11,8 @@ public class IterableModifyRecord
 private int position;
     private String oldValue;
 
-    public IterableModifyRecord(int id, ModificationType type, int position, String oldValue) {
-        super(id);
+    public IterableModifyRecord(int id, ModificationType type, int position, String oldValue, int nbline) {
+        super(id, nbline);
         this.type = type;
         this.position = position;
         this.oldValue = oldValue;

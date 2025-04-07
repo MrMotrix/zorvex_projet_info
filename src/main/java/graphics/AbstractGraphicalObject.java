@@ -13,7 +13,8 @@ public abstract sealed class AbstractGraphicalObject implements GraphicalObject 
         GraphicalFunctionDeclaration,
         GraphicalLinkedList, 
         GraphicalVar, 
-        GraphicalNode, GraphicalPile
+        GraphicalNode, 
+        GraphicalPile
          {
     protected String name;
     protected Pane pane;

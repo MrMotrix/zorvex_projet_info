@@ -6,8 +6,8 @@ import graphics.ModificationType;
 public class ModifyVarRecord extends ExecutionRecord {
     private String oldValue;
 
-    public ModifyVarRecord(int id, String oldValue) {
-        super(id);
+    public ModifyVarRecord(int id, String oldValue, int nbline) {
+        super(id, nbline);
         this.oldValue = oldValue;
     }
 

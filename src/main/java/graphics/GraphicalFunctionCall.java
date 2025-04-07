@@ -24,13 +24,6 @@ public final class GraphicalFunctionCall extends AbstractGraphicalObject {
 
     private List<GraphicalObject> ids;
     
-    
-    // public GraphicalFunctionCall(String name, Pane pane, List<GraphicalObject> parameters) {
-    //     super(name, pane, id);
-    //     this.parameters = parameters;
-    //     this.functionName = name;
-    // }
-
     public List<GraphicalObject> getIds() {
         return ids;
     }

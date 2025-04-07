@@ -3,16 +3,12 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import interpreter.exceptions.RuntimeError;
 import interpreter.exceptions.SyntaxErrorException;
-import interpreter.expression.BinaryOperation;
 import interpreter.expression.Expression;
-import interpreter.expression.BinaryOperator;
 import interpreter.expression.FunctionCall;
-import interpreter.expression.Literal;
 import interpreter.expression.Variable;
 import interpreter.instruction.Afficher;
 import interpreter.instruction.Assigner;

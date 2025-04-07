@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-import graphics.IterableGraphicalObject;
-
 public class GraphicalRepresentation {
 
     private Map<Integer, GraphicalObject> elements;
@@ -81,7 +79,7 @@ public class GraphicalRepresentation {
             currentY += 80;
         }
         else if(element instanceof GraphicalFunctionCall){
-            currentY +=50;
+            currentY +=60;
         }
         else if (element != null){
             currentY += spaceBetweenPlots;

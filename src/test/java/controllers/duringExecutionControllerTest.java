@@ -4,15 +4,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import javafx.application.Platform;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import application.App;
 import base.JavaFXTestBase;
-import javafx.scene.layout.VBox;
 
 public class duringExecutionControllerTest extends JavaFXTestBase{
     

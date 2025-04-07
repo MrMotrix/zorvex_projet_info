@@ -1,9 +1,5 @@
 package graphics;
 
-import graphics.GraphicalArray;
-import graphics.GraphicalFunctionDeclaration;
-import interpreter.instruction.FunctionDeclaration;
-import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
@@ -11,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,13 +16,6 @@ public class GraphicalFunctionDeclarationTest extends JavaFXTestBase{
 
         private GraphicalFunctionDeclaration functionDeclaration;
         private Pane pane;
-
-    // @BeforeAll
-    // static void initToolkit() {
-    //     if (!Platform.isFxApplicationThread()) {
-    //         Platform.startup(() -> {});
-    //     }
-    // }
 
     @BeforeEach
     public void setUp() {

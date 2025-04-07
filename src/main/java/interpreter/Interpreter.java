@@ -226,6 +226,8 @@ public class Interpreter {
                 state.step();
                 if (result.asInteger() != 0) 
                     state.enterBlock(si.block());
+                else if (si.elseBlock() != null)
+                    state.enterBlock(si.elseBlock());
                 return instruction;
             case TantQue tantQue:
                 if (result.asInteger() != 0) 

@@ -88,7 +88,16 @@ public class Parser {
             advance();
             Expression condition = expression();
             Block block = block();
-            return new InstructionInfo(new Si(condition, block), line);
+            if (current().type() == TokenType.ENDL) 
+                advance();
+            
+            if (current().type() != TokenType.SINON) {
+                i -= 1;
+                return new InstructionInfo(new Si(condition, block), line);
+            }
+            advance();
+            Block sinonBlock = block();
+            return new InstructionInfo(new Si(condition, block, sinonBlock), line);
         }
 
         if (current().type() == TokenType.TANT_QUE) {

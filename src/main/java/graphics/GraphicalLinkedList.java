@@ -23,7 +23,7 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject implement
         currentX = 0;
         this.size = values.length;
     }
-
+    @Override
     public int size() {return size;}
 
 
@@ -71,22 +71,18 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject implement
      * Return an array containing the values of the LinkedList
      * @return
      */
+    @Override
     public String[] getValues() {return values;}
 
 
 
-    // /**
-    //  * Updates the value of the node at the specified index.
-    //  * This only updates the data model, not the visual field contents.
-    //  *
-    //  * @param index The index of the node to update.
-    //  * @param value The new value to assign to the node.
-    //  */
-    // @Override
-    // public void update(int index, String value) {
-    //     updateValue(index, value);
-    //     updateRender(index, value);
-    // }
+    /**
+     * Updates the value of the node at the specified index.
+     * This only updates the data model, not the visual field contents.
+     *
+     * @param index The index of the node to update.
+     * @param value The new value to assign to the node.
+     */
     @Override
     public void updateValue(int index, String value){
         if (index >= 0 && index < values.length) {
@@ -184,7 +180,7 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject implement
             renderedNodes.add(nodes.get(position).getOutgoingArrow());
             renderedNodes.add(nodes.get(position).getOutgoingArrowHead());
         }
-        // TODO : this can probablly be refactored. Its almos the same code than in deleteNodeAt
+        // this can probablly be refactored. Its almos the same code than in deleteNodeAt
         // Reconnect arrows for all shifted nodes
         for (int i = position + 1; i < nodes.size(); i++) {
             GraphicalNode prevNode = nodes.get(i - 1);

@@ -28,7 +28,7 @@ public final class GraphicalArray extends AbstractGraphicalObject implements Ite
         }
         this.size = this.values.length;
     }
-
+    @Override
     public String[] getValues(){return values;}
     /**
      * Returns the size of the array

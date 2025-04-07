@@ -12,6 +12,7 @@ import graphics.GraphicalFunctionDeclaration;
 import graphics.GraphicalLinkedList;
 import graphics.GraphicalRepresentation;
 import graphics.GraphicalVar;
+import graphics.IterableGraphicalObject;
 import graphics.ModificationType;
 import interpreter.Interpreter;
 import interpreter.instruction.Instruction;
@@ -399,39 +400,72 @@ public class duringExecutionController  {
                 List<GraphicalObject> pars = new ArrayList<>();
                 String f = function.name();
                 
-                if (f.equals("ajouter_liste")){
+                if (f.equals("ajouter_liste")){ // id, value
 
-                //     String oldValue = ((GraphicalArray) rep.getElement(interpreter.getId(function.args().get(0)))).getValues()[1];
-                //     record.push(new IterableModifyRecord(interpreter.getId(function.args().get(1).asString()), 
-                //         ModificationType.INSERT, Integer.parseInt(function.args().get(1).asString()),oldValue));
-                //     rep.updateElement(interpreter.getId(f), ModificationType.INSERT, f, Integer.parseInt(function.args().get(1).asString()));
+                    int id = Integer.parseInt(function.args().get(0).asString());
+                    String value = function.args().get(1).asString();
+                    int index = ((IterableGraphicalObject) rep.getElement(id)).size() - 1; 
+
+                    String oldValue = ((IterableGraphicalObject) rep.getElement(id)).getValues()[index];
+                    record.push(new IterableModifyRecord(id, 
+                        ModificationType.INSERT, 
+                        index,
+                        oldValue));
+                    rep.updateElement(id, ModificationType.INSERT, value, index);
     
                 }
-                else if (f.equals("supprimer_liste")){
-                    // int index = Integer.parseInt(function.args().get(1).asString());
-                    // String oldValue = ((GraphicalArray) rep.getElement(interpreter.getId(function.args().get(0)))).getValues()[index];
-                    
-                    rep.updateElement(interpreter.getId("x"), ModificationType.REMOVE,"0" , 0);
-                    
-                    // record.push(new IterableModifyRecord(interpreter.getId(function.args().get(1).asString()), 
-                        // ModificationType.REMOVE, index,oldValue));
-                    // rep.updateElement(interpreter.getId(function.args().get(0)), ModificationType.REMOVE, oldValue, index);
+                if (f.equals("inserer_liste")){ // id, index, value
+
+                    int id = Integer.parseInt(function.args().get(0).asString());
+                    int index = Integer.parseInt(function.args().get(1).asString());
+                    String value = function.args().get(2).asString();
+
+                    String oldValue = ((IterableGraphicalObject) rep.getElement(id)).getValues()[index];
+                    record.push(new IterableModifyRecord(id, 
+                        ModificationType.INSERT, 
+                        index,
+                        oldValue));
+                    rep.updateElement(id, ModificationType.INSERT, value, index);
     
-                } else if (f.equals("recuperer_liste")){
-                    // int index = Integer.parseInt(function.args().get(1).asString());
-                    // String oldValue = ((GraphicalArray) rep.getElement(interpreter.getId(function.args().get(0)))).getValues()[index];
+                }
+                else if (f.equals("supprimer_liste")){ // id, index
+                    int id = Integer.parseInt(function.args().get(0).asString());
+                    int index = Integer.parseInt(function.args().get(1).asString());
+                    
+                    String oldValue = ((IterableGraphicalObject) rep.getElement(id)).getValues()[index];
+                    record.push(new IterableModifyRecord(id, 
+                        ModificationType.INSERT, 
+                        index,
+                        oldValue));
                     
                     // rep.updateElement(interpreter.getId("x"), ModificationType.REMOVE,"0" , 0);
+                    
+                    record.push(new IterableModifyRecord(id, 
+                        ModificationType.REMOVE, 
+                        index,
+                        oldValue));
+                    rep.updateElement(id, ModificationType.REMOVE, oldValue, index); // here old value should be given as parameter but it wont be used
     
-                    // record.push(new IterableModifyRecord(interpreter.getId(function.args().get(1).asString()), 
-                        // ModificationType.REMOVE, index,oldValue));
-                    // rep.updateElement(interpreter.getId(function.args().get(0)), ModificationType.REMOVE, oldValue, index);
+                } else if (f.equals("recuperer_liste")){ // id, index
+
+                    // NOTHING TO DO SINCE ANY MODIFICATION IS DONE TO ANY GRAPHICAL OBJECT
+
+                    // int id = Integer.parseInt(function.args().get(0).asString());
+                    // int index = Integer.parseInt(function.args().get(1).asString());
+                    
+                    
+                    // String value = ((IterableGraphicalObject) rep.getElement(id)).getValues()[index];
+
     
-                }else if (f.equals("taille_liste")){
+                }else if (f.equals("taille_liste")){ // id
 
                     // nothing to do, it just returns a value
 
-                }else if (rep.getFunction(f) instanceof GraphicalFunctionDeclaration fd){
+                } else if(f.equals("modifier_liste")){ // id, index, newValue
+
+
+
+                } else if (rep.getFunction(f) instanceof GraphicalFunctionDeclaration fd){
                     parsNames = fd.getParameters();
 
                     
@@ -461,7 +495,6 @@ public class duringExecutionController  {
                 }
                 
                 else {throw new Exception("Mismatch between given arguments and function arguments");}
-                // lastCalledFunctionID = fc.getID();
             }
 
             else if (inst instanceof FunctionDeclaration fdeclaration) {
@@ -479,8 +512,8 @@ public class duringExecutionController  {
         }
         
         
-        try{
-            // we try to get the current line of the interpreter, it will raise an exception if there is no more lines to read, i.e. we have just executed the last line of code
+        try{ // we try to get the current line of the interpreter, it will raise an exception if there is no more lines to read, i.e. we have just executed the last line of code
+            
             highlightCurrentLine(interpreter.getCurrentLine()-1);
 
         } catch(Exception e){

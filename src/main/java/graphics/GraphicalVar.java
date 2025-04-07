@@ -10,10 +10,16 @@ public final class GraphicalVar extends AbstractGraphicalObject {
 
     private String value;
 
-    public GraphicalVar(String name, String value, Pane pane) {
-        super(name, pane);
+    // public GraphicalVar(String name, String value, Pane pane) {
+    //     super(name, pane);
+    //     this.value = value;
+    // }
+
+    public GraphicalVar(String name, String value, Pane pane, int id) {
+        super(name, pane, id);
         this.value = value;
     }
+
     /**
      * Returns the content of the variable
      * @return value of the variable as a String

@@ -3,14 +3,14 @@ package controllers;
 import graphics.GraphicalRepresentation;
 
 public abstract class ExecutionRecord {
-    protected String variableName;
+    protected int id;
 
-    public ExecutionRecord(String variableName) {
-        this.variableName = variableName;
+    public ExecutionRecord(int id) {
+        this.id = id;
     }
 
-    public String getVariableName() {
-        return variableName;
+    public int getId() {
+        return id;
     }
 
     public abstract void undo(GraphicalRepresentation rep);

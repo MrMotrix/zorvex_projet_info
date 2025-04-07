@@ -17,8 +17,8 @@ public final class GraphicalLinkedList extends AbstractGraphicalObject implement
 
     private double currentX;
     
-    public GraphicalLinkedList(String name,  String[] values, Pane pane) {
-        super(name, pane);
+    public GraphicalLinkedList(String name,  String[] values, Pane pane, int id) {
+        super(name, pane, id);
         this.values = values;
         currentX = 0;
         this.size = values.length;

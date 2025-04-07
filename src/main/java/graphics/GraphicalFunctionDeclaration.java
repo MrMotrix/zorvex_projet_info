@@ -16,8 +16,8 @@ public final class GraphicalFunctionDeclaration extends AbstractGraphicalObject{
 
     private List<String> parameters;
     private String variables;
-    public GraphicalFunctionDeclaration(String name, Pane pane, List<String> parameters, String variables) {
-        super(name, pane);
+    public GraphicalFunctionDeclaration(String name, Pane pane, List<String> parameters, String variables, int id) {
+        super(name, pane, id);
         this.variables = variables;
         this.parameters = parameters.isEmpty() ? List.of("vide") : parameters;
     }

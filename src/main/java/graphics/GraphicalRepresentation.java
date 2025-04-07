@@ -1,39 +1,72 @@
 package graphics;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
+
 import graphics.IterableGraphicalObject;
 
 public class GraphicalRepresentation {
 
-    private Map<String, GraphicalObject> elements;
+    private Map<Integer, GraphicalObject> elements;
+    private Map<String, GraphicalFunctionDeclaration> functions;
+    private ArrayList<Integer> graphicalRenderOrderIds;
     
     private double currentX;
     private double currentY;
     private double spaceBetweenPlots;
+    private Stack<Integer> graphicalFCOrder;
     
     public GraphicalRepresentation() {
         this.elements = new HashMap<>();
+        this.graphicalRenderOrderIds = new ArrayList<>();
+        this.graphicalFCOrder = new Stack<>();
         reinitializePositioningValues();
     }
 
-    public Map<String, GraphicalObject> getElements() {
+    public Stack<Integer> fcalls(){
+        return graphicalFCOrder;
+
+    }
+
+    public Map<Integer, GraphicalObject> getElements() {
         return elements;
     }
 
-    public GraphicalObject getElement(String name){
-        return elements.get(name);
+    public Map<String, GraphicalFunctionDeclaration> getFunctions() {
+        return functions;
     }
 
-    public void setElements(Map<String, GraphicalObject> elements) {
+    public GraphicalFunctionDeclaration getFunction(String name) {
+        return functions.get(name);
+    }
+
+    public void addFunction(String name, GraphicalFunctionDeclaration function){
+        if (functions == null) {
+            functions = new HashMap<>();
+        }
+        functions.put(name, function);
+    }
+
+    public GraphicalObject getElement(int id){
+        return elements.get(id);
+    }
+
+    public void setElements(Map<Integer, GraphicalObject> elements) {
         this.elements = elements;
     }
 
-    public void addElement(String name, GraphicalObject element) {
+    public void addElement(int id, GraphicalObject element) {
             
         element.draw(currentX, currentY);
-        elements.put(name, element);
+        elements.put(id, element);
+        graphicalRenderOrderIds.add(id);
         
+        adjustSpacing(element);
+    }
+
+    private void adjustSpacing(GraphicalObject element) {
         if (element instanceof GraphicalFunctionDeclaration){
             currentY += 80;
         }
@@ -44,7 +77,7 @@ public class GraphicalRepresentation {
             currentY += spaceBetweenPlots;
         }
         else if (element instanceof GraphicalVar){
-            currentY += 60;
+            currentY += 80;
         }
         else if(element instanceof GraphicalFunctionCall){
             currentY +=50;
@@ -54,29 +87,30 @@ public class GraphicalRepresentation {
         }
     }
 
-    public void updateElement(String name, ModificationType type, String value, int index) {
-        if (elements.containsKey(name)) {
+    public void updateElement(int id, ModificationType type, String value, int index) {
+        if (elements.containsKey(id)) {
             switch (type) {
                 case INSERT:
-                    IterableGraphicalObject obj1 = ((IterableGraphicalObject)elements.get(name));
+                    IterableGraphicalObject obj1 = ((IterableGraphicalObject)elements.get(id));
                     obj1.addNodeAt(index, value);
                     break;
                 case REMOVE:
-                    IterableGraphicalObject obj2 = ((IterableGraphicalObject)elements.get(name));
+                    IterableGraphicalObject obj2 = ((IterableGraphicalObject)elements.get(id));
                     obj2.deleteNodeAt(index);
                     break;
                 case UPDATE: 
-                    elements.get(name).update(index, value);
+                    elements.get(id).update(index, value);
                 default:
                     break;
             }
         }
     }
 
-    public void deleteElement(String name) {
-        if (elements.containsKey(name)) {
-            elements.get(name).removeFromPane();
-            elements.remove(name);
+    public void deleteElement(int id) {
+        if (elements.containsKey(id)) {
+            elements.get(id).removeFromPane();
+            elements.remove(id);
+            graphicalRenderOrderIds.remove(graphicalRenderOrderIds.indexOf(id));
             reorganize();
         }
     }
@@ -101,9 +135,23 @@ public class GraphicalRepresentation {
         }
         this.reinitializePositioningValues();
     
-        for (GraphicalObject obj : elements.values()) {
-            obj.draw(currentX, currentY);
-            currentY += spaceBetweenPlots;
+        // for (GraphicalObject obj : elements.values()) {
+        //     obj.draw(currentX, currentY);
+        //     adjustSpacing(obj);
+        // }
+
+        for (int id : graphicalRenderOrderIds) {
+            GraphicalObject obj = elements.get(id);
+            if (obj != null) {
+                obj.draw(currentX, currentY);
+                adjustSpacing(obj);
+                if (obj instanceof GraphicalFunctionCall){
+                    increaseX(40);
+                }
+                else if (obj instanceof GraphicalVar v && v.getID() < 0){
+                    increaseX(-40);
+                }
+            }
         }
     }
 

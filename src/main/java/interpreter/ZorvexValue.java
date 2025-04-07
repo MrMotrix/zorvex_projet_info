@@ -115,4 +115,8 @@ public class ZorvexValue {
             return type == other.type && value == other.value;
         return false;
     }
+
+    public ZorvexType type() {
+        return type;
+    }
 }

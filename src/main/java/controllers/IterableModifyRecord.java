@@ -4,14 +4,16 @@ import graphics.GraphicalRepresentation;
 import graphics.IterableGraphicalObject;
 import graphics.ModificationType;
 
-public class IterableModifyRecord extends ExecutionRecord{
+public class IterableModifyRecord
+ extends ExecutionRecord
+{
     
     private ModificationType type;
-    private int position;
+private int position;
     private String oldValue;
 
-    public IterableModifyRecord(String variableName, ModificationType type, int position, String oldValue) {
-        super(variableName);
+    public IterableModifyRecord(int id, ModificationType type, int position, String oldValue) {
+        super(id);
         this.type = type;
         this.position = position;
         this.oldValue = oldValue;
@@ -19,6 +21,6 @@ public class IterableModifyRecord extends ExecutionRecord{
 
     @Override
     public void undo(GraphicalRepresentation rep) {
-        rep.updateElement(variableName, type, oldValue, position);
+        rep.updateElement(id, type, oldValue, position);
     }
 }

@@ -17,11 +17,29 @@ public final class GraphicalFunctionCall extends AbstractGraphicalObject {
 
     private String functionName;
     private List<GraphicalObject> parameters;
+    public List<GraphicalObject> getParameters() {
+        return parameters;
+    }
 
+    private List<GraphicalObject> ids;
     
     
-    public GraphicalFunctionCall(String name, Pane pane, List<GraphicalObject> parameters) {
-        super(name, pane);
+    // public GraphicalFunctionCall(String name, Pane pane, List<GraphicalObject> parameters) {
+    //     super(name, pane, id);
+    //     this.parameters = parameters;
+    //     this.functionName = name;
+    // }
+
+    public List<GraphicalObject> getIds() {
+        return ids;
+    }
+
+    public void setIds(List<GraphicalObject> ids) {
+        this.ids = ids;
+    }
+
+    public GraphicalFunctionCall(String name, Pane pane, List<GraphicalObject> parameters, int id) {
+        super(name, pane, id);
         this.parameters = parameters;
         this.functionName = name;
     }
@@ -78,6 +96,22 @@ public final class GraphicalFunctionCall extends AbstractGraphicalObject {
     public void updateRender(int index, String value) {
         
         return;
+    }
+
+    public void addId(GraphicalObject o){
+        ids.add(o);
+    }
+
+    public void addPar(GraphicalObject par){
+        parameters.add(par);
+    }
+
+    @Override
+    public void removeFromPane() {
+        super.removeFromPane();
+        parameters.forEach(GraphicalObject::removeFromPane);
+        ids.forEach(GraphicalObject::removeFromPane);
+        
     }
 
 }

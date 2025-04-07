@@ -38,26 +38,32 @@ public class successFileUploadController {
 
     // ========================================TEST========================================================
     
-    public static String code =  """
-        fonction fibo(n) {
-            si n = 0 {
-                retourner 0
-            }
-            si n = 1 {
-                retourner 1
-            }
-            retourner fibo(n-1) + fibo(n-2)
-        }
-        afficher fibo(10)
-        """;
     
-        public static String code2 =  """
+    public static String code1 =  """
+    x <- [2, "coucou ca", 3]
+    recuperer_liste(x, 0)
+    taille <- taille_liste(x)
+
+    fonction fibo(n) {
+        si n = 0 {
+            retourner 0
+        }
+        si n = 1 {
+            retourner 1
+        }
+        retourner fibo(n-1) + fibo(n-2)
+    }
+    afficher fibo(3)
+            """;
+            
+    public static String code2 =  """
         fonction sum(a,b) {
             retourner a+b
-        }
-        afficher sum(1,2)
-        """;
-    
+            }
+            afficher sum(1,2)
+            """;
+            
+    public static String code = code1;
     // ================================================================================================
 
     public successFileUploadController() {

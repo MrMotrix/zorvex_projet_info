@@ -17,10 +17,16 @@ public final class GraphicalArray extends AbstractGraphicalObject implements Ite
     private double currentX;
     private double currentY;
     private int size ;
-    public GraphicalArray(String name, String[] values, Pane pane) {
-        super(name, pane);
-        this.values = values;
-        this.size = values.length;
+    public GraphicalArray(String name, String[] values, Pane pane, int id) {
+        super(name, pane, id);
+        this.values = new String[values.length];
+        for (int i = 0; i < values.length; i++) {
+            String[] parts = values[i].trim().split(" ", 2);
+            // this.values[i] = parts.length > 1 ? parts[1] : parts[0]; 
+            if (i!= values.length -1) this.values[i] = parts[1]; 
+            else this.values[i] = parts[1].substring(0, parts[1].length() - 1); 
+        }
+        this.size = this.values.length;
     }
 
     public String[] getValues(){return values;}

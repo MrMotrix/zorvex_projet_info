@@ -1,9 +1,9 @@
 package graphics;
 
 public class GraphicalObjectIDGenerator {
-    private static int currentId = 0;
+    private static int currentId = -1;
 
     public static synchronized int getNextId() {
-        return currentId++;
+        return currentId--;
     }
 }

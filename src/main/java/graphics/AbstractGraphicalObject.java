@@ -18,7 +18,7 @@ public abstract sealed class AbstractGraphicalObject implements GraphicalObject 
     protected String name;
     protected Pane pane;
     protected List<Node> renderedNodes;
-    private final int id;
+    protected final int id;
 
     public final Color COLOR_ARRAY_BOX = Color.web("#646B3C"); // #646B3C
     public final Color COLOR_VARIABLE_BOX = Color.web("#5E7B9D"); // #5E7B9D
@@ -35,11 +35,11 @@ public abstract sealed class AbstractGraphicalObject implements GraphicalObject 
     public final Color COLOR_CONTENT_TEXT_FUNCTION = Color.web("#000000"); // #000000
     public final Color COLOR_ACTIVE_FUNCTION_CALL_TEXT = Color.web("#ffffff"); // #000000
 
-    public AbstractGraphicalObject(String name, Pane pane) {
+    public AbstractGraphicalObject(String name, Pane pane, int id) {
         this.name = name;
         this.pane = pane;
         this.renderedNodes = new ArrayList<>();
-        this.id = GraphicalObjectIDGenerator.getNextId();
+        this.id = id;
         
     }
     

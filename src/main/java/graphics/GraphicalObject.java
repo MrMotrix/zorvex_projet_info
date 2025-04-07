@@ -3,7 +3,6 @@ package graphics;
 public interface GraphicalObject {
     String getName();
 
-
     /**
      * Draw the object on the pane at the specified coordinates.
      * @param x coordinate

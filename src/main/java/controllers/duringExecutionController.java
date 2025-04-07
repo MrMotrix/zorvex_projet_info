@@ -1,121 +1,3 @@
-//         // ============================================ TESTING ============================================================================================
-//         // ============================================ CASE 1 : random remove of elements from a graphical representation======================================================================        
-//         if (TESTING_INDEX == 1){
-
-//             // random test to add a var, an array or a llist
-//             switch (random.nextInt(3)) {
-//                 case 0 -> rep.addElement(new GraphicalVar("Line", MainController.currentLine + "", canvasPane));
-//                 case 1 -> rep.addElement(new GraphicalArray("myArray_done_in_line" + MainController.currentLine, new String[]{"value1", "value2", "value3"}, canvasPane));
-//                 case 2 -> rep.addElement(new GraphicalLinkedList("myLinkedList", new String[]{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11"}, canvasPane)); // just to see what happens if there is not enough space
-//             }
-//         //========================================================== CASE 2 :  add and remove elements from a linked list ======================================================================
-//         } else if (TESTING_INDEX == 2){
-
-//             if(MainController.currentLine < 6) {
-//                 // rep.addElement(new GraphicalArray("myArray_done_in_line" + MainController.currentLine, new String[]{"value1", "value2", "value3"}, canvasPane));
-//                 rep.addElement(new GraphicalLinkedList("myLinkedList" + MainController.currentLine, new String[]{"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11"}, canvasPane)); 
-//             }
-//             else if (MainController.currentLine < 12){
-//                 GraphicalLinkedList g = (GraphicalLinkedList) rep.getElements().get(4);
-//                 int index = MainController.currentLine + random.nextInt(4);
-//                 g.addNodeAt(index, MainController.currentLine + "");
-//                 // rep.addElement((GraphicalLinkedList)(rep.getElements().getLast()).get(index));
-//             } else if (MainController.currentLine < 20){
-//                 GraphicalLinkedList g = (GraphicalLinkedList) rep.getElements().get(4);
-//                 int index = random.nextInt(12);
-//                 sendMessageToConsole("Delete position" + index);
-//                 g.deleteNodeAt(index);
-                                
-//             } else {
-//                 rep.deleteElement(rep.getElements().getFirst());
-//             }
-//         //========================================================== CASE 3 : add and remove elements from an array  ======================================================================
-
-//         } else if (TESTING_INDEX == 3){
-//             if(MainController.currentLine < 6) {
-
-//                 rep.addElement(new GraphicalArray("myGraphicalArray" + MainController.currentLine, "Hello worlds this is an array test".split(" "), canvasPane)); 
-                
-//             } else if (MainController.currentLine < 12){
-//                 GraphicalArray g = (GraphicalArray) rep.getElements().get(4);
-//                 g.addNodeAt(2, "test" + random.nextInt(10));
-
-//             } else if (MainController.currentLine < 20){
-//                 GraphicalArray g = (GraphicalArray) rep.getElements().get(4);
-//                 int index = random.nextInt(12);
-//                 sendMessageToConsole("Delete position" + index);
-//                 g.deleteNodeAt(index);
-
-//             } else {
-//                 rep.deleteElement(rep.getElements().getFirst());
-//             }
-//         //========================================================== CASE 4 : modify the value of a variable  ======================================================================
-
-//         } else if (TESTING_INDEX == 4){
-//             if(MainController.currentLine < 6) {
-
-//                 rep.addElement(new GraphicalVar("myVar" + MainController.currentLine, "value" + MainController.currentLine, canvasPane)); 
-                
-//             } else {
-//                 int index = random.nextInt(5);
-//                 sendMessageToConsole("Variable modified" + index);
-//                 rep.getElements().get(index).update(0, MainController.currentLine + "");;
-
-//             }
-//             //========================================================== CASE 5 : modify the value of an array at a given index  ======================================================================
-
-//         } else if (TESTING_INDEX == 5){
-//             if(MainController.currentLine < 6) {
-
-//                 rep.addElement(new GraphicalArray("myGraphicalArray" + MainController.currentLine, "Hello worlds this is an array test".split(" "), canvasPane)); 
-                
-//             } else if (MainController.currentLine < 12){
-//                 int index = random.nextInt(7);
-//                 sendMessageToConsole("Index modified in the last array" + index);
-//                 rep.getElements().getLast().update(index, MainController.currentLine + "");;
-
-//             } else if (MainController.currentLine < 20){
-
-//                 GraphicalArray g = (GraphicalArray) rep.getElements().getLast();
-//                 g.addNodeAt(random.nextInt(g.size()), "test" + MainController.currentLine);
-            
-//             } else if (MainController.currentLine < 25){
-//                 int index = random.nextInt(7);
-//                 sendMessageToConsole("Index modified in the last array" + index);
-//                 rep.getElements().getLast().update(MainController.currentLine - 20, MainController.currentLine + "");;
-
-//             }
-        
-
-//         //========================================================== CASE 6 : modify the value of a linked list at a given index  ======================================================================
-
-//         } else if (TESTING_INDEX == 6){
-//             if(MainController.currentLine < 6) {
-
-//                 rep.addElement(new GraphicalLinkedList("myLinkedList" + MainController.currentLine, "Hello worlds this is an llist test".split(" "), canvasPane)); 
-                
-//             } else if (MainController.currentLine < 12){
-//                 int index = random.nextInt(7);
-//                 sendMessageToConsole("Index modified in the last llist" + index);
-//                 rep.getElements().getLast().update(index, MainController.currentLine + "");;
-
-//             } else if (MainController.currentLine < 20){
-
-//                 GraphicalLinkedList g = (GraphicalLinkedList) rep.getElements().getLast();
-//                 g.addNodeAt(random.nextInt(g.size()), "test" + MainController.currentLine);
-            
-//             } else if (MainController.currentLine < 25){
-//                 int index = random.nextInt(7);
-//                 sendMessageToConsole("Index modified in the last array" + index);
-//                 rep.getElements().getLast().update(MainController.currentLine - 20, MainController.currentLine + "");;
-
-//             }
-//         }
-            
-//         //===========================================================END TEST=========================================================================
-//     }
-
-
 package controllers;
 
 import java.util.ArrayList;
@@ -153,6 +35,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import graphics.GraphicalObject;
+import graphics.GraphicalObjectIDGenerator;
 public class duringExecutionController  {
 
     // ======================== FXML ========================
@@ -234,6 +117,7 @@ public class duringExecutionController  {
     int TESTING_INDEX = 5;
     private ExecutionStack record;
     private int currentLine;
+    private int lastCalledFunctionID;
     // ==============================================================================
 
 
@@ -384,17 +268,47 @@ public class duringExecutionController  {
             // get the affected variable from the interpreter
             Instruction inst = interpreter.step();
 
-            if (inst instanceof Assigner assigner) {        
-                String var = assigner.variableName(); // get the name of the variable
-                String value = interpreter.getVariable(var).toString(); // get the value of the variable
+            if (inst instanceof Assigner assigner) {    
+                
+                // switch(assigner.()){
+
+                // }
+                String name = assigner.variableName(); // get the name of the variable
+                if (name.equals("")) return;
+                String value = interpreter.getVariable(name).toString(); // get the value of the variable
+                String type = interpreter.getVariable(name).type().toString(); // get the type of the variable
                 value = value.substring(value.indexOf(" ") + 1); // remove the type of variable
+                
+                switch (type){
+                    case "LIST" : 
+                        if (rep.getElements().containsKey(interpreter.getId(name))) { // if the variable already exists
+                            record.push(new IterableModifyRecord(interpreter.getId(name), ModificationType.UPDATE,0, value)); // TODO fix index
+                            rep.updateElement(interpreter.getId(name), ModificationType.UPDATE, value, 0);
+                        } else {
+                            GraphicalArray array = new GraphicalArray(name, value.split(","), canvasPane, interpreter.getId(name));
+                            rep.addElement(interpreter.getId(name), array );
+                            record.push(new CreateRecord(array.getID(), array));
+                        }
+                        break;
+                    case "STRING":
+                    case "INTEGER" :
+                        if (rep.getElements().containsKey(interpreter.getId(name))) { // if the variable already exists
+                            record.push(new ModifyVarRecord(interpreter.getId(name), value)); // TODO fix index
+                            rep.updateElement(interpreter.getId(name), ModificationType.UPDATE, value, 0);
+                        } else {
+                            GraphicalVar var = new GraphicalVar(name, value, canvasPane, interpreter.getId(name));
+                            rep.addElement(interpreter.getId(name), var );
+                            record.push(new CreateRecord(var.getID(), var));
+                        }
+                }   
+                
+
+                    
 
                 // add the variable to the graphical representation or check if it already exists and update it
-                if (rep.getElements().containsKey(var)) { // if the variable already exists
-                    record.push(new ModifyVarRecord(var, ((GraphicalVar)(rep.getElement(var))).getValue()));
-                    rep.updateElement(var, ModificationType.UPDATE, value, 0);
 
-                } else { // if we are creating a variable
+                // } else { 
+                    // if we are creating a variable
                     // TODO : this is the switch case that should handle the tupe of assignation
                     // AbstractGraphicalObject thisIsTheTypeOfAssignationReturned;
                     // switch (thisIsTheTypeOfAssignationReturned){
@@ -416,9 +330,9 @@ public class duringExecutionController  {
                     //     default -> {sendMessageToConsole("Un type de retour est erronnee");}
                     // }
                         
-                        GraphicalVar temp = new GraphicalVar(var, value, canvasPane);
-                        rep.addElement(var, temp);
-                        record.push(new CreateRecord(var, temp));
+                        // GraphicalVar temp = new GraphicalVar(name, value, canvasPane, interpreter.getId(name));
+                        // rep.addElement(interpreter.getId(var), temp );
+                        // record.push(new CreateRecord(temp.getID(), temp));
                         // ArrayList<GraphicalObject> tempA = new ArrayList<>();
                         // tempA.add(temp);
                 
@@ -436,50 +350,138 @@ public class duringExecutionController  {
                  /* GraphicalLinkedList temp = new GraphicalLinkedList(var, new String[]{value}, canvasPane);
                  rep.addElement(var, temp);
                  record.push(new CreateRecord(var, temp)); */
-                }
+                
             }
             else if (inst instanceof Afficher afficher) {
                 sendMessageToConsole(afficher.result().asString());
             }
             else if (inst instanceof Retourner retourner) {
                 String returnValue = retourner.result().asString();
-                GraphicalVar temp = new GraphicalVar("Renvoyer", returnValue, canvasPane);
-                rep.addElement("Renvoyer", temp);
-                record.push(new CreateRecord("Renvoyer", temp));
+                GraphicalVar temp = new GraphicalVar("Renvoyer", returnValue, canvasPane, GraphicalObjectIDGenerator.getNextId());
+                rep.addElement(temp.getID(), temp);
+                record.push(new CreateRecord(temp.getID(), temp));
+
+                // returnValue.getParameters().forEache(m -> rep.deleteElement(m.getID()));
+                
+            
+                
+
+                // lastCalledFunctionID = rep.fcalls().pop().intValue();
+                
+                // GraphicalFunctionCall fcall = (GraphicalFunctionCall)(rep.getElement(lastCalledFunctionID));
+                
+                // fcall.getIds().forEach(m -> rep.deleteElement(m)); 
+                // rep.deleteElement(fcall.getID());
+                
+                
+                // fcall.addId(temp); // add to the function that has just returned a valie, the graphicalVar containing the value 
+                
+                // if (!rep.fcalls().isEmpty()) {
+                //     GraphicalFunctionCall fcall2 = (GraphicalFunctionCall)(rep.getElement(rep.fcalls().getLast().intValue()));
+                //     fcall2.addId(fcall);
+                // }
+                    
+                
+                // fcall.addId(temp.getID());
                 rep.increaseX(-40);
 
                 
             }
+
+    /*         else if (inst instanceof Retourner retourner) {
+                String returnValue = retourner.result().asString();
+                GraphicalVar temp = new GraphicalVar("Renvoyer", returnValue, canvasPane, GraphicalObjectIDGenerator.getNextId());
+                rep.addElement(temp.getID(), temp);
+                record.push(new CreateRecord(temp.getID(), temp));
+            
+                lastCalledFunctionID = rep.fcalls().pop();
+                GraphicalFunctionCall fcall = (GraphicalFunctionCall)(rep.getElement(lastCalledFunctionID));
+                fcall.removeFromPane();
+                rep.deleteElement(fcall.getID());
+            
+                if (!rep.fcalls().isEmpty()) {
+                    GraphicalFunctionCall fcall2 = (GraphicalFunctionCall)(rep.getElement(rep.fcalls().getLast()));
+                    fcall2.addId(fcall); // por si quieres conservar rastro visual de la llamada
+                    fcall2.addId(temp);  // <-- SOLUCIÓN: guardar también el valor retornado
+                }
+            } */
+            
+            
             
             else if (inst instanceof Function function) {
                 // get the name of the function
                 List<String> parsNames;
                 List<GraphicalObject> pars = new ArrayList<>();
                 String f = function.name();
-                if (rep.getElement(f) instanceof GraphicalFunctionDeclaration fd){
+                
+                // if (f.equals("ajouter_liste")){
+
+                //     String oldValue = ((GraphicalArray) rep.getElement(interpreter.getId(function.args().get(0)))).getValues()[1];
+                //     record.push(new IterableModifyRecord(interpreter.getId(function.args().get(1).asString()), 
+                //         ModificationType.INSERT, Integer.parseInt(function.args().get(1).asString()),oldValue));
+                //     rep.updateElement(interpreter.getId(f), ModificationType.INSERT, f, Integer.parseInt(function.args().get(1).asString()));
+    
+                // }
+                if (f.equals("supprimer_liste")){
+                    // int index = Integer.parseInt(function.args().get(1).asString());
+                    // String oldValue = ((GraphicalArray) rep.getElement(interpreter.getId(function.args().get(0)))).getValues()[index];
+                    
+                    rep.updateElement(interpreter.getId("x"), ModificationType.REMOVE,"0" , 0);
+    
+                    // record.push(new IterableModifyRecord(interpreter.getId(function.args().get(1).asString()), 
+                        // ModificationType.REMOVE, index,oldValue));
+                    // rep.updateElement(interpreter.getId(function.args().get(0)), ModificationType.REMOVE, oldValue, index);
+    
+                } else if (f.equals("recuperer_liste")){
+                    // int index = Integer.parseInt(function.args().get(1).asString());
+                    // String oldValue = ((GraphicalArray) rep.getElement(interpreter.getId(function.args().get(0)))).getValues()[index];
+                    
+                    // rep.updateElement(interpreter.getId("x"), ModificationType.REMOVE,"0" , 0);
+    
+                    // record.push(new IterableModifyRecord(interpreter.getId(function.args().get(1).asString()), 
+                        // ModificationType.REMOVE, index,oldValue));
+                    // rep.updateElement(interpreter.getId(function.args().get(0)), ModificationType.REMOVE, oldValue, index);
+    
+                }else if (f.equals("taille_liste")){
+
+
+
+                }else if (rep.getFunction(f) instanceof GraphicalFunctionDeclaration fd){
                     parsNames = fd.getParameters();
 
-                }
-                else {throw new Exception("Mismatch between given arguments and function arguments");}
-
-                //get function parameters names
-                GraphicalFunctionCall fc = new GraphicalFunctionCall(f + "CALL", canvasPane, pars);
-                rep.addElement(f + "CALL", fc);
-                rep.increaseX(40);                
-                for (int i = 0; i < parsNames.size(); i++){
                     
-                    GraphicalVar temp = new GraphicalVar(parsNames.get(i),function.args().get(i).asString() ,canvasPane);
+                    //get function parameters names
+                    GraphicalFunctionCall fc = new GraphicalFunctionCall(f , canvasPane, pars, GraphicalObjectIDGenerator.getNextId());
+                    rep.addElement(fc.getID(), fc);
+                    rep.increaseX(40);
+                    
+                    ArrayList<GraphicalObject> ids = new ArrayList<>();
+                    
+                    for (int i = 0; i < parsNames.size(); i++){
+                        
+                    GraphicalVar temp = new GraphicalVar(parsNames.get(i),
+                    function.args().get(i).asString() ,
+                    canvasPane, 
+                    // interpreter.getId(function.args().get(i).asString()));
+                    interpreter.getId(parsNames.get(i)));
                     pars.add(temp);
-                    rep.addElement(parsNames.get(i), temp);
-                    record.push(new CreateRecord(parsNames.get(i), temp));
+                    rep.addElement(interpreter.getId(parsNames.get(i)), temp);
+                    record.push(new CreateRecord(temp.getID(), temp));
+                    ids.add(temp);
                 }
                 fc.setParameters(pars);
-                
+                fc.setIds(ids);
+                rep.fcalls().push(fc.getID());
+            
+            }
+            else {throw new Exception("Mismatch between given arguments and function arguments");}
+                // lastCalledFunctionID = fc.getID();
             }
 
             else if (inst instanceof FunctionDeclaration fdeclaration) {
-                GraphicalFunctionDeclaration fd = new GraphicalFunctionDeclaration(fdeclaration.name(), canvasPane,  fdeclaration.parameters(), null);
-                rep.addElement(fdeclaration.name(), fd);
+                GraphicalFunctionDeclaration fd = new GraphicalFunctionDeclaration(fdeclaration.name(), canvasPane,  fdeclaration.parameters(), null, GraphicalObjectIDGenerator.getNextId());
+                rep.addElement(fd.getID(), fd);
+                rep.addFunction(fdeclaration.name(), fd);
             }
 
         } catch (Exception e) {

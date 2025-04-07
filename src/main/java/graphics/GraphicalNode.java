@@ -21,7 +21,7 @@ public final class GraphicalNode extends AbstractGraphicalObject{
     private Polygon outgoingArrowHead;
 
     public GraphicalNode(String value, int index, Pane pane) {
-        super(value, pane);
+        super(value, pane, GraphicalObjectIDGenerator.getNextId());
         this.value = value;
         this.index = index;
 

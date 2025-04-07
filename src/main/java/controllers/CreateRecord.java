@@ -1,18 +1,19 @@
 package controllers;
 
+import graphics.AbstractGraphicalObject;
 import graphics.GraphicalObject;
 import graphics.GraphicalRepresentation;
 
 public class CreateRecord extends ExecutionRecord {
-    private GraphicalObject graphic;
+    private AbstractGraphicalObject graphic;
 
-    public CreateRecord(String variableName, GraphicalObject graphic) {
-        super(variableName);
+    public CreateRecord(int id, AbstractGraphicalObject graphic) {
+        super(id);
         this.graphic = graphic;
     }
 
     @Override
     public void undo(GraphicalRepresentation rep) {
-        rep.deleteElement(variableName);
+        rep.deleteElement(graphic.getID());
     }
 }

@@ -207,7 +207,7 @@ public class Interpreter {
         else if (fc.name().equals("empiler")) {
             lastReturnValue = ZorvexValue.nullValue();
             values.get(0).empiler(values.get(1));
-            return new Function(List.of(new ZorvexValue(variableId)), fc.name());
+            return new Function(List.of(new ZorvexValue(variableId), values.get(1)), fc.name());
         }
         else if (fc.name().equals("depiler")) {
             lastReturnValue = values.get(0).depiler();

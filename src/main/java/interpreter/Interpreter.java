@@ -40,7 +40,11 @@ public class Interpreter {
         new FunctionDeclaration("supprimer_liste", null, List.of("liste", "indice")),
         new FunctionDeclaration("taille_liste", null, List.of("liste")),
         new FunctionDeclaration("recuperer_liste", null, List.of("liste", "indice")),
-        new FunctionDeclaration("modifier_liste", null, List.of("liste", "indice", "valeur"))
+        new FunctionDeclaration("modifier_liste", null, List.of("liste", "indice", "valeur")),
+        new FunctionDeclaration("pile_vide", null, List.of()),
+        new FunctionDeclaration("empiler", null, List.of("pile", "element")),
+        new FunctionDeclaration("depiler", null, List.of("pile")),
+        new FunctionDeclaration("est_pile_vide", null, List.of("pile"))
     );
 
     private int currentInstruction = 0;
@@ -96,9 +100,20 @@ public class Interpreter {
                 "retourner x",
             "}",
 
-            "x <- [7,85,2,3,4,15]",
-            "tri(x)",
-            "afficher x"
+            "x <- pile_vide()",
+            "empiler(x, 5)",
+            "empiler(x, 2)",
+            "empiler(x, 3)",
+            "y <- depiler(x)",
+            "depiler(x)",
+            "depiler(x)",
+            "si est_pile_vide(x) {",
+                "afficher \"ok\"",
+            "}",
+            "z <- x+\" coucou\"",
+            "afficher y",
+            "afficher x",
+            "afficher z"
             );
         
         Interpreter interpreter = new Interpreter(String.join("\n", program) + "\n");
@@ -187,6 +202,23 @@ public class Interpreter {
         }
         else if (fc.name().equals("recuperer_liste")) {
             lastReturnValue = new ZorvexValue(values.get(0).get(values.get(1).asInteger()));
+            return new Function(values, fc.name());
+        }
+        else if (fc.name().equals("pile_vide")) {
+            lastReturnValue = ZorvexValue.emptyStack();
+            return new Function(List.of(), fc.name());
+        }
+        else if (fc.name().equals("empiler")) {
+            lastReturnValue = ZorvexValue.nullValue();
+            values.get(0).empiler(values.get(1));
+            return new Function(List.of(new ZorvexValue(variableId)), fc.name());
+        }
+        else if (fc.name().equals("depiler")) {
+            lastReturnValue = values.get(0).depiler();
+            return new Function(List.of(new ZorvexValue(variableId), lastReturnValue), fc.name());
+        }
+        else if (fc.name().equals("est_pile_vide")) {
+            lastReturnValue = new ZorvexValue(values.get(0).isEmpty() ? 1 : 0);
             return new Function(values, fc.name());
         }
 

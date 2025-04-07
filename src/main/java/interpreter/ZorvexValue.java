@@ -1,5 +1,6 @@
 package interpreter;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class ZorvexValue {
         value = new ArrayList<ZorvexValue>(values);
         type = ZorvexType.LIST;
     }
+    
 
     public static ZorvexValue nullValue() {
         ZorvexValue result = new ZorvexValue(0);
@@ -52,6 +54,7 @@ public class ZorvexValue {
         throw new RuntimeError("Cannot convert " + this + " to integer");
     }
 
+    // lists
     public void add(ZorvexValue element) throws RuntimeError {
         if (type != ZorvexType.LIST)
             throw new RuntimeError("Cannot add to" + this + " as it is not a list.");
@@ -104,11 +107,44 @@ public class ZorvexValue {
         List<ZorvexValue> list = (List<ZorvexValue>)value;
         return list.size();
     }
+    
+    public static ZorvexValue emptyStack() {
+        ZorvexValue result = new ZorvexValue(0);
+        result.type = ZorvexType.STACK;
+        result.value = new ArrayDeque<ZorvexValue>();
+        return result;
+    }
+
+    public boolean isEmpty() throws RuntimeError {
+        if (type != ZorvexType.STACK)
+            throw new RuntimeError("Cannot call isEmpty on " + this + "as it is not a stack.");
+        ArrayDeque<ZorvexValue> stack = (ArrayDeque<ZorvexValue>)value;
+        
+        return stack.isEmpty();
+    }
+
+    public ZorvexValue depiler() throws RuntimeError {
+        if (type != ZorvexType.STACK)
+            throw new RuntimeError("Cannot call depiler on " + this + "as it is not a stack.");
+        ArrayDeque<ZorvexValue> stack = (ArrayDeque<ZorvexValue>)value;
+        
+        if (isEmpty())
+            throw new RuntimeError("Ne peut dépiler d'une pile vide");
+        return stack.pollLast();
+    }
+
+    public void empiler(ZorvexValue element) throws RuntimeError {
+        if (type != ZorvexType.STACK)
+            throw new RuntimeError("Cannot call empiler on " + this + "as it is not a stack.");
+        ArrayDeque<ZorvexValue> stack = (ArrayDeque<ZorvexValue>)value;
+        stack.offerLast(element);
+    }
 
     public String asString() {
         if (type == ZorvexType.LIST) 
             return "[" + String.join(",", ((List<ZorvexValue>)value).stream().map(x -> x.asString()).toList()) + "]";
-        
+        if (type == ZorvexType.STACK) 
+            return "[" + String.join(",", ((ArrayDeque<ZorvexValue>)value).stream().map(x -> x.asString()).toList()) + "]";
         return value.toString();
     }
 

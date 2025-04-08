@@ -96,20 +96,38 @@ public class Interpreter {
                 "retourner x",
             "}",
 
-            "x <- pile_vide()",
-            "empiler(x, 5)",
-            "empiler(x, 2)",
-            "empiler(x, 3)",
-            "y <- depiler(x)",
-            "depiler(x)",
-            "depiler(x)",
-            "si est_pile_vide(x) {",
-                "afficher \"ok\"",
+            "fonction infixe(g, i, n) {",
+                "si i < n {",
+                    "si recuperer_liste(g, i) {",
+                        "infixe(g, 2*(i+1)-1, n)",
+                        "afficher recuperer_liste(g, i)",
+                        "infixe(g, 2*(i+1), n)",
+                    "}",
+                "}",
             "}",
-            "z <- x+\" coucou\"",
-            "afficher y",
-            "afficher x",
-            "afficher z"
+
+            "fonction recherche_dicho(l,x) {",
+                "L <- 0",
+                "R <- taille_liste(l)-1",
+                "tant que L <= R {",
+                    "m <- (L+R)/2",
+                    "si recuperer_liste(l,m) < x {",
+                        "L <- m+1",
+                    "}",
+                    "si recuperer_liste(l,m) > x {",
+                        "R <- m-1",
+                    "}",
+                    "si recuperer_liste(l, m) = x {",
+                        "retourner m",
+                    "}",
+                "}",
+                "retourner -1",
+            "}",
+            "x <- [5,2,3,4,7,9,8,0,10]",
+            "l <- [1,2,3,4,5,7,9]",
+            "afficher \"test\"",
+            "afficher recherche_dicho(l, 7)",
+            "infixe(x,0,taille_liste(x))"
             );
         
         Interpreter interpreter = new Interpreter(String.join("\n", program) + "\n");
@@ -139,6 +157,10 @@ public class Interpreter {
 
     public int getId(String name) {
         return stack.peekLast().getId(name);
+    }
+    
+    public boolean isDone() {
+        return !state.inBlock();
     }
 
     public ZorvexValue getVariable(int id) {

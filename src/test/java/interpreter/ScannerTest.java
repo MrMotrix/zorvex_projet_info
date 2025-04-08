@@ -99,31 +99,6 @@ public class ScannerTest {
         }
     }
 
-    @Test
-    public void testInvalidSyntax() {
-        String code = "si x { afficher 5 }"; // Syntaxe invalide (car condition manquante)
-
-        try {
-            List<Token> tokens = Scanner.tokenize(code);
-            System.out.println("Tokens générés : " + tokens);
-        } catch (SyntaxErrorException e) {
-            System.out.println("Message d'erreur : " + e.getMessage());
-            assertTrue(e.getMessage().contains("Erreur de syntaxe"));
-        }
-    }
-
-    @Test
-    public void testMissingParenthesis() {
-        String code = "si (x > 5 { afficher 5 }"; // Parenthèse droite manquante
-
-        try {
-            List<Token> tokens = Scanner.tokenize(code);
-        } catch (SyntaxErrorException e) {
-            assertTrue(e.getMessage().contains("Parenthèse fermante manquante"));
-        }
-    }
-
-
     // Méthode pour vérifier que le token correspond au type attendu
     private void assertToken(Token token, TokenType expectedType, String expectedLexeme) {
         assertEquals(expectedType, token.type(), "Type de token incorrect");

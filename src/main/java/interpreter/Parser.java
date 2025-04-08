@@ -91,7 +91,7 @@ public class Parser {
             if (current().type() == TokenType.ENDL) 
                 advance();
             
-            if (current().type() != TokenType.SINON) {
+            if (i >= tokens.size() || current().type() != TokenType.SINON) {
                 i -= 1;
                 return new InstructionInfo(new Si(condition, block), line);
             }

@@ -133,59 +133,103 @@ public class successFileUploadController {
         
             """;
     public static String code4 =  """
-            fonction fibo(n) {
-            afficher "hello world"
-            si n = 0 {
-                retourner 0   
-            }
-            si n = 1 {
-                retourner 1
-            }
-            retourner fibo(n-1) + fibo(n-2)
+    fonction fibo(n) {
+        si n = 0 {
+            retourner 0   
         }
-        fonction ack(m,n) {
-            si m = 0 {
-                retourner n+1
-            }
-            si n = 0 {
-                retourner ack(m-1, 1)
-            }
-            retourner ack(m-1, ack(m, n-1))
-        } 
-
-        fonction tri(l) {
-            i <- taille_liste(l)-1
-            tant que i >= 1 {
-                j <- 0
-                tant que j < i {
-                    si recuperer_liste(l, j+1) < recuperer_liste(l, j) {
-                        x <- recuperer_liste(l, j)
-                        y <- recuperer_liste(l, j+1)
-                        modifier_liste(l, j, y)
-                        modifier_liste(l, j+1, x)
-                    }
-                    j <- j + 1
-                }
-                i <- i-1
-            }
+        si n = 1 {
+            retourner 1
         }
+        retourner fibo(n-1) + fibo(n-2)
+    }
 
-        fonction argmax(l) {
-            n <- taille_liste(l)
-            x <- 0
-            i <- 0
-            tant que i < n {
-                si recuperer_liste(l, i) > recuperer_liste(l, x) {
-                    x <- i
-                }
-                i <- i+1
+fonction tri(l) {
+    i <- taille_liste(l)-1
+    tant que i >= 1 {
+        j <- 0
+        tant que j < i {
+            si recuperer_liste(l, j+1) < recuperer_liste(l, j) {
+                x <- recuperer_liste(l, j)
+                y <- recuperer_liste(l, j+1)
+                modifier_liste(l, j, y)
+                modifier_liste(l, j+1, x)
             }
-            retourner x
+            j <- j + 1
         }
+        i <- i-1
+    }
+    retourner l
+}
 
-        x <- [7,8,52,3,4,15]
-        tri(x)
-        afficher(x)
+fonction argmax(l) {
+    n <- taille_liste(l)
+    x <- 0
+    i <- 0
+    tant que i < n {
+        si recuperer_liste(l, i) > recuperer_liste(l, x) {
+            x <- i
+        }
+        i <- i+1
+    }
+    retourner x
+}
+
+fonction parite(n) {
+    si n/2*2 = n {
+        retourner "pair"
+    } 
+    sinon {
+        retourner "impair"
+    }
+}
+
+fonction infixe(g, i, n) {
+    si i < n {
+        si recuperer_liste(g, i) {
+            x <- infixe(g, 2*(i+1)-1, n)
+            afficher recuperer_liste(g, i)
+            x <- infixe(g, 2*(i+1), n)
+        }
+        retourner i
+    }
+    retourner 0
+}
+
+fonction recherche_dicho(l, x) {
+    L <- 0
+    R <- taille_liste(l)-1
+    cmp <- 0
+    tant que L <= R {
+        m <- (L+R)/2
+        si recuperer_liste(l,m) < x {
+            L <- m + 1
+            cmp <- cmp+1
+        }
+        si recuperer_liste(l,m) > x {
+            R <- m-1
+            cmp <- cmp+1
+        }
+        si recuperer_liste(l,m) = x {
+            cmp <- cmp+1
+            retourner m
+        }
+    }
+    retourner -1
+}
+
+arbre <- [5,2,3,4,7,9,8,0,10]
+afficher "parcours infixe de l'arbre " + arbre
+arbre <- infixe(arbre,0,taille_liste(arbre))
+
+liste <- [30, 5, 40, 10, 20]
+afficher "maximum de la liste " + liste
+afficher recuperer_liste(liste, argmax(liste))
+
+afficher "tri de cette meme liste"
+afficher tri(liste)
+
+afficher "fibonacci(10) = " + fibo(10)
+afficher "5 est " + parite(5)
     """;
           
     
@@ -198,8 +242,13 @@ public class successFileUploadController {
             afficher(a)       
             """;
             
-            
-    public static String code = code2;
+    public static String code6 = """
+        fonction bidon(a,b,c){
+            afficher (a * b + c)
+        }
+        bidon(1,2,3)    
+        """;
+    public static String code = code4;
     // ================================================================================================
 
     public successFileUploadController() {

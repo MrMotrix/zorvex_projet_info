@@ -47,9 +47,14 @@ public class duringExecutionControllerIntegrationTest extends JavaFXTestBase{
     void testGoNextLineIntegration() {
         // Verify that the line progresses as expected when going to the next line.
         Platform.runLater(() -> {
-            int initialLine = controller.getCurrentHighlightedLine();
-            controller.goNextLine(null);
-            assertEquals(initialLine + 1, controller.getCurrentHighlightedLine());  // Check if the line increments.
+            try{
+
+                int initialLine = controller.getCurrentHighlightedLine();
+                controller.goNextLine(null);
+                assertEquals(initialLine + 1, controller.getCurrentHighlightedLine());  // Check if the line increments.
+            } catch(Exception e){
+                fail("Exception thrown: " + e.getMessage()); 
+            }
         });
     }
 

@@ -176,7 +176,7 @@ public class GraphicalRepresentation {
                     increaseX(40);
                 }
                 else if (obj instanceof GraphicalVar v && v.getID() < 0){
-                    increaseX(-40);
+                    if (currentX >= 50) increaseX(-40);
                 }
             }
         }

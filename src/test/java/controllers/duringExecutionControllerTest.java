@@ -37,10 +37,15 @@ public class duringExecutionControllerTest extends JavaFXTestBase{
     @Test
     void testGoNextLine() {
         Platform.runLater(() -> {
-            
-            int initialLine = controller.getCurrentHighlightedLine();
-            controller.goNextLine(null);
-            assertEquals(initialLine + 1, controller.getCurrentHighlightedLine());
+            try{
+
+                int initialLine = controller.getCurrentHighlightedLine();
+                controller.goNextLine(null);
+                assertEquals(initialLine + 1, controller.getCurrentHighlightedLine());
+            }
+            catch (Exception e){
+                fail("Exception thrown: " + e.getMessage());
+            }
         });
     }
 

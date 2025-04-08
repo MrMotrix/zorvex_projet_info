@@ -184,8 +184,8 @@ public class duringExecutionController  {
 
         } catch (Exception e){
             if ((e instanceof RuntimeError)){
-
                 sendMessageToConsole(e.getMessage());
+
             }
             return;
         }
@@ -211,9 +211,10 @@ public class duringExecutionController  {
     /**
      * This method is used to go to the next line of the code. It is called when the user presses the "Next" button, and also it is called multiple times when the continue button is pressed. 
      * @param event
+     * @throws Exception 
      */
     @FXML
-    void goNextLine(ActionEvent event) {
+    void goNextLine(ActionEvent event) throws Exception {
         
         currentLine = interpreter.getCurrentLine();
 
@@ -402,7 +403,9 @@ public class duringExecutionController  {
             sendMessageToConsole("Erreur dans la ligne " + currentLine + ": " + e.getMessage());
             highlightCurrentLine(currentLine - 1);
             continueButton.setDisable(true);
-            nextLineButton.setDisable(true);        }
+            nextLineButton.setDisable(true);        
+            throw e;
+        }
         try{ // we try to get the current line of the interpreter, it will raise an exception if there is no more lines to read, i.e. we have just executed the last line of code
             highlightCurrentLine(interpreter.getCurrentLine()-1);
         } catch(Exception e){

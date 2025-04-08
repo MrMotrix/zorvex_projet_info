@@ -198,8 +198,13 @@ public class successFileUploadController {
             afficher(a)       
             """;
             
-            
-    public static String code = code2;
+    public static String code6 = """
+        fonction bidon(a,b,c){
+            afficher (a * b + c)
+        }
+        bidon(1,2,3)    
+        """;
+    public static String code = code3;
     // ================================================================================================
 
     public successFileUploadController() {

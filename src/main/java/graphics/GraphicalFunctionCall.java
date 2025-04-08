@@ -47,6 +47,9 @@ public final class GraphicalFunctionCall extends AbstractGraphicalObject {
             t.setText(functionName + "(" + parameters.stream()
             .map(GraphicalObject::getName)
             .collect(Collectors.joining(", ")) + ")");
+
+            Rectangle r = (Rectangle) renderedNodes.get(0);
+            r.setWidth(Math.max(MIN_WIDTH, Math.max(t.getLayoutBounds().getWidth(), t.getLayoutBounds().getWidth()) + 2 * PADDING));
         }
     }
     

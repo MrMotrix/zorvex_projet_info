@@ -98,7 +98,7 @@ public class menuBarController {
         // TODO : implement link to documentation or something like that
     
         try {
-        URI uri = new URI("https://www.google.com/");
+        URI uri = new URI("https://github.com/MrMotrix/zorvex_projet_info/blob/main/README.md");
         if (Desktop.isDesktopSupported()) {
             Desktop.getDesktop().browse(uri);
         }

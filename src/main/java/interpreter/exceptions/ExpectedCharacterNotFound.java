@@ -12,7 +12,7 @@ public class ExpectedCharacterNotFound extends SyntaxErrorException {
 
     @Override
     public String toString() {
-        return "Expected character on line " + lineNumber + ": " + expectedCharacter + " not found"; 
+        return "Caractère attendu en ligne " + lineNumber + ": " + expectedCharacter + " non trouvé"; 
     }
 
     @Override

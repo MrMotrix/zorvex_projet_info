@@ -16,7 +16,7 @@ public class SyntaxErrorException extends Exception {
   }
 
   public String toString() {
-    return "Syntax error on line " + lineNumber;
+    return "Erreur de syntaxe dans la ligne " + lineNumber;
   }
 
   @Override

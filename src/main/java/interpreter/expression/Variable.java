@@ -10,7 +10,7 @@ public record Variable(String name) implements Expression {
             return context.getVariable(name);
         }
         catch(Exception e) {
-            throw new RuntimeError("No variable found with name "+name());
+            throw new RuntimeError("Variable "+name()+ " non trouvée");
         }
     }
 

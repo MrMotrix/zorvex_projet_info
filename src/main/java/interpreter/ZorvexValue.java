@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import interpreter.exceptions.RuntimeError;
+import interpreter.exceptions.UnexpectedTypeException;
 
 public class ZorvexValue {
     private ZorvexType type;
@@ -51,59 +52,59 @@ public class ZorvexValue {
             return (int)value;
         if (isString())
             return Integer.valueOf((String)value);
-        throw new RuntimeError("Cannot convert " + this + " to integer");
+        throw new RuntimeError("Ne peut convertir " + this + " en entier");
     }
 
     // lists
     public void add(ZorvexValue element) throws RuntimeError {
         if (type != ZorvexType.LIST)
-            throw new RuntimeError("Cannot add to" + this + " as it is not a list.");
+            throw new UnexpectedTypeException(this, ZorvexType.LIST);
         if (element.type == ZorvexType.LIST)
-            throw new RuntimeError("List of lists aren't supported yet.");
+            throw new RuntimeError("Les listes de listes ne sont pas supportées.");
         ((List<ZorvexValue>)value).add(element);
     }
 
     public void set(int index, ZorvexValue element) throws RuntimeError {
         if (type != ZorvexType.LIST)
-            throw new RuntimeError("Cannot set in" + this + " as it is not a list.");
+            throw new UnexpectedTypeException(this, ZorvexType.LIST);
         if (element.type == ZorvexType.LIST)
-            throw new RuntimeError("List of lists aren't supported yet.");
+            throw new RuntimeError("Les listes de listes ne sont pas supportées.");
         List<ZorvexValue> list = (List<ZorvexValue>)value;
         if (index >= list.size())
-            throw new RuntimeError("Index out of bounds");
+            throw new RuntimeError("Dépassement de bornes");
         ((List<ZorvexValue>)value).set(index, element);
     }
 
     public void remove(int index) throws RuntimeError {
         if (type != ZorvexType.LIST)
-            throw new RuntimeError("Cannot remove in" + this + " as it is not a list.");
+            throw new UnexpectedTypeException(this, ZorvexType.LIST);
         List<ZorvexValue> list = (List<ZorvexValue>)value;
         if (index >= list.size())
-            throw new RuntimeError("Index out of bounds");
+            throw new RuntimeError("Dépassement de bornes");
         ((List<ZorvexValue>)value).remove(index);
     }
 
     public ZorvexValue get(int index) throws RuntimeError {
         if (type != ZorvexType.LIST)
-            throw new RuntimeError("Cannot remove in" + this + " as it is not a list.");
+            throw new UnexpectedTypeException(this, ZorvexType.LIST);
         List<ZorvexValue> list = (List<ZorvexValue>)value;
         if (index >= list.size())
-            throw new RuntimeError("Index out of bounds");
+            throw new RuntimeError("Dépassement de bornes");
         return list.get(index);
     }
 
     public void insert(int index, ZorvexValue element) throws RuntimeError {
         if (type != ZorvexType.LIST)
-            throw new RuntimeError("Cannot remove in" + this + " as it is not a list.");
+            throw new UnexpectedTypeException(this, ZorvexType.LIST);
         List<ZorvexValue> list = (List<ZorvexValue>)value;
         if (index >= list.size())
-            throw new RuntimeError("Index out of bounds");
+            throw new RuntimeError("Dépassement de bornes");
         list.add(index, element);
     }
 
     public int size() throws RuntimeError {
         if (type != ZorvexType.LIST)
-            throw new RuntimeError("Cannot get " + this + "'s size as it is not a list.");
+            throw new UnexpectedTypeException(this, ZorvexType.LIST);
         List<ZorvexValue> list = (List<ZorvexValue>)value;
         return list.size();
     }
@@ -117,7 +118,7 @@ public class ZorvexValue {
 
     public boolean isEmpty() throws RuntimeError {
         if (type != ZorvexType.STACK)
-            throw new RuntimeError("Cannot call isEmpty on " + this + "as it is not a stack.");
+            throw new UnexpectedTypeException(this, ZorvexType.STACK);
         ArrayDeque<ZorvexValue> stack = (ArrayDeque<ZorvexValue>)value;
         
         return stack.isEmpty();
@@ -125,7 +126,7 @@ public class ZorvexValue {
 
     public ZorvexValue depiler() throws RuntimeError {
         if (type != ZorvexType.STACK)
-            throw new RuntimeError("Cannot call depiler on " + this + "as it is not a stack.");
+            throw new UnexpectedTypeException(this, ZorvexType.STACK);
         ArrayDeque<ZorvexValue> stack = (ArrayDeque<ZorvexValue>)value;
         
         if (isEmpty())
@@ -135,7 +136,7 @@ public class ZorvexValue {
 
     public void empiler(ZorvexValue element) throws RuntimeError {
         if (type != ZorvexType.STACK)
-            throw new RuntimeError("Cannot call empiler on " + this + "as it is not a stack.");
+            throw new UnexpectedTypeException(this, ZorvexType.STACK);
         ArrayDeque<ZorvexValue> stack = (ArrayDeque<ZorvexValue>)value;
         stack.offerLast(element);
     }

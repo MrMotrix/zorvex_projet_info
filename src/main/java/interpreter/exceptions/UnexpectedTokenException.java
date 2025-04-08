@@ -21,7 +21,7 @@ public class UnexpectedTokenException extends SyntaxErrorException {
 
     @Override
     public String toString() {
-        return  "Unexpected token on line " + lineNumber + " got " + got + (this.expected != null ? (" expected " + expected) : "") ;
+        return  "Jeton inattendu en ligne " + lineNumber + " obtenu " + got + (this.expected != null ? (" attendait " + expected) : "") ;
     }
 
     @Override

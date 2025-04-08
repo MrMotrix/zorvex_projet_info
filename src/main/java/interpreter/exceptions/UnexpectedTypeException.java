@@ -8,7 +8,7 @@ public class UnexpectedTypeException extends RuntimeError {
     private final ZorvexType expected;
 
     public UnexpectedTypeException(ZorvexValue value, ZorvexType expected) {
-        super("Unexpected type, expected " + expected + " got " + value);
+        super("Type inattendu : attendait " + expected + " obtenu " + value);
         this.value = value;
         this.expected = expected;
     }

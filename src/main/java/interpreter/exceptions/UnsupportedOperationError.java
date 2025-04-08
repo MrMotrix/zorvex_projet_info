@@ -10,7 +10,7 @@ public class UnsupportedOperationError extends RuntimeError {
     private final TokenType operator;
 
     public UnsupportedOperationError(ZorvexValue value1, ZorvexValue value2, TokenType operator) {
-        super("Unsupported operation " + operator + " on operands " + value1 + " and " + value2);
+        super("Operation non supportée " + operator + " sur les opérandes " + value1 + " et " + value2);
         this.value1 = value1;
         this.value2 = value2;
         this.operator = operator;

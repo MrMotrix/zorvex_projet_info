@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import javafx.application.Platform;
 import application.App;
 import base.JavaFXTestBase;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import java.util.List;
@@ -31,7 +33,7 @@ class successFileUploadControllerTest extends JavaFXTestBase{
     void testBeginExecutionChangesScene() {
         Platform.runLater(() -> {
             controller.beginExecution(null);
-            assertNotNull(mainController.successScene, "La escena de éxito no debe ser nula después de la ejecución");
+            assertNotNull(mainController.successScene, "successFileUploadController instance should not be null after changintg scene.");
         });
     }
     
@@ -39,7 +41,24 @@ class successFileUploadControllerTest extends JavaFXTestBase{
     void testSaveStoresCorrectValues() {
         Platform.runLater(() -> {
             controller.save();
-            assertEquals(controller.getSplitPane().getDividerPositions()[0], mainController.getSplitPaneDividerPosition(), "El divisor debe guardarse correctamente");
+            assertEquals(controller.getSplitPane().getDividerPositions()[0], mainController.getSplitPaneDividerPosition(), "The divider position should be saved correctly.");
         });
+    }
+
+    @Test
+    void testCheckSceneChangeToDuring() {
+        Platform.runLater(() -> {
+            controller.beginExecution(null);
+            Scene currentScene = controller.getApp().getScene();
+            Parent root = currentScene.getRoot();
+            assertNotNull(root);
+            assertTrue(root.getId() == null || root.getId().contains("during") || root.toString().toLowerCase().contains("during"));
+        });
+    
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

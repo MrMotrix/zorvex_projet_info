@@ -273,6 +273,8 @@ afficher "5 est " + parite(5)
     public void setMainController(MainController mainController) {this.mainController = mainController;}
     public void setSplitPaneDivider(double size) {this.splitPane.setDividerPosition(0, size);}
     public void setApp(App app) {this.app = app;}
+    public App getApp() {return app;}
+
     /**
      * Start the execution of the program.
      * @param event

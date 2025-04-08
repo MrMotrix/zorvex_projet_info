@@ -4,8 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import base.JavaFXTestBase;
 import javafx.application.Platform;
+import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -69,6 +71,25 @@ class GraphicalPileTest extends JavaFXTestBase{
         assertDoesNotThrow(() -> pile.draw(10, 20));
     }
 
+    @Test
+    void testPopSynchronizesInternalStateAndGraphics() {
+        pane = new Pane();
+        pile = new GraphicalPile("P", List.of("0", "1", "2", "3"), pane, 1);
+        pile.draw(0, 0);
+        int initialSize = pile.size();
+        int initialRectangles = countRectangles(pile.renderedNodes);
+        assertEquals(initialSize, initialRectangles);
 
+        pile.pop();
+
+        int newSize = pile.size();
+        int newRectangles = countRectangles(pile.renderedNodes);
+        assertEquals(initialSize - 1, newSize);
+        assertEquals(newSize, newRectangles);
+    }
+
+    private int countRectangles(List<Node> nodes) {
+        return (int) nodes.stream().filter(n -> n instanceof Rectangle).count();
+    }
 }
 

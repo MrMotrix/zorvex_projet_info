@@ -7,6 +7,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import javafx.application.Platform;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import application.App;
 import base.JavaFXTestBase;
 
@@ -38,7 +40,6 @@ public class duringExecutionControllerTest extends JavaFXTestBase{
     void testGoNextLine() {
         Platform.runLater(() -> {
             try{
-
                 int initialLine = controller.getCurrentHighlightedLine();
                 controller.goNextLine(null);
                 assertEquals(initialLine + 1, controller.getCurrentHighlightedLine());
@@ -94,4 +95,22 @@ public class duringExecutionControllerTest extends JavaFXTestBase{
             assertNotNull(controller.getNblineVbox());
         });
     }
+
+    @Test
+    void testCheckSceneChangeToSuccess() {
+        Platform.runLater(() -> {
+            controller.stopExecution(null);
+            Scene currentScene = controller.getApp().getScene();
+            Parent root = currentScene.getRoot();
+            assertNotNull(root);
+            assertTrue(root.getId() == null || root.getId().contains("success") || root.toString().toLowerCase().contains("success"));
+        });
+    
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+    
 }

@@ -29,13 +29,17 @@ class duringExecutionControllerFunctionalTest extends JavaFXTestBase{
     @Test
     void testExecutionFlow() {
         Platform.runLater(() -> {
-        // Simulates execution step by step
-        controller.goNextLine(null);
-        assertEquals(2, controller.getMainController().getCurrentLine());
+        try{// Simulates execution step by step
+            controller.goNextLine(null);
+            assertEquals(2, controller.getMainController().getCurrentLine());
 
-        controller.goNextLine(null);
-        assertEquals(3, controller.getMainController().getCurrentLine());
+            controller.goNextLine(null);
+            assertEquals(3, controller.getMainController().getCurrentLine());
+        } catch (Exception e) {
+            fail("Exception thrown: " + e.getMessage());
+        }
         });
+        
     }
 
     @Test

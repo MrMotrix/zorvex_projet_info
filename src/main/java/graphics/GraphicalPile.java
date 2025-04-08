@@ -21,6 +21,11 @@ public final class GraphicalPile extends AbstractGraphicalObject{
     public GraphicalPile(String name, List<String> values, Pane pane, int id) {
         super(name, pane, id);
         this.values = new ArrayList<>();
+        if (values.get(0).equals("[]")) {
+            size = 0;
+            this.values.add("(vide)");
+            return;
+        }
         for (int i = 0; i < values.size(); i++) {
             String value = values.get(i).trim(); 
             
@@ -32,11 +37,37 @@ public final class GraphicalPile extends AbstractGraphicalObject{
                     this.values.add(parts[1].substring(0, parts[1].length() - 1)); 
                 } else {
                     this.values.add(parts[1]); 
-                }
+                }   
             } else {
                 this.values.add(parts[0]); 
             }
         }        size = values.size();
+    }
+
+    public GraphicalPile(String name, String[] values, Pane pane, int id) {
+        super(name, pane, id);
+        this.values = new ArrayList<>();
+        if (values[0].equals("[]")) {
+            this.values.add("(vide)");
+            size = 0;
+            return;
+        }
+        for (int i = 0; i < values.length; i++) {
+            String value = values[i].trim(); 
+            
+            String[] parts = value.split(" ", 2);
+            
+            if (parts.length > 1) {
+                
+                if (i == values.length - 1 && parts[1].endsWith("]")) {
+                    this.values.add(parts[1].substring(0, parts[1].length() - 1)); 
+                } else {
+                    this.values.add(parts[1]); 
+                }
+            } else {
+                this.values.add(parts[0]); 
+            }
+        }        size = values.length;
     }
 
     @Override
@@ -108,6 +139,9 @@ public final class GraphicalPile extends AbstractGraphicalObject{
     }
 
     public void push(String value){
+        if (size == 0) {
+            values.remove(0); // remove the empty value
+        }
         values.add(0, value);
         size++;
         clearRenderedNodes(); // Clear old graphical elements
@@ -120,7 +154,9 @@ public final class GraphicalPile extends AbstractGraphicalObject{
         String value = values.get(0);
         values.remove(0);
         size--;
-
+        if (size == 0) {
+            values.add("(vide)");
+        }
         clearRenderedNodes();
         draw(currentX, currentY);
         return value;

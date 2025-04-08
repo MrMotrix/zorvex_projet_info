@@ -374,7 +374,7 @@ public class duringExecutionController  {
                     ArrayList<GraphicalObject> ids = new ArrayList<>();
                     String type;
                     for (int i = 0; i < parsNames.size(); i++){
-                        type = function.args().get(0).type().toString();
+                        type = function.args().get(i).type().toString();
                         AbstractGraphicalObject temp = createParameterObject(type, parsNames.get(i), function.args().get(i).asString(), interpreter.getId(parsNames.get(i)));
                         pars.add(temp);
                         rep.addElement(interpreter.getId(parsNames.get(i)), temp);

@@ -148,6 +148,16 @@ public class Interpreter {
     }
 
     public int getCurrentLine() {
+        while (state.hasBlockReachedEnd()) {
+            if (callStack.size() > 0 && callStack.getLast() == state.getCurrentBlock()) {
+                callStack.removeLast();
+                stack.removeLast();
+                lastReturnValue = ZorvexValue.nullValue();
+            }
+
+            state.exitBlock();
+        }
+
         return state.getCurrentInstruction().line();
     }
 

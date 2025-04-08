@@ -93,5 +93,7 @@ afficher recuperer_liste(liste, argmax(liste))
 afficher "tri de cette meme liste"
 afficher tri(liste)
 
+afficher recherche_dicho(liste, 10)
+
 afficher "fibonacci(10) = " + fibo(10)
 afficher "5 est " + parite(5)

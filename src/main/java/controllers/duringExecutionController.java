@@ -2,11 +2,14 @@ package controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
-import javax.naming.OperationNotSupportedException;
-
 import application.App;
+import controllers.record.AfficherRecord;
+import controllers.record.CreateRecord;
+import controllers.record.DeleteRecord;
+import controllers.record.ExecutionStack;
+import controllers.record.IterableModifyRecord;
+import controllers.record.ModifyVarRecord;
+import controllers.record.StackModifyRecord;
 import graphics.AbstractGraphicalObject;
 import graphics.GraphicalArray;
 import graphics.GraphicalFunctionCall;
@@ -18,7 +21,6 @@ import graphics.IterableGraphicalObject;
 import graphics.ModificationType;
 import interpreter.Interpreter;
 import interpreter.exceptions.RuntimeError;
-import interpreter.exceptions.UnexpectedTokenException;
 import interpreter.instruction.Instruction;
 import interpreter.instruction.Retourner;
 import interpreter.instruction.Afficher;
@@ -197,9 +199,6 @@ public class duringExecutionController  {
         currentLine = record.currentLine();
         if (! reverse) {
             reverse = true;
-            // currentLine --;
-            // continueButton.setDisable(false);
-            // nextLineButton.setDisable(false);
             continueButton.setDisable(true);
             nextLineButton.setDisable(true);
         }
@@ -207,8 +206,6 @@ public class duringExecutionController  {
             stopExecution(event);
         }
         highlightCurrentLine(currentLine - 1);
-        // sendMessageToConsole("Last line executed : " + currentLine);
-        
     }
 
     /**
@@ -233,12 +230,10 @@ public class duringExecutionController  {
             Instruction inst = interpreter.step();
             if (inst == null) {goNextLine(event);}
              else if (inst instanceof Assigner assigner) {        
-
                 String name = assigner.variableName(); // get the name of the variable
                 if (name.equals("")) {
                     try{
                         highlightCurrentLine(interpreter.getCurrentLine()-1); // we try to get the current line of the interpreter, it will raise an exception if there is no more lines to read, i.e. we have just executed the last line of code
-            
                     } catch(Exception e){
                         highlightCurrentLine(-1);
                         sendMessageToConsole("Fin du fichier atteint");
@@ -252,55 +247,7 @@ public class duringExecutionController  {
                 String value = interpreter.getVariable(name).toString(); // get the value of the variable
                 String type = interpreter.getVariable(name).type().toString(); // get the type of the variable
                 value = value.substring(value.indexOf(" ") + 1); // remove the type of variable
-                
-                switch (type){
-                    case "LIST" : 
-                        if (rep.getElements().containsKey(interpreter.getId(name))) { // if the variable already exists
-                            record.push(new IterableModifyRecord(interpreter.getId(name), ModificationType.UPDATE,0, value, currentLine)); // TODO fix index
-                            rep.updateElement(interpreter.getId(name), ModificationType.UPDATE, value, 0);
-                        } else {
-                            GraphicalArray array = new GraphicalArray(name, value.split(","), canvasPane, interpreter.getId(name));
-                            // GraphicalPile array = new GraphicalPile(name, List.of(value.split(",")), canvasPane, interpreter.getId(name));
-                            rep.addElement(interpreter.getId(name), array );
-                            record.push(new CreateRecord(array.getID(), array, currentLine));
-                        }
-                        break;
-                    case "LLIST" : 
-                        if (rep.getElements().containsKey(interpreter.getId(name))) { // if the variable already exists
-                            record.push(new IterableModifyRecord(interpreter.getId(name), ModificationType.UPDATE,0, value, currentLine)); // TODO fix index
-                            rep.updateElement(interpreter.getId(name), ModificationType.UPDATE, value, 0);
-                        } else {
-                            GraphicalLinkedList llist = new GraphicalLinkedList(name, value.split(","), canvasPane, interpreter.getId(name));
-                            rep.addElement(interpreter.getId(name), llist );
-                            record.push(new CreateRecord(llist.getID(), llist, currentLine));
-                        }
-                        break;              
-                    case "STACK" :
-                        if (rep.getElements().containsKey(interpreter.getId(name))) { // for piles only push operation as Assigner operation is accepted, so index  = 0
-                            record.push(new IterableModifyRecord(interpreter.getId(name), ModificationType.UPDATE,0, value, currentLine)); //TODO : fix index
-                            rep.updateElement(interpreter.getId(name), ModificationType.UPDATE, value, 0);
-                        } else {
-                            GraphicalPile pile = new GraphicalPile(name, List.of(value.split(",")), canvasPane, interpreter.getId(name));
-                            rep.addElement(interpreter.getId(name), pile );
-                            record.push(new CreateRecord(pile.getID(), pile, currentLine));
-                        }
-                        break;          
-                    case "STRING":
-                    case "INTEGER" :
-                        if (rep.getElements().containsKey(interpreter.getId(name))) { // if the variable already exists
-                            record.push(new ModifyVarRecord(interpreter.getId(name), value, currentLine)); 
-                            rep.updateElement(interpreter.getId(name), ModificationType.UPDATE, value, 0);
-                        } else {
-                            GraphicalVar var = new GraphicalVar(name, value, canvasPane, interpreter.getId(name));
-                            rep.addElement(interpreter.getId(name), var );
-                            record.push(new CreateRecord(var.getID(), var, currentLine));
-                        }
-                
-                        break;
-                    default : 
-        
-                }   
-                
+                handleVariableAssignment(name, value, type, currentLine);
             }
             else if (inst instanceof Afficher afficher) {
                 sendMessageToConsole(afficher.result().asString());
@@ -318,19 +265,18 @@ public class duringExecutionController  {
             
                 // Delete ids and vars from the function that returned a value
                 finished.getParameters().forEach(p -> rep.deleteElement(((AbstractGraphicalObject) p).getID()));
-                finished.getIds().forEach(id -> rep.deleteElement(((AbstractGraphicalObject) id).getID()));
+                finished.getIds().forEach(id -> {
+                    rep.deleteElement(((AbstractGraphicalObject) id).getID());
+                    record.push(new DeleteRecord(((AbstractGraphicalObject) id).getID(), (AbstractGraphicalObject) id, currentLine));
+                });
                 rep.deleteElement(finishedFunctionId);
-            
+                record.push(new DeleteRecord(finishedFunctionId, finished, currentLine));
                 // Add return variable to the last function if possible
                 if (!rep.fcalls().isEmpty()) {
                     int previousFunctionId = rep.fcalls().peek();
                     GraphicalFunctionCall previous = (GraphicalFunctionCall)(rep.getElement(previousFunctionId));
-            
-                    // previous.addPar(temp);
                     previous.addId(temp);
-                    // previous.setParameters(previous.getParameters()); 
                 }
-       
             }
             else if (inst instanceof Function function) {
                 // get the name of the function
@@ -343,7 +289,6 @@ public class duringExecutionController  {
                     int id = Integer.parseInt(function.args().get(0).asString());
                     String value = function.args().get(1).asString();
                     int index = ((IterableGraphicalObject) rep.getElement(id)).size() - 1; 
-
                     String oldValue = ((IterableGraphicalObject) rep.getElement(id)).getValues()[index];
                     record.push(new IterableModifyRecord(id, 
                         ModificationType.INSERT, 
@@ -351,55 +296,40 @@ public class duringExecutionController  {
                         oldValue, 
                         currentLine));
                     rep.updateElement(id, ModificationType.INSERT, value, index + 1);
-
-    
                 }
                 else if (f.equals("inserer_liste")){ // id, index, value
-
                     int id = Integer.parseInt(function.args().get(0).asString());
                     int index = Integer.parseInt(function.args().get(1).asString());
                     String value = function.args().get(2).asString();
-
                     String oldValue = ((IterableGraphicalObject) rep.getElement(id)).getValues()[index];
                     record.push(new IterableModifyRecord(id, 
                         ModificationType.INSERT, 
                         index,
                         oldValue, currentLine));
                     rep.updateElement(id, ModificationType.INSERT, value, index);
-    
                 }
                 else if (f.equals("supprimer_liste")){ // id, index
                     int id = Integer.parseInt(function.args().get(0).asString());
                     int index = Integer.parseInt(function.args().get(1).asString());
-                    
                     String oldValue = ((IterableGraphicalObject) rep.getElement(id)).getValues()[index];
-                    
-                    // rep.updateElement(interpreter.getId("x"), ModificationType.REMOVE,"0" , 0);
-                    
                     record.push(new IterableModifyRecord(id, 
                         ModificationType.REMOVE, 
                         index,
                         oldValue, currentLine));
                     rep.updateElement(id, ModificationType.REMOVE, oldValue, index); // here old value should be given as parameter but it wont be used
-    
-                } else if (f.equals("recuperer_liste")){ // id, index
+                }
+                else if (f.equals("recuperer_liste")){ // id, index
                     goNextLine(event);
                     return;
                     // NOTHING TO DO SINCE ANY MODIFICATION IS DONE TO ANY GRAPHICAL OBJECT
-
-
-    
                 }else if (f.equals("taille_liste")){ // id
-
-                    // nothing to do, it just returns a value
                     goNextLine(event);
                     return;
+                    // nothing to do, it just returns a value
                 } else if(f.equals("modifier_liste")){ // id, index, newValue
-
                     int id = Integer.parseInt(function.args().get(0).asString());
                     int index = Integer.parseInt(function.args().get(1).asString());
                     String value = function.args().get(2).asString();
-
                     String oldValue = ((IterableGraphicalObject) rep.getElement(id)).getValues()[index];
                     record.push(new IterableModifyRecord(id, 
                         ModificationType.UPDATE, 
@@ -409,106 +339,51 @@ public class duringExecutionController  {
                     rep.updateElement(id, ModificationType.UPDATE, value, index);
 
                 } else if (f.equals("pile_vide")){ // list.of trucs
-
                     // nothing to do, assignation is done later
                     goNextLine(event);
                     return;
                 } else if (f.equals("empiler")){ // id, value
-
                     int id = Integer.parseInt(function.args().get(0).asString());
                     String value = function.args().get(1).asString();
 
                     String oldValue = ((GraphicalPile) rep.getElement(id)).peek();
-                    record.push(new IterableModifyRecord(id, 
-                        ModificationType.UPDATE, 
-                        0,
+                    record.push(new StackModifyRecord(id, 
                         oldValue, 
+                        ModificationType.PUSH, 
                         currentLine));
                     rep.updateElement(id, ModificationType.INSERT, value, 0);
-
                 } else if (f.equals("depiler")){ // id
-
                     int id = Integer.parseInt(function.args().get(0).asString());
-                    String value = function.args().get(1).asString();
-
                     String oldValue = ((GraphicalPile) rep.getElement(id)).peek();
-                    record.push(new IterableModifyRecord(id, 
-                        ModificationType.REMOVE, 
-                        0,
+                    record.push(new StackModifyRecord(id, 
                         oldValue, 
+                        ModificationType.POP, 
                         currentLine));
-
-                    rep.updateElement(id, ModificationType.REMOVE, null, 0);
+                    rep.updateElement(id, ModificationType.POP, null, 0);
                 } else if (f.equals("est_pile_vide")){ // list.of ids ?
                     // nothing to do
                     goNextLine(event);
                     return;
                 }
-                
                 else if (rep.getFunction(f) instanceof GraphicalFunctionDeclaration fd){
-                    parsNames = fd.getParameters();
-
-                    
+                    parsNames = fd.getParameters();   
                     //get function parameters names
                     GraphicalFunctionCall fc = new GraphicalFunctionCall(f , canvasPane, pars, GraphicalObjectIDGenerator.getNextId());
                     rep.addElement(fc.getID(), fc);
                     rep.increaseX(40);
-                    
                     ArrayList<GraphicalObject> ids = new ArrayList<>();
                     String type;
-
                     for (int i = 0; i < parsNames.size(); i++){
                         type = function.args().get(0).type().toString();
-                        AbstractGraphicalObject temp;
-                        
-                        switch(type){
-                            case "LIST" : 
-                            temp = new GraphicalArray(
-                                parsNames.get(i), 
-                                function.args().get(i).asString().substring(1, function.args().get(i).asString().length() - 1).split(","),
-                                canvasPane, 
-                                interpreter.getId(parsNames.get(i)));
-                                
-                                break;
-                            case "LLIST" : 
-                                temp = new GraphicalLinkedList(
-                                    parsNames.get(i), 
-                                    function.args().get(i).asString().split(","), 
-                                    canvasPane, 
-                                    interpreter.getId(parsNames.get(i)));
-                                break;
-
-                            case "INTEGER" :
-                            case "STRING" :
-                                temp = new GraphicalVar(
-                                    parsNames.get(i), 
-                                    function.args().get(i).asString(),
-                                     canvasPane, 
-                                     interpreter.getId(parsNames.get(i)));
-
-                                
-                                break;
-                            case "PILE" :
-                                temp = new GraphicalPile(
-                                    parsNames.get(i), 
-                                    function.args().get(i).asString().split(","),
-                                    canvasPane, 
-                                    i);
-                            default:
-                                throw new Exception("Unknown type of variable : " + type);
-                        }
+                        AbstractGraphicalObject temp = createParameterObject(type, parsNames.get(i), function.args().get(i).asString(), interpreter.getId(parsNames.get(i)));
                         pars.add(temp);
-
                         rep.addElement(interpreter.getId(parsNames.get(i)), temp);
-
                         record.push(new CreateRecord(temp.getID(), temp, currentLine));
                         ids.add(temp);
                     }
-
                     fc.setParameters(pars);
                     fc.setIds(ids);
                     rep.fcalls().push(fc.getID());
-
                     record.push(new CreateRecord(fc.getID(), fc, currentLine));
                 }
                 
@@ -527,15 +402,9 @@ public class duringExecutionController  {
             sendMessageToConsole("Erreur dans la ligne " + currentLine + ": " + e.getMessage());
             highlightCurrentLine(currentLine - 1);
             continueButton.setDisable(true);
-            nextLineButton.setDisable(true);
-            // throw e;
-        }
-        
-        
+            nextLineButton.setDisable(true);        }
         try{ // we try to get the current line of the interpreter, it will raise an exception if there is no more lines to read, i.e. we have just executed the last line of code
-            
             highlightCurrentLine(interpreter.getCurrentLine()-1);
-
         } catch(Exception e){
             highlightCurrentLine(-1);
             sendMessageToConsole("Fin du fichier atteint");
@@ -552,11 +421,9 @@ public class duringExecutionController  {
             nextLineButton.setDisable(true);
         }
     }
-        
 
     @FXML
     void restartExecution(ActionEvent event) {
-
         sendMessageToConsole("On redemarre l'éxécution");
 
         // reinitialize the defaiult values of the position magager 
@@ -620,7 +487,9 @@ public class duringExecutionController  {
         app.setScene(mainController.successScene);
 
     }
-
+    /**
+     * Save the current state of the scene in the mainController. Used before changing the scene
+     */
     private void save(){
         // save the current scene and controller
         mainController.setSplitPaneDividerPosition(splitPane.getDividerPositions()[0]);
@@ -772,4 +641,73 @@ public class duringExecutionController  {
         sendMessageToConsole("Une erreur est survenue lors de la lecture du fichier: \n" + e.toString());
         stopExecution(null);
     }  
+
+    /**
+     * This method is used to handle the variable assignment. It is called when the user presses the "next" button and there is a variable assignment in the code.
+     * @param name of the variable
+     * @param value of the variable
+     * @param type of the variable (INTEGER, STRING, LIST, STACK)
+     * @param currentLine on the code to keep track of the execution
+     * @throws Exception
+     */
+    void handleVariableAssignment(String name, String value, String type, int currentLine) throws Exception {
+        int id = interpreter.getId(name);
+        AbstractGraphicalObject obj;
+    
+        switch (type) {
+            case "LIST":
+                obj = new GraphicalArray(name, value.split(","), canvasPane, id);
+                break;
+            case "LLIST":
+                obj = new GraphicalLinkedList(name, value.split(","), canvasPane, id);
+                break;
+            case "STACK":
+                obj = new GraphicalPile(name, List.of(value.split(",")), canvasPane, id);
+                break;
+            case "STRING":
+            case "INTEGER":
+                obj = new GraphicalVar(name, value, canvasPane, id);
+                break;
+            default:
+                throw new Exception("Unknown variable type: " + type);
+        }
+    
+        if (rep.getElements().containsKey(id)) {
+            if (obj instanceof IterableGraphicalObject) {
+                record.push(new IterableModifyRecord(id, ModificationType.UPDATE, 0, value, currentLine));
+            } else {
+                record.push(new ModifyVarRecord(id, value, currentLine));
+            }
+            rep.updateElement(id, ModificationType.UPDATE, value, 0);
+        } else {
+            rep.addElement(id, obj);
+            record.push(new CreateRecord(id, obj, currentLine));
+        }
+    }
+
+    /**
+     * This method is used to create the parameter object of a function. It is called when the user presses the "next" button and there is a function call in the code.
+     * @param type of the parameter (INTEGER, STRING, LIST, STACK)
+     * @param name of the parameter
+     * @param rawValue of the parameter (the value of the parameter as a string)
+     * @param id of the parameter (the id of the parameter in the interpreter)
+     * @return the parameter object
+     * @throws Exception 
+     */
+    protected AbstractGraphicalObject createParameterObject(String type, String name, String rawValue, int id) throws Exception {
+        switch (type) {
+            case "LIST":
+                return new GraphicalArray(name, rawValue.substring(1, rawValue.length() - 1).split(","), canvasPane, id);
+            case "LLIST":
+                return new GraphicalLinkedList(name, rawValue.split(","), canvasPane, id);
+            case "PILE":
+                return new GraphicalPile(name, rawValue.split(","), canvasPane, id);
+            case "INTEGER":
+            case "STRING":
+                return new GraphicalVar(name, rawValue, canvasPane, id);
+            default:
+                throw new Exception("Unknown type of variable : " + type);
+        }
+    }
+    
 }

@@ -110,6 +110,17 @@ public class GraphicalRepresentation {
                     break;
                 case UPDATE: 
                     elements.get(id).update(index, value);
+                    case POP :
+                    if(elements.get(id) instanceof GraphicalPile pile){
+                        pile.pop();
+                        return;
+                    }
+                case PUSH :
+                    if(elements.get(id) instanceof GraphicalPile pile){
+                        pile.push(value);
+                        return;
+                    }
+                    throw new IllegalArgumentException("Invalid modification type for this element.");
                 default:
                     break;
             }

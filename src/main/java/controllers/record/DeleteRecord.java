@@ -1,4 +1,4 @@
-package controllers;
+package controllers.record;
 
 import graphics.AbstractGraphicalObject;
 import graphics.GraphicalObject;

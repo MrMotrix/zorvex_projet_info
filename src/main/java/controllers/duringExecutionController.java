@@ -572,11 +572,11 @@ public class duringExecutionController  {
 
         consolePanel.setWrapText(true);
 
-        continueButton.setStyle(continueButton.getStyle() + "-fx-background-color: green; -fx-text-fill: white;");
-        lastLineButton.setStyle(lastLineButton.getStyle() + "-fx-background-color: black; -fx-text-fill: white;");
-        nextLineButton.setStyle(nextLineButton.getStyle() + "-fx-background-color: black; -fx-text-fill: white;");
-        restartButton.setStyle(restartButton.getStyle() + "-fx-background-color: yellow; -fx-text-fill: black;");
-        stopButton.setStyle(stopButton.getStyle() + "-fx-background-color: red; -fx-text-fill: white;");
+        continueButton.setStyle(continueButton.getStyle() + "-fx-background-color: green; -fx-text-fill: white;-fx-padding: 0 2 0 2;-fx-font-size: 10;");
+        lastLineButton.setStyle(lastLineButton.getStyle() + "-fx-background-color: black; -fx-text-fill: white;-fx-padding: 0 2 0 2;-fx-font-size: 10;");
+        nextLineButton.setStyle(nextLineButton.getStyle() + "-fx-background-color: black; -fx-text-fill: white;-fx-padding: 0 2 0 2;-fx-font-size: 10;");
+        restartButton.setStyle(restartButton.getStyle() + "-fx-background-color: yellow; -fx-text-fill: black;-fx-padding: 0 2 0 2;-fx-font-size: 10;");
+        stopButton.setStyle(stopButton.getStyle() + "-fx-background-color: red; -fx-text-fill: white;-fx-padding: 0 2 0 2;-fx-font-size: 10;");
         
         splitPane.setDividerPosition(0, mainController.splitPaneDividerPosition);
 

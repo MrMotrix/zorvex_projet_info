@@ -1,4 +1,4 @@
-<h1 style="text-align:center;">L'Interpreteur Zorvex</h1>
+# L'Interpreteur Zorvex
 
 **Version** : 1.0.0  
 
@@ -6,12 +6,91 @@
 
 **Date de la dernière version** : 8 avril 2025
 
-<h1 style="text-align:center;">Le Langage Zorvex</h1>
-// to be done
-<h1 style="text-align:center;">L'Installation</h1>
-// to be done
-<h1 style="text-align:center;">L'Interface</h1>
+Sommaire :
 
+- [Le langage Zorvex](#le-langage-zorvex)
+- [Installation](#installation)
+- [Interface](#interface)
+- [Exemples de programmes](#exemples-de-programmes)
+
+## Le langage Zorvex
+
+### Généralités
+
+Zorvex est un langage *impératif*, ayant une syntaxe proche de ce qui est usuellement considéré comme du pseudo-code.
+
+Un **programme** en Zorvex est une suite d'**instructions**, une par ligne, séparées par des retours à la ligne. 
+
+Les **instructions** correspondent à des calculs, des assignations ou des modifications portant sur des **variables**.
+
+Une **variable** est la donnée d'un **identifiant** et d'une valeur associée. Un **identifiant** est une suite de caractère, un nom donnée à celle-ci. La valeur ainsi que le type donnés à une variable peut changer au cours de l'exécution du programme à l'aide de différentes instructions.
+
+Toute **instruction** est basée sur l'évaluation d'une **expression**. Il s'agit d'un calcul mathématique mettant en oeuvre des **variables**, des constantes, ou des valeurs de retours d'**appels** de **fonctions** avec un certain nombre d'**arguments**.
+
+Une **fonction** est une suite d'instructions particulière du programme. Elle possède des **paramètres** qui vont correspondre à des variables pouvant être utilisés lors de l'exécution de celle-ci. 
+
+Les valeurs données à ces **paramètres** sont celles des **arguments** apparaissant au même nombre lors de l'appel de la fonction.
+
+Lors d'un **appel** de fonction, les instructions la composant sont exécutées séquentiellement, jusqu'à ce qu'une instruction **retourner** soit rencontrée. Les variables définies à l'extérieur de l'appel de fonction ne sont pas accessibles lors de celui-ci.
+
+L'**expression** evaluée par cette instruction va ainsi correspondre à la valeur de retour de l'appel.
+
+### Types
+
+Quatre **types** de variables existent en Zorvex.
+
+- Les **nombres** : constitués uniquement d'entiers, positifs et négatifs, de `-2147483648` à `2147483647`
+- Les **chaines de caractères**, délimitées par des guillements `"`.
+- Les **tableaux dynamiques** : correspondent à ce qu'on appelle parfois listes dans différents langages. 
+Supportent l'ajout et la suppression d'éléments. Définis par une suite de nombres, ou de chaines, sépraées par des virgules entre crochets `[]`.
+- Les **piles** : une structure basée sur deux opérations : **empiler** et **dépiler**.
+
+### Expression
+
+Une expression est avant tout basée sur des opérations portant sur des **litéraux**. Cela inclut l'addition, la soustraction, la multiplication ou les comparaisons. En voici un exemple : `((5+2)*(7+3))/(10+12)`.
+
+Un **litéral** est une constante d'un type donné.
+
+Lorsqu'une expression met en jeu des types incompatibles, une **exception** est soulevée.
+
+Exception (sans mauvais jeu de mot) faite des chaînes de caractères et de l'addition. Dans ce cas là, l'opération de concaténation est effctuée (en convertissant toutes les opérandes en chaîne de caractères).
+
+De plus, les variables et les appels de fonctions sont des expressions. Ainsi, `(x+y)/5*z` est toujours une expression.
+
+Les expressions sont évaluées suivant les règles de priorités usuelles des mathématiques.
+
+Un appel de fonction prend la structure suivante, `nom_de_fonction(arg_1, arg_2, ..., arg_n)`, où les `arg_i` désignent les différents arguments de la fonction.
+
+Si un identifiant apparaissant dans une expression n'est pas détecté, une **exception** est soulevée.
+
+### Instructions
+
+#### Assignation
+
+L'instruction la plus importante en Zorvex est l'instruction d'assignation.
+
+Elle prend la forme `identifiant <- expression`. Lors de son exécution, la variable `identifiant`, si elle n'existait pas déjà, est créée, et prend la valeur correspondant à l'évaluation d'`expression`.
+
+#### Structures de contrôle
+
+##### Tant que
+
+##### Sinon
+
+#### Déclaration de fonction
+
+### Fonctions-Instructions
+
+#### Listes
+
+#### Piles
+
+### Exceptions
+
+
+## Installation
+
+## Interface
 
 L'interface de ZorvexInterpreter est interactive et ergonomique pour l'utilisateur. 
 
@@ -61,3 +140,5 @@ Pendant l'exécution, en fonction du type d'instruction interprétée, une actio
 Si une erreur est détectée pendant l'exécution du programme, celle-ci sera interrompue, et un message détaillé du type d’erreur sera envoyé via la console.
 
 Pour consulter les informations sur le produit, cliquez sur le menu supérieur, dans la section « Aide », « A propos ». En outre, vous y trouverez les coordonnées des développeurs au cas où vous auriez trouvé des bugs ou des erreurs.
+
+## Exemples de programmes

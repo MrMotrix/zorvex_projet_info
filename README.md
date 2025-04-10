@@ -73,17 +73,81 @@ Elle prend la forme `identifiant <- expression`. Lors de son exécution, la vari
 
 #### Structures de contrôle
 
+Il est parfois nécessaire pour le programmeur de pouvoir exécuter des instructions conditionnellement ou avec répétition. En Zorvex, cela peut être fait à l'aide des **structures de contrôles** qui sont au nombre de deux. 
+
+L'expression associée à la **structure de contrôle** est appelée la **condition**. Si elle est vérifiée (son évaluation retourne un résultat non nul), les instructions d'un des blocs de la structure vont être exécutées.
+
+##### Si-sinon
+
+La structure de contrôle **si** permet d'exécuter un bloc d'instruction lorsqu'une condition est vérifiée.
+
+Elle prend la forme 
+```
+si condition {
+    <bloc d'instructions>
+}
+```
+De plus, une instruction **si** peut posséder un bloc supplémentaire, un bloc **sinon** qui va correspondre à des instructions qui seront exécutées si la condition n'est **pas** vérifiée.
+
+Cela prend la forme
+```
+si condition {
+    <bloc d'instructions 1>
+} sinon {
+    <bloc d'instructions 2>
+}
+```
+
 ##### Tant que
 
-##### Sinon
+Une boucle tant que est une autre structure de contrôle. Sa forme est assez simple.
+
+```
+tant que condition {
+    <bloc>
+}
+```
+Et comme on peut s'en douter, les instrutcions du bloc vont être exécutées tant que la condition n'est pas vérifiée.
 
 #### Déclaration de fonction
 
+Le dernier type d'instruction en Zorvex est la déclaration de fonction.
+
+Elle prend la forme 
+```
+fonction nom_fonction(param1, param2, ..., paramn) {
+    bloc d'instruction
+}
+```
+
+où les `param_i` désignent les différents paramètres de la fonction.
+
 ### Fonctions-Instructions
+
+Certaines fonctions sont déjà définies par Zorvex. Elles concernent les différentes structures de données.
+
+Lorsqu'un des arguments n'est pas du type attendu, une **exception** est levée.
+
+Les différentes structures de données ne peuvent seulement stocker des entiers ou des chaines de caractère.
 
 #### Listes
 
+- `ajouter_liste(liste, element)` ajoute l'élément `element` à la liste `liste`.
+- `taille_liste(liste)` retourne le nombre d'éléments contenus dans la liste `liste`
+
+Les trois instructions suivantes soulèvent une **exception** lorsque l'indice se trouve hors des bornes de la liste. Un indice valide est compris entre `0` et `taille_liste(liste)-1` inclus.
+
+- `inserer_liste(liste, indice, element)` ajoute l'élément `element` en position `indice` dans la liste `liste`. 
+- `suppprimer_liste(liste, indice)` supprime de la liste `liste` l'élément en position `indice`.
+- `recuperer_liste(liste, indice)` retourne l'élément en position `indice` dans la liste `liste`.
+- `modifier_liste(liste, indice, valeur)` remplace l'élément en position `indice` dans la liste `liste` par `valeur`.
+
 #### Piles
+
+- `pile_vide` retourne une pile vide.
+- `empiler(pile, element)` ajoute en haut de la pile `pile`
+l'élément `element`.
+- `depiler(pile)` retourne l'élément se trouvant en haut de la pile `pile`, en le supprimant de celle-ci. Soulève une exception si la pile concernée est vide.
 
 ### Exceptions
 

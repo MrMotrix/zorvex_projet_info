@@ -178,9 +178,6 @@ Dans le panneau inférieur gauche se trouve la console, où seront affichés les
 
 Vous pouvez ajouter un point d'arrêt sur n'importe quelle ligne du programme. Il vous suffit de cliquer sur le bouton noir situé à gauche de la ligne où vous souhaitez ajouter un point d'arret. Il deviendra rouge pour indiquer qu'il est activé. De même, si vous souhaitez supprimer un point d'arret à n'importe quel endroit du programme, vous pouvez sélectionner un point rouge qui deviendra noir pour indiquer qu'il est désactivé.
 
-
-    *insert image of the second scene*
-
 Une fois que vous avez défini les points d'arrêt souhaités, cliquez sur «Commencer» pour lancer l'exécution.
 
 Si vous avez défini un point d'arrêt, le programme s'arrêtera à cette ligne et la mettra en évidence une fois son exécution terminée. Vous remarquerez que cinq boutons sont apparus au centre du panneau gauche de l'interface avec les légendes suivantes :

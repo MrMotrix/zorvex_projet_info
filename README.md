@@ -203,3 +203,20 @@ Si une erreur est détectée pendant l'exécution du programme, celle-ci sera in
 Pour consulter les informations sur le produit, cliquez sur le menu supérieur, dans la section « Aide », « A propos ». En outre, vous y trouverez les coordonnées des développeurs au cas où vous auriez trouvé des bugs ou des erreurs.
 
 ## Exemples de programmes
+    fonction tri_a_bulle(l) {
+        i <- taille_liste(l)-1
+        tant que i >= 1 {
+            j <- 0
+            tant que j < i {
+                si recuperer_liste(l, j+1) < recuperer_liste(l, j) {
+                    x <- recuperer_liste(l, j)
+                    y <- recuperer_liste(l, j+1)
+                    modifier_liste(l, j, y)
+                    modifier_liste(l, j+1, x)
+                }
+                j <- j + 1
+            }
+            i <- i-1
+        }
+        retourner l
+    }

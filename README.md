@@ -71,6 +71,10 @@ L'instruction la plus importante en Zorvex est l'instruction d'assignation.
 
 Elle prend la forme `identifiant <- expression`. Lors de son exécution, la variable `identifiant`, si elle n'existait pas déjà, est créée, et prend la valeur correspondant à l'évaluation d'`expression`.
 
+#### Afficher
+
+Une deuxième instruction importante est l'instruction afficher. Elle permet d'écrire dans la console d'exécution l'évaluation d'une expression. Sa syntaxe est `afficher expression`.
+
 #### Structures de contrôle
 
 Il est parfois nécessaire pour le programmeur de pouvoir exécuter des instructions conditionnellement ou avec répétition. En Zorvex, cela peut être fait à l'aide des **structures de contrôles** qui sont au nombre de deux. 
@@ -203,21 +207,42 @@ Si une erreur est détectée pendant l'exécution du programme, celle-ci sera in
 Pour consulter les informations sur le produit, cliquez sur le menu supérieur, dans la section « Aide », « A propos ». En outre, vous y trouverez les coordonnées des développeurs au cas où vous auriez trouvé des bugs ou des erreurs.
 
 ## Exemples de programmes
+
 ### Tri à bulle
-    fonction tri_a_bulle(l) {
-        i <- taille_liste(l)-1
-        tant que i >= 1 {
-            j <- 0
-            tant que j < i {
-                si recuperer_liste(l, j+1) < recuperer_liste(l, j) {
-                    x <- recuperer_liste(l, j)
-                    y <- recuperer_liste(l, j+1)
-                    modifier_liste(l, j, y)
-                    modifier_liste(l, j+1, x)
-                }
-                j <- j + 1
+
+```
+fonction tri_a_bulle(l) {
+    i <- taille_liste(l)-1
+    tant que i >= 1 {
+        j <- 0
+        tant que j < i {
+            si recuperer_liste(l, j+1) < recuperer_liste(l, j) {
+                x <- recuperer_liste(l, j)
+                y <- recuperer_liste(l, j+1)
+                modifier_liste(l, j, y)
+                modifier_liste(l, j+1, x)
             }
-            i <- i-1
+            j <- j + 1
         }
-        retourner l
+        i <- i-1
     }
+    retourner l
+}
+```
+
+### Maximum
+
+```
+fonction max(l) {
+    argmax <- 0
+    i <- 0
+    n <- taille_liste(l)
+    tant que i < n {
+        si recuperer_liste(l, argmax) < recuperer_liste(l, i) {
+            argmax <- i
+        }
+        i <- i+1
+    }
+    retourner recuperer_liste(l, argmax)
+}
+```

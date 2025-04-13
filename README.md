@@ -153,11 +153,6 @@ Les trois instructions suivantes soulèvent une **exception** lorsque l'indice s
 l'élément `element`.
 - `depiler(pile)` retourne l'élément se trouvant en haut de la pile `pile`, en le supprimant de celle-ci. Soulève une exception si la pile concernée est vide.
 
-### Exceptions
-
-
-## Installation
-
 ## Interface
 
 L'interface de ZorvexInterpreter est interactive et ergonomique pour l'utilisateur. 

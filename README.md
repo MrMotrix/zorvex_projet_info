@@ -203,7 +203,7 @@ Si une erreur est détectée pendant l'exécution du programme, celle-ci sera in
 Pour consulter les informations sur le produit, cliquez sur le menu supérieur, dans la section « Aide », « A propos ». En outre, vous y trouverez les coordonnées des développeurs au cas où vous auriez trouvé des bugs ou des erreurs.
 
 ## Exemples de programmes
-### Tri a bulles
+### Tri à bulle
     fonction tri_a_bulle(l) {
         i <- taille_liste(l)-1
         tant que i >= 1 {

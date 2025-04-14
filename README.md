@@ -153,6 +153,13 @@ Les trois instructions suivantes soulèvent une **exception** lorsque l'indice s
 l'élément `element`.
 - `depiler(pile)` retourne l'élément se trouvant en haut de la pile `pile`, en le supprimant de celle-ci. Soulève une exception si la pile concernée est vide.
 
+### Installation
+
+Deux méthodes peuvent être utilisées pour installer et exécuter l'application.
+1) Cloner le dépôt actuel et exécuter le projet avec gradle
+2) (Seulement pour Windows) Aller sur ce lien [https://drive.google.com/file/d/1bYqoucLuYtpyMRJd5U4tChTfH-gPXI3s/view](GoogleDrive). Installez et décompressez le dossier. Ensuite, dans le dossier *ZorvexInterpreteur*, double-cliquez sur *run.bat* et donnez les permissions nécessaires. L'applcation va s'éxécuter normalement.
+
+
 ## Interface
 
 L'interface de ZorvexInterpreter est interactive et ergonomique pour l'utilisateur. 

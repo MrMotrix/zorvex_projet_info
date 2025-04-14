@@ -157,7 +157,7 @@ l'élément `element`.
 
 Deux méthodes peuvent être utilisées pour installer et exécuter l'application.
 1) Cloner le dépôt actuel et exécuter le projet avec gradle
-2) (Seulement pour Windows) Aller sur ce lien [https://drive.google.com/file/d/1bYqoucLuYtpyMRJd5U4tChTfH-gPXI3s/view](GoogleDrive). Installez et décompressez le dossier. Ensuite, dans le dossier *ZorvexInterpreteur*, double-cliquez sur *run.bat* et donnez les permissions nécessaires. L'applcation va s'éxécuter normalement.
+2) (Seulement pour Windows) Aller sur ce lien [https://drive.google.com/file/d/1bYqoucLuYtpyMRJd5U4tChTfH-gPXI3s/view](GoogleDrive). Installez et décompressez le dossier. Ensuite, dans le dossier *ZorvexInterpreteur*, double-cliquez sur *run.bat* et donnez les permissions nécessaires. L'application va s'éxécuter normalement.
 
 
 ## Interface

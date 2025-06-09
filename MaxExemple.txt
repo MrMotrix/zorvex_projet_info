@@ -1,0 +1,16 @@
+fonction max(l) {
+    argmax <- 0
+    i <- 0
+    n <- taille_liste(l)
+    tant que i < n {
+        si recuperer_liste(l, argmax) < recuperer_liste(l, i) {
+            argmax <- i
+        }
+        i <- i+1
+    }
+    retourner recuperer_liste(l, argmax)
+}
+
+liste <- [2,4,3,10,6]
+maximum <- max(liste)
+afficher maximum

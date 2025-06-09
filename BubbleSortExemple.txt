@@ -1,0 +1,21 @@
+fonction tri_a_bulle(l) {
+    i <- taille_liste(l)-1
+    tant que i >= 1 {
+        j <- 0
+        tant que j < i {
+            si recuperer_liste(l, j+1) < recuperer_liste(l, j) {
+                x <- recuperer_liste(l, j)
+                y <- recuperer_liste(l, j+1)
+                modifier_liste(l, j, y)
+                modifier_liste(l, j+1, x)
+            }
+            j <- j + 1
+        }
+        i <- i-1
+    }
+    retourner l
+}
+
+x <- [9,8,1,45]
+y <- tri_a_bulle(x)
+afficher(y)

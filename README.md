@@ -71,6 +71,10 @@ L'instruction la plus importante en Zorvex est l'instruction d'assignation.
 
 Elle prend la forme `identifiant <- expression`. Lors de son exécution, la variable `identifiant`, si elle n'existait pas déjà, est créée, et prend la valeur correspondant à l'évaluation d'`expression`.
 
+#### Afficher
+
+Une deuxième instruction importante est l'instruction afficher. Elle permet d'écrire dans la console d'exécution l'évaluation d'une expression. Sa syntaxe est `afficher expression`.
+
 #### Structures de contrôle
 
 Il est parfois nécessaire pour le programmeur de pouvoir exécuter des instructions conditionnellement ou avec répétition. En Zorvex, cela peut être fait à l'aide des **structures de contrôles** qui sont au nombre de deux. 
@@ -149,10 +153,12 @@ Les trois instructions suivantes soulèvent une **exception** lorsque l'indice s
 l'élément `element`.
 - `depiler(pile)` retourne l'élément se trouvant en haut de la pile `pile`, en le supprimant de celle-ci. Soulève une exception si la pile concernée est vide.
 
-### Exceptions
+### Installation
 
+Deux méthodes peuvent être utilisées pour installer et exécuter l'application.
+1) Cloner le dépôt actuel et exécuter le projet avec gradle
+2) (Seulement pour Windows) Aller sur ce lien [https://drive.google.com/file/d/1bYqoucLuYtpyMRJd5U4tChTfH-gPXI3s/view](GoogleDrive). Installez et décompressez le dossier. Ensuite, dans le dossier *ZorvexInterpreteur*, double-cliquez sur *run.bat* et donnez les permissions nécessaires. L'application va s'éxécuter normalement.
 
-## Installation
 
 ## Interface
 
@@ -177,9 +183,6 @@ Dans le panneau supérieur gauche se trouve le panneau d'instructions, où se tr
 Dans le panneau inférieur gauche se trouve la console, où seront affichés les résultats de sortie du programme (le cas échéant), ainsi que les éventuels messages d'erreur en cas d'exception. 
 
 Vous pouvez ajouter un point d'arrêt sur n'importe quelle ligne du programme. Il vous suffit de cliquer sur le bouton noir situé à gauche de la ligne où vous souhaitez ajouter un point d'arret. Il deviendra rouge pour indiquer qu'il est activé. De même, si vous souhaitez supprimer un point d'arret à n'importe quel endroit du programme, vous pouvez sélectionner un point rouge qui deviendra noir pour indiquer qu'il est désactivé.
-
-
-    *insert image of the second scene*
 
 Une fois que vous avez défini les points d'arrêt souhaités, cliquez sur «Commencer» pour lancer l'exécution.
 
@@ -206,3 +209,42 @@ Si une erreur est détectée pendant l'exécution du programme, celle-ci sera in
 Pour consulter les informations sur le produit, cliquez sur le menu supérieur, dans la section « Aide », « A propos ». En outre, vous y trouverez les coordonnées des développeurs au cas où vous auriez trouvé des bugs ou des erreurs.
 
 ## Exemples de programmes
+
+### Tri à bulle
+
+```
+fonction tri_a_bulle(l) {
+    i <- taille_liste(l)-1
+    tant que i >= 1 {
+        j <- 0
+        tant que j < i {
+            si recuperer_liste(l, j+1) < recuperer_liste(l, j) {
+                x <- recuperer_liste(l, j)
+                y <- recuperer_liste(l, j+1)
+                modifier_liste(l, j, y)
+                modifier_liste(l, j+1, x)
+            }
+            j <- j + 1
+        }
+        i <- i-1
+    }
+    retourner l
+}
+```
+
+### Maximum
+
+```
+fonction max(l) {
+    argmax <- 0
+    i <- 0
+    n <- taille_liste(l)
+    tant que i < n {
+        si recuperer_liste(l, argmax) < recuperer_liste(l, i) {
+            argmax <- i
+        }
+        i <- i+1
+    }
+    retourner recuperer_liste(l, argmax)
+}
+```

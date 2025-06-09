@@ -157,8 +157,8 @@ public class ZorvexValue {
     public boolean equals(Object object) {
         if (object == null)
             return false;
-        if (object instanceof ZorvexValue other) 
-            return type == other.type && value == other.value;
+        if (object instanceof ZorvexValue other && type == other.type)
+                return type == ZorvexType.STRING ? value.equals(other.value) : value == other.value;
         return false;
     }
 

@@ -10,22 +10,6 @@ import interpreter.exceptions.UnexpectedTokenException;
 import interpreter.expression.*;
 import interpreter.instruction.*;
 
-// program          → instruction* EOF;
-// instruction      → declfonction | afficher | assigner | condition;
-// declfonction     → "fonction " IDENTIFIER "(" ((IDENTIFIER',')* IDENTIFIER) | () ")" block;
-// afficher         → "afficher " expression ENDL;
-// assignation      → IDENTIFIER "<-" expression ENDL;
-// condition        → "si " expression block ;
-// block            → "{" instruction* "}" ENDL ;
-// expression       → equality ;
-// equality         → comparison ( ( "!=" | "==" ) comparison )* ;
-// comparison       → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
-// term             → factor ( ( "-" | "+" ) factor )* ;
-// factor           → unary ( ( "/" | "*" ) unary )* ;
-// unary            → ( "!" | "-" ) unary | call ;
-// call             → IDENTIFIER ( "(" arguments? ")" ) | primary ;
-// primary          → NUMBER | STRING | IDENTIFIER | "true" | "false" | "nil" | "(" expression ")" ;
-
 public class Parser {
     private final List<Token> tokens;
     private int i = 0;
